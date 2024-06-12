@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import UploadImages from './pages/UploadImages/UploadImages';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,6 +32,14 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import AccessibilitySettings from './pages/AccessibilitySettings/AccessibilitySettings';
+import SelectImages from './pages/SelectImages/SelectImages';
+import LoadImages from './pages/LoadImages/LoadImages';
+import SearchResults from './pages/SearchResults/SearchResults';
+import IndividualResult from './pages/IndividualResult/IndividualResult';
+import InstitutionInformation from './pages/InstitutionInformation/InstitutionInformation';
+import ContactInstitution from './pages/ContactInstitution/ContactInstitution';
+import ProcessCompleted from './pages/ProcessCompleted/ProcessCompleted';
 
 setupIonicReact();
 
@@ -39,11 +47,38 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
+        <Route exact path="/upload-images">
+          <UploadImages />
+        </Route>
+        <Route exact path="/accessibility-settings">
+          <AccessibilitySettings />
+        </Route>
+        <Route exact path="/select-images">
+          <SelectImages />
+        </Route>
+        <Route exact path="/loading-images">
+          <LoadImages />
+        </Route>
+        <Route exact path="/search-results">
+          <SearchResults />
+        </Route>
+        <Route exact path="/individual-result">
+          <IndividualResult />
+        </Route>
+        <Route exact path="/institution-information">
+          <InstitutionInformation />
+        </Route>
+        <Route exact path="/contact-health-institution">
+          <ContactInstitution />
+        </Route>
+        <Route exact path="/process-completed">
+          <ProcessCompleted />
         </Route>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/upload-images" />
+        </Route>
+        <Route>
+          <Redirect to="/upload-images" />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
