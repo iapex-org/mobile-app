@@ -35,12 +35,12 @@ import './App.css';
 import UploadImages from './pages/UploadImages/UploadImages';
 import AccessibilitySettings from './pages/AccessibilitySettings/AccessibilitySettings';
 import SelectImages from './pages/SelectImages/SelectImages';
-import LoadImages from './pages/LoadImages/LoadImages';
 import SearchResults from './pages/SearchResults/SearchResults';
 import IndividualResult from './pages/IndividualResult/IndividualResult';
 import InstitutionInformation from './pages/InstitutionInformation/InstitutionInformation';
 import ContactInstitution from './pages/ContactInstitution/ContactInstitution';
 import ProcessCompleted from './pages/ProcessCompleted/ProcessCompleted';
+import LoadingImages from './pages/LoadingImages/LoadingImages';
 
 setupIonicReact();
 
@@ -58,7 +58,7 @@ const App: React.FC = () => (
           <SelectImages />
         </Route>
         <Route exact path="/loading-images">
-          <LoadImages />
+          <LoadingImages />
         </Route>
         <Route exact path="/search-results">
           <SearchResults />
