@@ -7,3 +7,8 @@
 .margin-auto {
   margin-left: auto;
 }
+
+.closeIcon {
+  margin: 10px;
+  font-size: 25px;
+}

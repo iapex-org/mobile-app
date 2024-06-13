@@ -19,6 +19,7 @@ const SearchResults: React.FC = () => {
                     <IonBackButton text="Resultados" color='medium' defaultHref="#" />
                 </IonButtons>
             </IonToolbar>
+            
             <IonContent className='ion-padding'>
 
                 <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>

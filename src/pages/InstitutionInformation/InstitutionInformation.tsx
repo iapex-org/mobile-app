@@ -24,7 +24,7 @@ const InstitutionInformation: React.FC = () => {
 
             <IonContent className='ion-padding'>
                 <IonCard>
-                    <img src="src\assets\img\institution-1.jpg" />
+                    <img src="src\assets\img\institution-1.jpg" className="institution-img" />
                     <IonCardContent>
                         <p><strong>Ubicación:</strong> El IMSS en Córdoba está situado en una zona accesible de la ciudad, con conexiones viales que facilitan el acceso tanto a pie como en transporte público. La dirección exacta puede variar, pero generalmente se encuentra en una zona central o de fácil acceso para los residentes.</p>
                         <p><strong>Personal médico y administrativo:</strong> El IMSS de Córdoba cuenta con un equipo multidisciplinario de profesionales de la salud, incluyendo médicos generales, especialistas, enfermeras, técnicos de laboratorio, y personal administrativo, todos dedicados a ofrecer una atención de calidad a los asegurados.</p>
