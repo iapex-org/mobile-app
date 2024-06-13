@@ -1,66 +1,42 @@
 import {
     IonContent,
     IonPage,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonRow,
     IonToggle,
     IonToolbar,
-    IonCol,
-    IonTitle,
     IonBackButton,
-    IonButtons,
-    IonIcon,
-    IonThumbnail,
-    IonLabel,
-    IonItem,
+    IonButtons
 } from '@ionic/react';
-import { closeOutline } from 'ionicons/icons';
 import './IndividualResult.css';
+import PatientCard from '../../components/PatientCard/PatientCard';
+import InstitutionCard from '../../components/InstitutionCrad/InstitutionCard';
 
 const IndividualResult: React.FC = () => {
     return (
         <IonPage>
-            <IonContent>
-                <IonToolbar>
-                    <IonButtons slot="start">
-                        <IonBackButton defaultHref="#" />
-                    </IonButtons>
-                    <IonTitle>Paciente No. 23</IonTitle>
-                </IonToolbar>
-                <p className="firstText">
-                    Las siguientes imágenes pueden ser no aptas para cualquier tipo de
-                    público. Se recomienda discreción.
-                </p>
-                <div className="firstDiv">
-                    <h2>Mostrar imagenes</h2>
-                    <IonToggle
-                        className="firstToggle"
-                        aria-label="Tertiary toggle"
-                        color="tertiary"
-                        checked={true}
-                    />
+            <IonToolbar>
+                <IonButtons slot="start" className='ion-margin-horizontal'>
+                    <IonBackButton text="Paciente No. 23" color='medium' defaultHref="#" />
+                </IonButtons>
+            </IonToolbar>
+            <IonContent className='ion-padding'>
+
+                <div className="show-images">
+                    <p>Mostrar imagenes</p>
+                    <div className="margin-auto">
+                        <IonToggle
+                            className="firstToggle"
+                            aria-label="Tertiary toggle"
+                            color="tertiary"
+                            checked={true}
+                        />
+                    </div>
                 </div>
-                <IonCard>
-                    <img className="firstImg" src="https://www.stillking.com/data/2019/12/27/12/1600x_/1.jpg" />
-                    <IonCardContent>
-                        <p>
-                            <strong>Edad:</strong> 34
-                        </p>
-                        <p>
-                            <strong>Estatura:</strong> 1.81 m
-                        </p>
-                        <p>
-                            <strong>Peso:</strong> 92 kg
-                        </p>
-                        <p>
-                            <strong>Complexión:</strong> Robusta
-                        </p>
-                        <p>
-                            <strong>Descripción:</strong> Piel morena, cabello
+
+                <PatientCard imageUrl="src\assets\img\patient-1.jpg" content='Edad: 34,
+                        Estatura: 1.81 m,
+                        Peso: 92 kg,
+                        Complexión: Robusta,
+                        Descripción: Piel morena, cabello
                             negro, corto y liso. Rostro con barba crecida, ojos oscuros, nariz
                             ancha y labios carnosos. Mejillas llenas y mandíbula prominente.
                             Tatuaje de un corazón de unos 5 cm de diámetro en el antebrazo
@@ -68,35 +44,16 @@ const IndividualResult: React.FC = () => {
                             redonda pequeña en el dorso de la mano derecha que parece una
                             quemadura. Mancha de nacimiento cerca del tobillo de la pierna
                             derecha.
-                        </p>
-                        <p>
-                            <strong>Condiciones especiales (si aplica):</strong> Falta dedo
-                            anular de la mano derecha.
-                        </p>
-                    </IonCardContent>
-                    <IonButton className="firstButton" expand="block">
-                        Contactar
-                    </IonButton>
-                </IonCard>
-                <div className="firstText">
-                    <h2>Institución en la que se encuentra registrado el paciente</h2>
-                </div>
-                <IonCard>
-                    <IonRow>
-                        <IonCol size="6">
-                            <img src="https://th.bing.com/th/id/R.cbf71e920220be835dc0ba83baf863e9?rik=xoFeIa6YjUrkOw&pid=ImgRaw&r=0" className="product-image" />
-                        </IonCol>
-                        <IonCol size="6">
-                            <IonCardHeader>
-                                <IonCardTitle>Hospital IMSS Región Córdoba</IonCardTitle>
-                            </IonCardHeader>
-                            <IonCardContent>
-                                El IMSS en Córdoba se ubica en una zona accesible de la ciudad, con conexiones viales
-                                convenientes tanto para peatones como para usuarios de transporte público … Ver más
-                            </IonCardContent>
-                        </IonCol>
-                    </IonRow>
-                </IonCard>
+                        Condiciones especiales (si aplica): Falta dedo anular de la mano derecha.'
+                        button='Contactar'
+                        link='/contact-institution'/>
+
+                <p>Institución en la que se encuentra registrado el paciente.</p>
+
+                <InstitutionCard imageUrl="src\assets\img\institution-1.jpg" title='Hospital IMSS Región Córdoba'
+                    content='El IMSS en Córdoba se ubica en una zona accesible de la ciudad, con conexiones viales
+                        convenientes tanto para peatones como para usuarios de transporte público … Ver más'/>
+
             </IonContent>
         </IonPage>
     );
