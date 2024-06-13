@@ -1,0 +1,13 @@
+.firstText {
+    margin: 10px;
+  }
+
+  .firstDiv {
+    margin: 10px;
+    display: flex;
+    text-align: center;
+  }
+
+  .secondDiv {
+    margin-left: auto;
+  }

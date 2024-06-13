@@ -45,7 +45,7 @@ const IndividualResult: React.FC = () => {
                     />
                 </div>
                 <IonCard>
-                    <img className="firstImg" src="https://thumbs.dreamstime.com/b/man-patient-sleeping-hospital-bed-man-patient-sleeping-hospital-bed-nurse-120764154.jpg" />
+                    <img className="firstImg" src="https://www.stillking.com/data/2019/12/27/12/1600x_/1.jpg" />
                     <IonCardContent>
                         <p>
                             <strong>Edad:</strong> 34
@@ -60,7 +60,7 @@ const IndividualResult: React.FC = () => {
                             <strong>Complexión:</strong> Robusta
                         </p>
                         <p>
-                            <strong>Descripción:</strong> Descripción: Piel morena, cabello
+                            <strong>Descripción:</strong> Piel morena, cabello
                             negro, corto y liso. Rostro con barba crecida, ojos oscuros, nariz
                             ancha y labios carnosos. Mejillas llenas y mandíbula prominente.
                             Tatuaje de un corazón de unos 5 cm de diámetro en el antebrazo
@@ -78,12 +78,12 @@ const IndividualResult: React.FC = () => {
                         Contactar
                     </IonButton>
                 </IonCard>
-                <div className="firstDiv">
+                <div className="firstText">
                     <h2>Institución en la que se encuentra registrado el paciente</h2>
                 </div>
                 <IonCard>
                     <IonRow>
-                        <IonCol size="6" style={{}}>
+                        <IonCol size="6">
                             <img src="https://th.bing.com/th/id/R.cbf71e920220be835dc0ba83baf863e9?rik=xoFeIa6YjUrkOw&pid=ImgRaw&r=0" className="product-image" />
                         </IonCol>
                         <IonCol size="6">
