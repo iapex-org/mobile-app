@@ -25,8 +25,8 @@ import '@ionic/react/css/display.css';
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* import '@ionic/react/css/palettes/dark.always.css'; */
-/* import '@ionic/react/css/palettes/dark.class.css'; */
+// import '@ionic/react/css/palettes/dark.always.css';
+// import '@ionic/react/css/palettes/dark.class.css';
 // import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
@@ -34,13 +34,14 @@ import './theme/variables.css';
 import './App.css';
 import UploadImages from './pages/UploadImages/UploadImages';
 import AccessibilitySettings from './pages/AccessibilitySettings/AccessibilitySettings';
-import SelectImages from './pages/SelectImages/SelectImages';
+import VerifyImages from './pages/VerifyImages/VerifyImages';
 import SearchResults from './pages/SearchResults/SearchResults';
 import IndividualResult from './pages/IndividualResult/IndividualResult';
 import InstitutionInformation from './pages/InstitutionInformation/InstitutionInformation';
 import ContactInstitution from './pages/ContactInstitution/ContactInstitution';
 import ProcessCompleted from './pages/ProcessCompleted/ProcessCompleted';
 import LoadingImages from './pages/LoadingImages/LoadingImages';
+import InputPatientInformation from './pages/InputPatientInformation/InputPatientInformation';
 
 setupIonicReact();
 
@@ -48,14 +49,17 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/upload-images">
-          <UploadImages />
-        </Route>
         <Route exact path="/accessibility-settings">
           <AccessibilitySettings />
         </Route>
-        <Route exact path="/select-images">
-          <SelectImages />
+        <Route exact path="/upload-images">
+          <UploadImages />
+        </Route>
+        <Route exact path="/verify-images">
+          <VerifyImages />
+        </Route>
+        <Route exact path="/input-patient-information">
+          <InputPatientInformation />
         </Route>
         <Route exact path="/loading-images">
           <LoadingImages />

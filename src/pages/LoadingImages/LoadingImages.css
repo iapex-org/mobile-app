@@ -8,26 +8,19 @@
     padding: 0px;
 }
 
-.material-symbols-outlined {
-    font-size: 10rem;
-    color: #1F89EA;
-}
-
 h1 {
     font-size: 2.3rem;
     font-weight: bold;
 }
 
-p {
-    color: #343A40;
+.fixed-button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
 }
 
-ion-button[slot='fixed'] {
-    bottom: 5px;
-    left: 5px;
-}
-
-.accessibility-icon {
-    font-size: 4rem;
-    color: #fff;
+.cogIcon {
+    font-size: 10rem;
+    align-self: center;
 }

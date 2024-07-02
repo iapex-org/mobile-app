@@ -1,34 +1,35 @@
-import {
-    IonCard,
-    IonCardContent,
-    IonCheckbox,
-    IonCol,
-    IonGrid,
-    IonRow,
-} from '@ionic/react';
+import { IonCard, IonIcon, IonItem, IonLabel, IonList, IonThumbnail } from '@ionic/react';
+import { trashOutline } from 'ionicons/icons';
 import './ImageSelectCard.css';
 
-const ImageSelectCard: React.FC = () => {
+interface ImageSelectCardProps {
+    imageUrl: string;
+    imageName: string;
+}
+
+const ImageSelectCard: React.FC<ImageSelectCardProps> = ({ imageUrl, imageName }) => {
     return (
-        <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
-            <IonGrid className='ion-no-padding'>
-                <IonRow className="ion-align-items-center">
-                    <IonCol size="4" className='ion-no-padding'>
-                        <img className="institution-img" src="src\assets\img\patient-1.jpg" />
-                    </IonCol>
+        <IonList mode='ios' className='ion-no-padding'>
+            <IonItem className='custom-item'>
+                <IonThumbnail slot="start" className="custom-thumbnail">
+                    <img src={imageUrl} alt={imageName} />
+                </IonThumbnail>
+                <IonLabel>{imageName}</IonLabel>
+                <IonIcon icon={trashOutline} slot="end" color='danger' />
+            </IonItem>
+        </IonList>
 
-                    <IonCol size="4">
-                        <IonCardContent className="ion-no-padding ion-margin-horizontal">
-                            <p>IMG_2023_30_45.jpg</p>
-                        </IonCardContent>
-                    </IonCol>
-
-                    <IonCol size="4" className="ion-text-end">
-                        <IonCheckbox className="closeIcon ion-margin-right"></IonCheckbox>
-                    </IonCol>
-                </IonRow>
-            </IonGrid>
-        </IonCard>
+        // <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
+        //     <IonList mode='ios' lines='none' className='ion-no-padding'>
+        //         <IonItem className='custom-item'>
+        //             <IonThumbnail slot="start" className="custom-thumbnail">
+        //                 <img src={imageUrl} alt={imageName} />
+        //             </IonThumbnail>
+        //             <IonLabel>{imageName}</IonLabel>
+        //             <IonIcon icon={trashOutline} slot="end" color='danger' />
+        //         </IonItem>
+        //     </IonList>
+        // </IonCard>
     );
 };
 

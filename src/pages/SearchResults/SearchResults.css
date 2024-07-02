@@ -1,14 +1,4 @@
-.show-images {
-  margin: 10px 0px;
+.filter-toggle {
   display: flex;
-  text-align: center;
-}
-
-.margin-auto {
-  margin-left: auto;
-}
-
-.closeIcon {
-  margin: 10px;
-  font-size: 25px;
+  align-items: center;
 }

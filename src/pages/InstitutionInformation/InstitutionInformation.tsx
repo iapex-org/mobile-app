@@ -1,66 +1,50 @@
 // Importaciones de Ionic y React
-import {
-    IonContent,
-    IonPage,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonButtons,
-    IonBackButton,
-    IonToolbar
-} from '@ionic/react';
-import './InstitutionInformation.css';
+import { IonContent, IonPage } from '@ionic/react';
+import InstitutionCard from '../../components/InstitutionCard/InstitutionCard';
+import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 
 // Componente de información de la institución
-const InstitutionInformation: React.FC = () => {
+const InstitutionBasicCard: React.FC = () => {
     return (
         <IonPage>
-            <IonToolbar>
-                <IonButtons slot="start" className='ion-margin-horizontal'>
-                    <IonBackButton text="Hospital IMSS Región Córdoba" color='medium' defaultHref="#" />
-                </IonButtons>
-            </IonToolbar>
+            <NavbarHeader title="Hospital IMSS Región Córdoba" />
 
             <IonContent className='ion-padding'>
-                <IonCard>
-                    <img src="src\assets\img\institution-1.jpg" className="institution-img" />
-                    <IonCardContent>
-                        <p><strong>Ubicación:</strong> El IMSS en Córdoba está situado en una zona accesible de la ciudad, con conexiones viales que facilitan el acceso tanto a pie como en transporte público. La dirección exacta puede variar, pero generalmente se encuentra en una zona central o de fácil acceso para los residentes.</p>
-                        <p><strong>Personal médico y administrativo:</strong> El IMSS de Córdoba cuenta con un equipo multidisciplinario de profesionales de la salud, incluyendo médicos generales, especialistas, enfermeras, técnicos de laboratorio, y personal administrativo, todos dedicados a ofrecer una atención de calidad a los asegurados.</p>
-                        <p><strong>Servicios ofrecidos:</strong></p>
-                        <ul>
-                            <li>Consulta externa: Atención médica general y especializada.</li>
-                            <li>Servicios de urgencias: Atención de emergencias médicas las 24 horas del día.</li>
-                            <li>Hospitalización: Camas disponibles para pacientes que requieren internamiento.</li>
-                            <li>Cirugía: Servicios quirúrgicos para diversas especialidades.</li>
-                            <li>Laboratorio y rayos X: Servicios de análisis clínicos y estudios de imagenología.</li>
-                            <li>Programas preventivos: Vacunación, control prenatal, detección de enfermedades crónicas, etc.</li>
-                            <li>Rehabilitación: Servicios de fisioterapia y rehabilitación física.</li>
-                        </ul>
-                        <p><strong>Atención al paciente:</strong> El IMSS de Córdoba pone un fuerte énfasis en la atención al paciente, ofreciendo programas de orientación y apoyo para asegurados y sus familias, asegurando un proceso de atención médica más comprensible y accesible.</p>
-                        <p><strong>Infraestructura:</strong> El edificio suele estar equipado con accesos adecuados para personas con discapacidad, ascensores, y señalización clara para guiar a los pacientes a sus respectivos servicios.</p>
-                    </IonCardContent>
-                </IonCard>
 
-                <IonCard>
-                    <IonCardHeader>
-                        <IonCardTitle>Datos adicionales de la institución de salud</IonCardTitle>
-                    </IonCardHeader>
+                <InstitutionCard
+                    imageUrl="src\assets\img\institution-1.jpg"
+                    content='Ubicación: El IMSS en Córdoba está situado en una zona accesible de la ciudad, con conexiones viales que facilitan el acceso tanto a pie como en transporte público. La dirección exacta puede variar, pero generalmente se encuentra en una zona central o de fácil acceso para los residentes.
+                    Personal médico y administrativo: El IMSS de Córdoba cuenta con un equipo multidisciplinario de profesionales de la salud, incluyendo médicos generales, especialistas, enfermeras, técnicos de laboratorio, y personal administrativo, todos dedicados a ofrecer una atención de calidad a los asegurados.
+                    Servicios ofrecidos:
+                    Consulta externa: Atención médica general y especializada.
+                    Servicios de urgencias: Atención de emergencias médicas las 24 horas del día.
+                    Hospitalización: Camas disponibles para pacientes que requieren internamiento.
+                    Cirugía: Servicios quirúrgicos para diversas especialidades.
+                    Laboratorio y rayos X: Servicios de análisis clínicos y estudios de imagenología.
+                    Programas preventivos: Vacunación, control prenatal, detección de enfermedades crónicas, etc.
+                    Rehabilitación: Servicios de fisioterapia y rehabilitación física.
+                    Atención al paciente: El IMSS de Córdoba pone un fuerte énfasis en la atención al paciente, ofreciendo programas de orientación y apoyo para asegurados y sus familias, asegurando un proceso de atención médica más comprensible y accesible.
+                    Infraestructura: El edificio suele estar equipado con accesos adecuados para personas con discapacidad, ascensores, y señalización clara para guiar a los pacientes a sus respectivos servicios.'
+                    showButton={false}
+                    title='Hospital IMSS Región Córdoba'
+                />
 
-                    <IonCardContent>
-                        <p>Se enlistan datos adicionales de la
+                <InstitutionCard
+                    content='Se enlistan datos adicionales de la
                             institución de salud, tales como número
                             total de camas, número de camas
                             disponibles, número de camas ocupadas,
                             requisitos de ingreso, así como otros datos
                             operativos escenciales acerca de cada
-                            institución de salud.</p>
-                    </IonCardContent>
-                </IonCard>
+                            institución de salud.'
+                    showButton={false}
+                    title='Datos adicionales de la institución de salud'
+                />
+
             </IonContent>
+
         </IonPage>
     );
 };
 
-export default InstitutionInformation;
+export default InstitutionBasicCard;

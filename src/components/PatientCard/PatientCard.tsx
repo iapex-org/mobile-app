@@ -1,22 +1,22 @@
 import { IonButton, IonCard, IonCardContent } from '@ionic/react';
 import './PatientCard.css';
 
-interface PatientCardProps {
+interface PatientCard {
     imageUrl: string;
     content: string;
     button: string;
     link: string;
 }
 
-const PatientCard: React.FC<PatientCardProps> = ({ imageUrl, content, button, link}) => {
+const PatientCard: React.FC<PatientCard> = ({ imageUrl, content, button, link}) => {
     return (
         <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
             <img className="patient-img"
                 src={imageUrl} />
-            <IonCardContent>
+            <IonCardContent  mode='ios'>
                 <p>{content}</p>
             </IonCardContent>
-            <IonButton mode='ios' expand="block" className='ion-padding' routerLink={link}>
+            <IonButton mode='ios' expand="block" className='ion-padding-bottom ion-padding-horizontal' routerLink={link}>
                 {button}
             </IonButton>
         </IonCard>

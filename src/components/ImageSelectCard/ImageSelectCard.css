@@ -1,0 +1,21 @@
+.custom-item {
+    --inner-padding-start: 0;
+    --padding-start: 0;
+    --margin-start: 0;
+    --border-width: 0;
+    padding-bottom: 15px;
+}
+
+.custom-thumbnail {
+    --border-radius: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+    --inner-padding-start: 0;
+}
+
+.custom-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
