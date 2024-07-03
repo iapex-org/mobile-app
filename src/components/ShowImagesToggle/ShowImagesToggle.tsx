@@ -2,7 +2,6 @@ import {
     IonItem,
     IonToggle
 } from '@ionic/react';
-import './ShowImagesToggle.css';
 
 const ShowImagesToggle: React.FC = () => {
     return (
