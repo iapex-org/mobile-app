@@ -1,6 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { ImageProvider } from './contexts/ImageContext';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -47,46 +48,48 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/accessibility-settings">
-          <AccessibilitySettings />
-        </Route>
-        <Route exact path="/upload-images">
-          <UploadImages />
-        </Route>
-        <Route exact path="/verify-images">
-          <VerifyImages />
-        </Route>
-        <Route exact path="/input-patient-information">
-          <InputPatientInformation />
-        </Route>
-        <Route exact path="/loading-images">
-          <LoadingImages />
-        </Route>
-        <Route exact path="/search-results">
-          <SearchResults />
-        </Route>
-        <Route exact path="/individual-result/:id">
-          <IndividualResult />
-        </Route>
-        <Route exact path="/institution-information">
-          <InstitutionInformation />
-        </Route>
-        <Route exact path="/contact-institution/:id">
-          <ContactInstitution />
-        </Route>
-        <Route exact path="/process-completed/:id">
-          <ProcessCompleted />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/upload-images" />
-        </Route>
-        <Route>
-          <Redirect to="/upload-images" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
+    <ImageProvider>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/accessibility-settings">
+            <AccessibilitySettings />
+          </Route>
+          <Route exact path="/upload-images">
+            <UploadImages />
+          </Route>
+          <Route exact path="/verify-images">
+            <VerifyImages />
+          </Route>
+          <Route exact path="/input-patient-information">
+            <InputPatientInformation />
+          </Route>
+          <Route exact path="/loading-images">
+            <LoadingImages />
+          </Route>
+          <Route exact path="/search-results">
+            <SearchResults />
+          </Route>
+          <Route exact path="/individual-result/:id">
+            <IndividualResult />
+          </Route>
+          <Route exact path="/institution-information">
+            <InstitutionInformation />
+          </Route>
+          <Route exact path="/contact-institution/:id">
+            <ContactInstitution />
+          </Route>
+          <Route exact path="/process-completed/:id">
+            <ProcessCompleted />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/upload-images" />
+          </Route>
+          <Route>
+            <Redirect to="/upload-images" />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </ImageProvider>
   </IonApp>
 );
 

@@ -1,0 +1,15 @@
+/* VerifyImages.css */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.select-button {
+    margin-bottom: 10px;
+}
+
+.select-button.active {
+    background-color: #007bff;
+    color: white;
+}
