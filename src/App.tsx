@@ -67,16 +67,16 @@ const App: React.FC = () => (
         <Route exact path="/search-results">
           <SearchResults />
         </Route>
-        <Route exact path="/individual-result">
+        <Route exact path="/individual-result/:id">
           <IndividualResult />
         </Route>
         <Route exact path="/institution-information">
           <InstitutionInformation />
         </Route>
-        <Route exact path="/contact-institution">
+        <Route exact path="/contact-institution/:id">
           <ContactInstitution />
         </Route>
-        <Route exact path="/process-completed">
+        <Route exact path="/process-completed/:id">
           <ProcessCompleted />
         </Route>
         <Route exact path="/">

@@ -1,7 +1,11 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import { IonButton, IonContent, IonInput, IonItem, IonList, IonPage, IonTextarea } from '@ionic/react';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 
 const ContactInstitution: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+
     return (
         <IonPage>
             <NavbarHeader title="Contactar" />
@@ -31,8 +35,7 @@ const ContactInstitution: React.FC = () => {
                     </IonItem>
                 </IonList>
 
-                <IonButton className='ion-margin-top' expand="block" mode='ios' routerLink='/process-completed'>Contactar</IonButton>
-
+                <IonButton className='ion-margin-top' expand="block" mode='ios' routerLink={`/process-completed/${id}`}>Contactar</IonButton>
             </IonContent>
         </IonPage>
     );

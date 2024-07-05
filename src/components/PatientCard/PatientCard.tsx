@@ -1,24 +1,33 @@
-import { IonButton, IonCard, IonCardContent } from '@ionic/react';
-import './PatientCard.css';
+import React from 'react';
+import { IonCard, IonCardHeader, IonCardContent, IonButton } from '@ionic/react';
 
-interface PatientCard {
+interface PatientCardProps {
+    patient: {
+        id: number;
+        age: number;
+        height: number;
+        weight: number;
+        body: string;
+        description: string;
+    };
     imageUrl: string;
-    content: string;
-    button: string;
     link: string;
+    buttonLabel: string;
 }
 
-const PatientCard: React.FC<PatientCard> = ({ imageUrl, content, button, link}) => {
+const PatientCard: React.FC<PatientCardProps> = ({ patient, imageUrl, link, buttonLabel }) => {
     return (
-        <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
-            <img className="patient-img"
-                src={imageUrl} />
-            <IonCardContent  mode='ios'>
-                <p>{content}</p>
+        <IonCard>
+            <IonCardHeader className='custom-ion-card-header'>
+                <img src={imageUrl} alt="Patient" />
+            </IonCardHeader>
+            <IonCardContent>
+                <p><b>Edad: </b>{patient.age} años</p>
+                <p><b>Peso: </b>{patient.weight} kg</p>
+                <p><b>Altura: </b>{patient.height} cm</p>
+                <p><b>Descripción: </b>{patient.description}</p>
+                <IonButton href={`${link}/${patient.id}`} expand='block' mode='ios'>{buttonLabel}</IonButton>
             </IonCardContent>
-            <IonButton mode='ios' expand="block" className='ion-padding-bottom ion-padding-horizontal' routerLink={link}>
-                {button}
-            </IonButton>
         </IonCard>
     );
 };

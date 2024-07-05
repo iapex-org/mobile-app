@@ -14,7 +14,7 @@ const NavbarHeader: React.FC<NavbarHeaderProps> = ({ title }) => {
         <IonHeader>
             <IonToolbar mode='ios'>
                 <IonButtons slot="start" className='ion-margin-horizontal'>
-                    <IonBackButton text={title} color='medium' defaultHref='#' />
+                    <IonBackButton text={title} color='medium' defaultHref='/' />
                 </IonButtons>
             </IonToolbar>
         </IonHeader>

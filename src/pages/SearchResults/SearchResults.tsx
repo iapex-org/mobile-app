@@ -1,17 +1,34 @@
+// pages/SearchResults/SearchResults.tsx
+import React, { useEffect, useState } from 'react';
 import { IonContent, IonIcon, IonPage } from '@ionic/react';
 import { filterOutline } from 'ionicons/icons';
-import PatientBasicCard from '../../components/PatientCard/PatientCard';
+import PatientCard from '../../components/PatientCard/PatientCard';
 import ShowImagesToggle from '../../components/ShowImagesToggle/ShowImagesToggle';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import PatientService from '../../services/PatientService';
+import { Patient } from '../../models/Patient';
 import './SearchResults.css';
 
 const SearchResults: React.FC = () => {
+    const [patients, setPatients] = useState<Patient[]>([]);
+
+    useEffect(() => {
+        async function fetchPatients() {
+            try {
+                const fetchedPatients = await PatientService.getPatients();
+                setPatients(fetchedPatients);
+            } catch (error) {
+                console.error('Error fetching patients:', error);
+            }
+        }
+        fetchPatients();
+    }, []);
+
     return (
         <IonPage>
             <NavbarHeader title="Resultados" />
 
             <IonContent className='ion-padding'>
-
                 <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
 
                 <div className='filter-toggle'>
@@ -19,18 +36,15 @@ const SearchResults: React.FC = () => {
                     <ShowImagesToggle />
                 </div>
 
-                <h5>Todos los resultados encontrados:</h5>
-
-                <PatientBasicCard imageUrl="src\assets\img\patient-1.jpg" content='Descripción: Piel morena y el cabello negro, corto y liso. Su rostro muestra una barba de candado crecida, ojos oscuros, nariz ancha y labios carnosos, con mejillas llenas y una mandíbula prominente. Muestra heridas...'
-                    button='Ver resultado'
-                    link='/individual-result' />
-                <PatientBasicCard imageUrl="src\assets\img\patient-2.jpg" content='Descripción: Piel morena y el cabello negro, corto y liso. Su rostro muestra una barba de candado crecida, ojos oscuros, nariz ancha y labios carnosos, con mejillas llenas y una mandíbula prominente. Muestra heridas...'
-                    button='Ver resultado'
-                    link='/individual-result' />
-                <PatientBasicCard imageUrl="src\assets\img\patient-3.jpg" content='Descripción: Piel morena y el cabello negro, corto y liso. Su rostro muestra una barba de candado crecida, ojos oscuros, nariz ancha y labios carnosos, con mejillas llenas y una mandíbula prominente. Muestra heridas...'
-                    button='Ver resultado'
-                    link='/individual-result' />
-
+                {patients.map((patient, index) => (
+                    <PatientCard
+                        key={patient.id}
+                        patient={patient}
+                        imageUrl={`src/assets/img/patient-${index + 1}.jpg`}
+                        buttonLabel='Ver resultado'
+                        link='/individual-result'
+                    />
+                ))}
             </IonContent>
         </IonPage>
     );
