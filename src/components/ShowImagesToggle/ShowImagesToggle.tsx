@@ -5,7 +5,7 @@ import {
 
 const ShowImagesToggle: React.FC = () => {
     return (
-        <IonItem className='ion-no-padding' lines='none'>
+        <IonItem mode='md' className='ion-no-padding' lines='none'>
             <IonToggle justify="space-between" checked={true} enableOnOffLabels={true}>
                 Mostrar imagenes
             </IonToggle>

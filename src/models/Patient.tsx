@@ -5,4 +5,5 @@ export interface Patient {
     weight: number;
     body: string;
     description: string;
+    institutionId: number;
 }

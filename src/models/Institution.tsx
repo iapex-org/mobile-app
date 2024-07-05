@@ -1,3 +1,5 @@
+import { Patient } from "./Patient";
+
 export interface Institution {
     id: number;
     name: string;
@@ -5,4 +7,5 @@ export interface Institution {
     phone: string;
     description: string;
     imageUrl: string;
+    patients?: Patient[];
 }

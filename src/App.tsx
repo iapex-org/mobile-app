@@ -72,7 +72,7 @@ const App: React.FC = () => (
           <Route exact path="/individual-result/:id">
             <IndividualResult />
           </Route>
-          <Route exact path="/institution-information">
+          <Route exact path="/institution-information/:id">
             <InstitutionInformation />
           </Route>
           <Route exact path="/contact-institution/:id">

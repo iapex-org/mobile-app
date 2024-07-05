@@ -1,5 +1,5 @@
-// services/InstitutionService.ts
 import { Institution } from '../models/Institution';
+import PatientService from './PatientService';
 
 class InstitutionService {
     private institutions: Institution[] = [
@@ -15,7 +15,13 @@ class InstitutionService {
     ];
 
     async getInstitutions(): Promise<Institution[]> {
-        return this.institutions;
+        const institutionsWithPatients = await Promise.all(
+            this.institutions.map(async (institution) => {
+                const patients = await PatientService.getPatientsByInstitution(institution.id);
+                return { ...institution, patients };
+            })
+        );
+        return institutionsWithPatients;
     }
 
     async createInstitution(institution: Institution): Promise<Institution> {
@@ -26,6 +32,7 @@ class InstitutionService {
 
     async deleteInstitution(institutionId: number): Promise<void> {
         this.institutions = this.institutions.filter(institution => institution.id !== institutionId);
+        // Además, eliminar o actualizar pacientes que estaban en esta institución si es necesario
     }
 }
 
