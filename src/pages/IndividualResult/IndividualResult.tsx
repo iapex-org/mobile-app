@@ -76,19 +76,21 @@ const IndividualResult: React.FC = () => {
                     />
                 )}
 
+                {loading && (
+                    <>
+                        <ShowImagesToggle />
+                        <h5>Detalles del paciente</h5>
+                        <CardPlaceholder />
+                        <h5>Institución en la que se encuentra registrado</h5>
+                        <CardPlaceholder />
+                    </>
+                )}
+
                 {!errorOccurred && (
                     <>
                         <ShowImagesToggle />
 
                         <h5>Detalles del paciente</h5>
-
-                        {loading && (
-                            <div>
-                                {[...Array(2)].map((_, index) => (
-                                    <CardPlaceholder key={index} />
-                                ))}
-                            </div>
-                        )}
 
                         {patient && (
                             <PatientCard

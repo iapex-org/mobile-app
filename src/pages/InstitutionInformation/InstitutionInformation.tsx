@@ -74,11 +74,11 @@ const InstitutionInformation: React.FC = () => {
                 )}
 
                 {loading && (
-                    <div>
+                    <>
                         {[...Array(2)].map((_, index) => (
                             <CardPlaceholder key={index} />
                         ))}
-                    </div>
+                    </>
                 )}
 
                 <IonToast mode='ios'

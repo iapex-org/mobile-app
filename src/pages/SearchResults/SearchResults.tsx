@@ -78,7 +78,7 @@ const SearchResults: React.FC = () => {
                     </div>
                 )}
 
-                {!loading && patients.length > 0 && !errorOccurred && (
+                {loading && (
                     <>
                         <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
 
@@ -87,13 +87,20 @@ const SearchResults: React.FC = () => {
                             <ShowImagesToggle />
                         </div>
 
-                        {loading && (
-                            <div>
-                                {[...Array(5)].map((_, index) => (
-                                    <CardPlaceholder key={index} />
-                                ))}
-                            </div>
-                        )}
+                        {[...Array(5)].map((_, index) => (
+                            <CardPlaceholder key={index} />
+                        ))}
+                    </>
+                )}
+
+                {!loading && patients.length > 0 && !errorOccurred && (
+                    <>
+                        <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
+
+                        <div className='filter-toggle'>
+                            <IonIcon icon={filterOutline} size='large' className="ion-margin-end" />
+                            <ShowImagesToggle />
+                        </div>
 
                         {!loading && patients.length > 0 && (
                             patients.map((patient, index) => (
