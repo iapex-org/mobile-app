@@ -1,9 +1,4 @@
-import {
-    IonBackButton,
-    IonButtons,
-    IonHeader,
-    IonToolbar
-} from '@ionic/react';
+import { IonBackButton, IonButtons, IonHeader, IonToolbar } from '@ionic/react';
 
 interface NavbarHeaderProps {
     title: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonContent, IonPage } from '@ionic/react';
-import { contrastOutline, contrastSharp, playForwardOutline, textOutline, textSharp, volumeHighOutline } from 'ionicons/icons';
+import { contrastSharp, playForwardOutline, textOutline, textSharp, volumeHighOutline } from 'ionicons/icons';
 import AccessibilitySettingCard from '../../components/AccessibilitySettingCard/AccessibilitySettingCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 

@@ -47,7 +47,7 @@ const AccessibilitySettingCard: React.FC<AccessibilitySettingCardProps> = ({ tit
     return (
         <div className="setting-card">
             <h4>{title}</h4>
-            <IonCard className='ion-no-margin'>
+            <IonCard mode='ios' className='ion-no-margin'>
                 <IonList mode='ios'>
                     {items.map((item, index) => (
                         <IonItem key={index} mode='ios' lines='none'>

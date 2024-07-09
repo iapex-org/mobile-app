@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 
 html.md {
     --ion-default-font: 'Poppins' !important;
 }
 
-html,
-body {
+html, body {
     font-family: 'Poppins', sans-serif;
     height: 100%;
     margin: 0;
@@ -14,30 +13,55 @@ body {
     font-weight: var(--text-bold, normal);
 }
 
+:root {
+    --text-size: 1em;
+    --text-bold: normal;
+}
+
+ion-content {
+    --ion-background-color: #F4F4F4;
+}
+
+ion-toolbar {
+    --ion-toolbar-background: #ffffff;
+}
+
 ion-card {
     border-radius: 20px;
+    --ion-box-shadow: none;
+    box-shadow: none;
+    background-color: #ffffff;
+    border: 2px solid #E0E0E0;
 }
 
 p {
     color: #343A40;
 }
-.high-contrast-dark {
-    font-family: 'Poppins', sans-serif;
-    --ion-background-color: #000000;
-    --ion-text-color: #ffffff;
-    --ion-toolbar-background: #000000;
-    --ion-toolbar-text-color: #ffffff;
-    --ion-item-background: #000000;
-    --ion-item-text-color: #ffffff;
-    --ion-button-text-color: #ffffff;
-    --ion-label-color: #ffffff;
-    --ion-text-color: #ffffff;
+
+/* CSS para los ajustes de accesibilidad */
+.high-contrast-dark html, .high-contrast-dark body, .high-contrast-dark ion-content {
+    --ion-background-color: #000000 !important;
+    --ion-text-color: #ffffff !important;
+    --ion-item-background: #000000 !important;
+    --ion-item-text-color: #ffffff !important;
+    --ion-button-text-color: #ffffff !important;
+    --ion-label-color: #ffffff !important;
+    --ion-text-color: #ffffff !important;
 }
+
+.high-contrast-dark ion-card {
+    background-color: #000000 !important;
+}
+
+.high-contrast-dark ion-item {
+    background-color: #000000 !important;
+}
+
+.high-contrast-dark ion-toolbar {
+    --ion-toolbar-background: #000000 !important;
+    --ion-toolbar-text-color: #ffffff !important;
+}
+
 .high-contrast-dark p {
-    color: #ffffff;
-}
-/* Definir variable CSS para tamaño de texto */
-:root {
-    --text-size: 1em; /* Tamaño base del texto */
-    --text-bold: normal; /* Estado inicial de la negrita */
+    color: #ffffff !important;
 }

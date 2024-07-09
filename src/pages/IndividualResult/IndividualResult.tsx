@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { IonAlert, IonContent, IonPage } from '@ionic/react';
+import { IonContent, IonPage, IonToast } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import InstitutionCard from '../../components/InstitutionCard/InstitutionCard';
 import ShowImagesToggle from '../../components/ShowImagesToggle/ShowImagesToggle';
@@ -9,31 +9,39 @@ import PatientService from '../../services/PatientService';
 import InstitutionService from '../../services/InstitutionService';
 import { Patient } from '../../models/Patient';
 import { Institution } from '../../models/Institution';
+import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
+import ErrorOrException from '../../components/Placeholders/ErrorOrException';
 
 const IndividualResult: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [patient, setPatient] = useState<Patient | null>(null);
     const [institution, setInstitution] = useState<Institution | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const history = useHistory();
-    const [errorAlert, setErrorAlert] = useState<string>('');
-    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [errorOccurred, setErrorOccurred] = useState<boolean>(false);
+    const [showFailedToast, setShowFailedToast] = useState<boolean>(false);
 
     const fetchPatient = async () => {
         try {
-            const fetchedPatients = await PatientService.getPatients();
-            const selectedPatient = fetchedPatients.find(p => p.id === parseInt(id));
+            // throw new Error('Error ficticio para probar el manejo de errores');
+
+            setShowFailedToast(false);
+
+            const selectedPatient = await PatientService.getPatientById(parseInt(id));
             if (!selectedPatient) {
                 throw new Error('Patient not found');
             }
             setPatient(selectedPatient);
 
-            const institutions = await InstitutionService.getInstitutions();
-            const patientInstitution = institutions.find(inst => inst.id === selectedPatient.institutionId);
+            const patientInstitution = await InstitutionService.getInstitutionById(selectedPatient.institutionId);
             setInstitution(patientInstitution || null);
+            setLoading(false);
+            setErrorOccurred(false);
         } catch (error) {
-            console.error('Error fetching patient or institution:', error);
-            setErrorAlert('Error al cargar la información del paciente seleccionado');
-            setShowAlert(true);
+            console.error('Error al obtener el paciente o la institución:', error);
+            setLoading(false);
+            setErrorOccurred(true);
+            setShowFailedToast(true);
         }
     };
 
@@ -42,63 +50,75 @@ const IndividualResult: React.FC = () => {
     }, [id]);
 
     const handleRetry = () => {
-        setShowAlert(false);
-        setPatient(null);
-        setInstitution(null);
-        setErrorAlert('');
+        setLoading(true);
+        setErrorOccurred(false);
         fetchPatient();
     };
 
-    if (!patient) {
-        return null;
-    }
+    const handleGoToHome = () => {
+        history.push('/upload-images');
+    };
 
     return (
         <IonPage>
-            <NavbarHeader title={`Paciente No. ${patient.id}`} />
+            <NavbarHeader title={patient ? `Paciente No. ${patient.id}` : 'Cargando...'} />
 
             <IonContent className='ion-padding'>
-                <ShowImagesToggle />
 
-                <h5>Detalles del paciente</h5>
+                {!loading && errorOccurred && (
+                    <ErrorOrException
+                        title="Ocurrió un error"
+                        message="Sucedio un error al cargar la información del paciente seleccionado. Por favor, intente cargarla de nuevo o regrese al inicio."
+                        showRetryButton={true}
+                        showHomeButton={true}
+                        onRetry={handleRetry}
+                        onHome={handleGoToHome}
+                    />
+                )}
 
-                <PatientCard
-                    patient={patient}
-                    imageUrl={`src/assets/img/patient-${patient.id}.jpg`}
-                    buttonLabel='Contactar'
-                    link='/contact-institution'
+                {!errorOccurred && (
+                    <>
+                        <ShowImagesToggle />
+
+                        <h5>Detalles del paciente</h5>
+
+                        {loading && (
+                            <div>
+                                {[...Array(2)].map((_, index) => (
+                                    <CardPlaceholder key={index} />
+                                ))}
+                            </div>
+                        )}
+
+                        {patient && (
+                            <PatientCard
+                                patient={patient}
+                                imageUrl={`src/assets/img/patient-${patient.id}.jpg`}
+                                buttonLabel='Contactar'
+                                link='/contact-institution'
+                            />
+                        )}
+
+                        <h5>Institución en la que se encuentra registrado</h5>
+
+                        {institution && (
+                            <InstitutionCard
+                                institution={institution}
+                                showButton={true}
+                            />
+                        )}
+                    </>
+                )}
+
+                <IonToast mode='ios'
+                    isOpen={showFailedToast}
+                    onDidDismiss={() => setShowFailedToast(false)}
+                    message="Error al obtener la información del paciente o la institución. Por favor, inténtelo más tarde."
+                    duration={3000}
+                    color="danger"
                 />
 
-                <h5>Institución en la que se encuentra registrado</h5>
-
-                {institution ? (
-                    <InstitutionCard
-                        institution={institution}
-                        showButton={true}
-                    />
-                ) : (
-                    <p>La institución no está disponible.</p>
-                )}
             </IonContent>
-
-            <IonAlert mode='ios'
-                header="Ocurrio un error"
-                message={errorAlert}
-                isOpen={showAlert}
-                buttons={[
-                    {
-                        text: 'Ir a inicio',
-                        handler: () => {
-                            history.push('/upload-images')
-                        },
-                    },
-                    {
-                        text: 'Reintentar',
-                        handler: handleRetry,
-                    },
-                ]}
-            ></IonAlert>
-
         </IonPage>
     );
 };

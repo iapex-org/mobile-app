@@ -1,5 +1,5 @@
 import './PatientCard.css'
-import { IonCard, IonCardHeader, IonCardContent, IonButton } from '@ionic/react';
+import { IonCard, IonCardContent, IonButton } from '@ionic/react';
 
 interface PatientCardProps {
     patient: {
@@ -24,7 +24,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, imageUrl, link, butt
                 <p><b>Peso: </b>{patient.weight} kg</p>
                 <p><b>Altura: </b>{patient.height} cm</p>
                 <p><b>Descripción: </b>{patient.description}</p>
-                <IonButton routerLink={`${link}/${patient.id}`} expand='block' mode='ios' className='ion-margin-top' >{buttonLabel}</IonButton>
+                <IonButton routerLink={link} expand='block' mode='ios' className='ion-margin-top' >{buttonLabel}</IonButton>
             </IonCardContent>
         </IonCard>
     );

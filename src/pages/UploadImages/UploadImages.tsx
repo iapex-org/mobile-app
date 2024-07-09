@@ -28,7 +28,7 @@ const UploadImages: React.FC = () => {
             if (images.photos.length > 0) {
                 const imageUrls = images.photos
                     .slice(0, 12)
-                    .filter(photo => photo.format && photo.format.includes('jpeg'))
+                    .filter(photo => photo.format && (photo.format.includes('jpeg') || photo.format.includes('png')  || photo.format.includes('bmp') || photo.format.includes('tiff') || photo.format.includes('HEIC')))
                     .map(photo => photo.webPath);
 
                 if (imageUrls.length >= 10) {
