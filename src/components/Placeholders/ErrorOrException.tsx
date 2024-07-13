@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonText, IonIcon, IonButton } from '@ionic/react';
 import { alertCircleOutline } from 'ionicons/icons';
-import './Placeholders.css';
+import styles from './Placeholders.module.css';
 
 interface ErrorOrExceptionProps {
     title?: string;
@@ -21,11 +21,11 @@ const ErrorOrException: React.FC<ErrorOrExceptionProps> = ({
     onHome = () => {}
 }) => {
     return (
-        <div className='container'>
+        <div className={styles.container}>
             <IonText>
                 <h1>{title}</h1>
             </IonText>
-            <IonIcon icon={alertCircleOutline} color='primary' className='alertIcon'></IonIcon>
+            <IonIcon icon={alertCircleOutline} color='primary' className={styles.alertIcon}></IonIcon>
             <p>{message}</p>
             {showRetryButton && (
                     <IonButton expand="block" mode='ios' onClick={onRetry}>Reintentar</IonButton>

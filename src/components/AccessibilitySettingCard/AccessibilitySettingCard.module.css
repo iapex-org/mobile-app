@@ -1,11 +1,11 @@
-.setting-card {
+.settingCard {
     margin-bottom: 35px;
 }
 
-.setting-card ion-item {
+.settingCard ion-item {
     background-color: white;
 }
 
-.setting-card ion-item {
+.settingCard ion-item {
     --background: transparent;
 }

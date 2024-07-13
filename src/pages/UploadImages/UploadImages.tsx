@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { IonButton, IonContent, IonIcon, IonImg, IonPage, IonText, IonToast } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonPage, IonText, IonToast } from '@ionic/react';
 import { accessibility, camera } from 'ionicons/icons';
 import { Camera } from '@capacitor/camera';
 import { ImageContext } from '../../contexts/ImageContext';
 import { useHistory } from 'react-router-dom';
-import './UploadImages.css';
+import styles from './UploadImages.module.css';
 
 const UploadImages: React.FC = () => {
     const { setImages } = useContext(ImageContext);
@@ -28,7 +28,7 @@ const UploadImages: React.FC = () => {
             if (images.photos.length > 0) {
                 const imageUrls = images.photos
                     .slice(0, 12)
-                    .filter(photo => photo.format && (photo.format.includes('jpeg') || photo.format.includes('png')  || photo.format.includes('bmp') || photo.format.includes('tiff') || photo.format.includes('HEIC')))
+                    .filter(photo => photo.format && (photo.format.includes('jpeg') || photo.format.includes('png') || photo.format.includes('bmp') || photo.format.includes('tiff') || photo.format.includes('HEIC')))
                     .map(photo => photo.webPath);
 
                 if (imageUrls.length >= 10) {
@@ -51,7 +51,11 @@ const UploadImages: React.FC = () => {
 
     return (
         <IonPage>
-            <IonContent>
+            <IonContent color={'primary'} className='ion-padding'>
+                <IonButton color='light' fill='clear' mode='ios' className='fixed-button' size='large' routerLink='/accessibility-settings'>
+                    <IonIcon icon={accessibility} className={styles.accessibilityIcon}></IonIcon>
+                </IonButton>
+
                 <IonToast mode='ios'
                     isOpen={!!errorToast}
                     position="top"
@@ -61,19 +65,16 @@ const UploadImages: React.FC = () => {
                     color={'danger'}
                 />
 
-                <IonImg src="src/assets/img/banner-top.png" />
-                <div className='container'>
+                <div className={styles.container}>
                     <IonText>
                         <h1>¡Bienvenido!</h1>
                     </IonText>
-                    <IonIcon icon={camera} color='primary' className='cameraIcon'></IonIcon>
+                    <IonIcon icon={camera} className={styles.cameraIcon}></IonIcon>
                     <p>¡Bienvenido a 'Encuéntrame'! Sube al menos 10 fotos claras de la persona que estás buscando. Asegúrate de incluir diferentes ángulos y características distintivas. Cada imagen es crucial para encontrar a esa persona. Juntos, podemos lograrlo.</p>
-                    <IonButton expand="block" mode='ios' onClick={openGallery}>Continuar</IonButton>
+                    <IonButton color={'light'} expand="block" mode='ios' onClick={openGallery} className={styles.whiteText}>Continuar</IonButton>
                 </div>
-                <IonButton color='light' fill='clear' mode='ios' className='fixed-button' size='large' routerLink='/accessibility-settings'>
-                    <IonIcon icon={accessibility} className='accessibilityIcon'></IonIcon>
-                </IonButton>
-                <IonImg src="src/assets/img/banner-bottom.png" />
+
+                <img src="src\assets\img\logo-encuentrame.png" alt="Encuéntrame" />
             </IonContent>
         </IonPage>
     );

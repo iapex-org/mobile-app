@@ -1,11 +1,4 @@
-import {
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle
-} from '@ionic/react';
-import './InstitutionCard.css';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 import { Institution } from '../../models/Institution';
 
 interface InstitutionCardProps {
@@ -16,7 +9,7 @@ interface InstitutionCardProps {
 const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, showButton = true }) => {
     return (
         <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
-            <img className="institution-img" src={institution.imageUrl} alt={`Imagen de ${institution.name}`} />
+            <img className="size-img" src={institution.imageUrl} alt={`Imagen de ${institution.name}`} />
             <IonCardHeader mode='ios'>
                 <IonCardTitle>{institution.name}</IonCardTitle>
             </IonCardHeader>

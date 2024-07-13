@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { IonContent, IonIcon, IonPage, IonToast } from '@ionic/react';
 import { filterOutline } from 'ionicons/icons';
 import PatientCard from '../../components/PatientCard/PatientCard';
-import ShowImagesToggle from '../../components/ShowImagesToggle/ShowImagesToggle';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import PatientService from '../../services/PatientService';
 import { Patient } from '../../models/Patient';
 import { useHistory } from 'react-router';
 import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
 import ErrorOrException from '../../components/Placeholders/ErrorOrException';
-import './SearchResults.css';
 
 const SearchResults: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -82,11 +80,6 @@ const SearchResults: React.FC = () => {
                     <>
                         <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
 
-                        <div className='filter-toggle'>
-                            <IonIcon icon={filterOutline} size='large' className="ion-margin-end" />
-                            <ShowImagesToggle />
-                        </div>
-
                         {[...Array(5)].map((_, index) => (
                             <CardPlaceholder key={index} />
                         ))}
@@ -96,11 +89,6 @@ const SearchResults: React.FC = () => {
                 {!loading && patients.length > 0 && !errorOccurred && (
                     <>
                         <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
-
-                        <div className='filter-toggle'>
-                            <IonIcon icon={filterOutline} size='large' className="ion-margin-end" />
-                            <ShowImagesToggle />
-                        </div>
 
                         {!loading && patients.length > 0 && (
                             patients.map((patient, index) => (
@@ -116,7 +104,6 @@ const SearchResults: React.FC = () => {
                     </>
                 )}
 
-                {/* Toast for fetch failure */}
                 <IonToast mode='ios'
                     isOpen={showFailedToast}
                     onDidDismiss={() => setShowFailedToast(false)}

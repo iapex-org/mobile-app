@@ -1,7 +1,7 @@
+import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { checkmarkCircle } from 'ionicons/icons';
-import { useState } from 'react';
-import './ImageSelectCard.css';
+import styles from './ImageSelectCard.module.css';
 
 interface ImageSelectCardProps {
     imageUrl: string;
@@ -41,15 +41,15 @@ const ImageSelectCard: React.FC<ImageSelectCardProps> = ({ imageUrl, onSelect, i
 
     return (
         <div
-            className={`image-select-card ${isSelected ? 'selected' : ''} ${isSelectedAnimation ? 'animated' : ''} ${isFullScreen ? 'fullscreen' : ''}`}
+            className={`${styles.imageSelectCard} ${isSelected ? styles.selected : ''} ${isSelectedAnimation ? styles.animated : ''} ${isFullScreen ? styles.fullscreen : ''}`}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchEnd}
             onClick={handleClick}
         >
-            <img src={imageUrl} className={`image ${isFullScreen ? 'fullscreen-image' : ''}`} />
+            <img src={imageUrl} className={styles.image} />
             {isSelected && (
-                <IonIcon icon={checkmarkCircle} className="selection-icon" style={{ color: '#ffffff' }} />
+                <IonIcon icon={checkmarkCircle} className={styles.selectionIcon} style={{ color: '#ffffff' }} />
             )}
         </div>
     );

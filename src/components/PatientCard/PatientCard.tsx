@@ -1,15 +1,8 @@
-import './PatientCard.css'
 import { IonCard, IonCardContent, IonButton } from '@ionic/react';
+import { Patient } from '../../models/Patient';
 
 interface PatientCardProps {
-    patient: {
-        id: number;
-        age: number;
-        height: number;
-        weight: number;
-        body: string;
-        description: string;
-    };
+    patient: Patient;
     imageUrl: string;
     link: string;
     buttonLabel: string;
@@ -18,7 +11,7 @@ interface PatientCardProps {
 const PatientCard: React.FC<PatientCardProps> = ({ patient, imageUrl, link, buttonLabel }) => {
     return (
         <IonCard mode='ios' className='ion-no-margin ion-no-padding ion-margin-bottom'>
-                <img src={imageUrl} className='patient-img' />
+            <img src={imageUrl} className='size-img' />
             <IonCardContent mode='ios'>
                 <p><b>Edad: </b>{patient.age} años</p>
                 <p><b>Peso: </b>{patient.weight} kg</p>

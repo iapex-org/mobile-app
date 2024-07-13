@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IonCard, IonIcon, IonItem, IonList, IonRange, IonToggle } from '@ionic/react';
-import './AccessibilitySettingCard.css';
+import styles from './AccessibilitySettingCard.module.css';
 
 interface AccessibilitySettingCardProps {
     title: string;
@@ -45,7 +45,7 @@ const AccessibilitySettingCard: React.FC<AccessibilitySettingCardProps> = ({ tit
     };
 
     return (
-        <div className="setting-card">
+        <div className={styles.settingCard}>
             <h4>{title}</h4>
             <IonCard mode='ios' className='ion-no-margin'>
                 <IonList mode='ios'>

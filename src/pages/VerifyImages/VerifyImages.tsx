@@ -4,9 +4,9 @@ import { addOutline, trashOutline } from 'ionicons/icons';
 import ImageSelectCard from '../../components/ImageSelectCard/ImageSelectCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { ImageContext } from '../../contexts/ImageContext';
-import './VerifyImages.css';
 import { Camera } from '@capacitor/camera';
 import { useHistory } from 'react-router-dom';
+import styles from './VerifyImages.module.css';
 
 const VerifyImages: React.FC = () => {
     const { images, selectedImages, setSelectedImages, setImages } = useContext(ImageContext);
@@ -127,7 +127,7 @@ const VerifyImages: React.FC = () => {
             <IonContent className='ion-padding'>
                 <p>Verifica tus fotos para asegurarte de que son las correctas antes de iniciar la búsqueda, puedes eliminar o subir más fotos.</p>
 
-                <div className="image-grid">
+                <div className={styles.imageGrid}>
                     {images.map((image: string, index: Key | null | undefined) => (
                         <ImageSelectCard
                             key={index}

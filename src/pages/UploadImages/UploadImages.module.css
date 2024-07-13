@@ -3,29 +3,41 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    height: 113vw;
-    margin: 0px 32px;
-    padding: 0px;
+    height: 100vh;
 }
 
 h1 {
     font-size: 2.3rem;
     font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .fixed-button {
     position: absolute;
-    bottom: 0;
-    left: 0;
     z-index: 9999;
 }
 
 .accessibilityIcon {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #fff;
 }
 
 .cameraIcon {
     font-size: 10rem;
+    margin-bottom: 20px;
     align-self: center;
+}
+
+.container p {
+    color: #fff;
+}
+
+img {
+    width: 150px;
+    display: flex;
+    margin: 0 auto;
+}
+
+.whiteText {
+    --ion-color-contrast: #3880ff !important;
 }

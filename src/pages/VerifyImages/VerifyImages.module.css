@@ -1,15 +1,14 @@
-/* VerifyImages.css */
-.image-grid {
+.imageGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 10px;
 }
 
-.select-button {
+/* .selectButton {
     margin-bottom: 10px;
 }
 
-.select-button.active {
+.selectButton.active {
     background-color: #007bff;
     color: white;
-}
+} */

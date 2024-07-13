@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { IonContent, IonPage, IonToast } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import InstitutionCard from '../../components/InstitutionCard/InstitutionCard';
-import ShowImagesToggle from '../../components/ShowImagesToggle/ShowImagesToggle';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import PatientService from '../../services/PatientService';
 import InstitutionService from '../../services/InstitutionService';
@@ -78,7 +77,6 @@ const IndividualResult: React.FC = () => {
 
                 {loading && (
                     <>
-                        <ShowImagesToggle />
                         <h5>Detalles del paciente</h5>
                         <CardPlaceholder />
                         <h5>Institución en la que se encuentra registrado</h5>
@@ -88,7 +86,6 @@ const IndividualResult: React.FC = () => {
 
                 {!errorOccurred && (
                     <>
-                        <ShowImagesToggle />
 
                         <h5>Detalles del paciente</h5>
 
