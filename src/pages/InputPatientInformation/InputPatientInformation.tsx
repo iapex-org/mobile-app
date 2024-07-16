@@ -1,66 +1,32 @@
 import { IonButton, IonContent, IonInput, IonItem, IonList, IonPage, IonSelect, IonSelectOption } from '@ionic/react';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const InputPatientInformation: React.FC = () => {
-
-    
-
-    const {register,formState: {errors}, handleSubmit} = useForm();
-
-    const [showToast, setShowToast] = useState<string>('');
-
-    const [toastMessage, setToastMessage] = useState('');
-
-    const onError = (error: any) => {
-        if (error.nombre) {
-            setToastMessage(error.nombre.message);
-            setShowToast('error');
-        } else if (error.apellidoMaterno) {
-            setToastMessage(error.apellidoMaterno.message);
-            setShowToast('error');
-        } else if (error.apellidoPaterno) {
-            setToastMessage(error.apellidoPaterno.message);
-            setShowToast('error');
-        } else if (error.nss) {
-            setToastMessage(error.nss.message);
-            setShowToast('error');
-        } else if (error.postura) {
-            setToastMessage(error.postura.message);
-            setShowToast('error');
-        } else if (error.descripcion) {
-            setToastMessage(error.descripcion.message);
-            setShowToast('error');
-        } else if (error.condicionesEspeciales) {
-            setToastMessage(error.condicionesEspeciales.message);
-            setShowToast('error');
-        }
-    };
-
+    const { register, handleSubmit } = useForm();
 
     return (
         <IonPage>
             <NavbarHeader title="Un paso más..." />
 
             <IonContent className='ion-padding'>
-                
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+
+                <form onSubmit={handleSubmit((data) => console.log(data))}>
                     <p>Llena el siguiente formulario para mejores coincidencias. Tu ayuda es fundamental.</p>
 
                     <h4>Información principal</h4>
                     <IonList>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Nombre(s)" labelPlacement="stacked" placeholder="Ingresa el nombre del paciente"
-                            {...register("nombre",{required:true, pattern: {value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras"}})}></IonInput>
+                                {...register("nombre", { required: true, pattern: { value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras" } })}></IonInput>
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Apellido materno" labelPlacement="stacked" placeholder="Ingresa el apellido materno del paciente"
-                            {...register("apellidoMaterno",{required:true, pattern: {value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras"}})}></IonInput>
+                                {...register("apellidoMaterno", { required: true, pattern: { value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras" } })}></IonInput>
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Apellido paterno" labelPlacement="stacked" placeholder="Ingresa el apellido paterno del paciente"
-                            {...register("ApellidoPaterno",{required:true, pattern: {value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras"}})}></IonInput>
+                                {...register("ApellidoPaterno", { required: true, pattern: { value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras" } })}></IonInput>
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonSelect label="Tipo de sangre" labelPlacement="stacked" placeholder="Selecciona el tipo de sangre">
@@ -91,7 +57,7 @@ const InputPatientInformation: React.FC = () => {
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Número de seguridad social (NSS)" labelPlacement="stacked" placeholder="Ingresa el NSS"
-                            {...register("NSS",{required:true, pattern: {value: /^[0-9]{11}$/, message: "El NSS debe contener 11 digitos"}})}></IonInput>
+                                {...register("NSS", { required: true, pattern: { value: /^[0-9]{11}$/, message: "El NSS debe contener 11 digitos" } })}></IonInput>
                         </IonItem>
                     </IonList>
 
@@ -172,15 +138,15 @@ const InputPatientInformation: React.FC = () => {
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Postura" labelPlacement="stacked" placeholder="Ingresa la postura del paciente"
-                            {...register("postura",{required:true, pattern: {value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras"}})}></IonInput>
+                                {...register("postura", { required: true, pattern: { value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras" } })}></IonInput>
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Descripción" labelPlacement="stacked" placeholder="Ingrese una descripción detallada"
-                            {...register("descripcion",{required:true, pattern: {value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras"}})}></IonInput>
+                                {...register("descripcion", { required: true, pattern: { value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras" } })}></IonInput>
                         </IonItem>
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Condiciones especiales (si aplica)" labelPlacement="stacked" placeholder="Discapacidad, amputaciones, etc."
-                            {...register("condicionesEspeciales",{required:true, pattern: {value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras"}})}></IonInput>
+                                {...register("condicionesEspeciales", { required: true, pattern: { value: /^[A-Za-z]+$/i, message: "Solo se aceptan letras" } })}></IonInput>
                         </IonItem>
                     </IonList>
 

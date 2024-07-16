@@ -94,7 +94,7 @@ const IndividualResult: React.FC = () => {
                                 patient={patient}
                                 imageUrl={`src/assets/img/patient-${patient.id}.jpg`}
                                 buttonLabel='Contactar'
-                                link='/contact-institution'
+                                link={`/contact-institution/${patient.id}`}
                             />
                         )}
 

@@ -11,7 +11,7 @@ const ProcessCompleted: React.FC = () => {
                         <h1>¡Lo lograste!</h1>
                     </IonText>
                     <IonIcon icon={checkmarkCircle} className={styles.checkmarkIcon}></IonIcon>
-                    <p>Tu solicitud acaba de ser recibida. Se te notificará a través de WhatsApp al número que nos proporcionaste. Cada minuto que transcurre es un minuto más cerca que estás de ver a esa persona tan querida.</p>
+                    <p>Tu solicitud ha sido recibida. Te notificaremos a través de WhatsApp al número proporcionado o por correo electrónico, según los datos que nos proporcionaste. Cada minuto que pasa te acerca más a reunirte con esa persona tan querida.</p>
                     <IonButton color={'light'} expand="block" mode='ios' routerLink='/search-results' className={styles.whiteText}>Volver a la sección de resultados</IonButton>
                 </div>
 
