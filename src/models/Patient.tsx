@@ -1,9 +1,35 @@
+// models/Patient.ts
+
 export interface Patient {
     id: number;
-    age: number;
-    height: number;
-    weight: number;
-    body: string;
-    description: string;
-    institutionId: number;
+    name: string;
+    lastName: string;
+    secondLastName: string;
+    gender: string;
+    approximateAge: number;
+    registrationDateTime: string;
+    registeringUserId: number;
+    active: boolean;
+    skinColor: string;
+    hair: string;
+    complexion: string;
+    eyeColor: string;
+    approximateHeight: number;
+    medicalConditions?: string;
+    distinctiveFeatures?: string;
+    institution: Institution;
+    images: Image[];
+    additionalNotes?: string;
+}
+
+export interface Institution {
+    id: number;
+    name: string;
+    // otras propiedades relevantes para la institución
+}
+
+export interface Image {
+    id: number;
+    image: string;
+    imageUrl: string;
 }
