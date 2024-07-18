@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { IonButton, IonContent, IonInput, IonItem, IonList, IonPage, IonSelect, IonSelectOption, IonText, IonTextarea, IonToast } from '@ionic/react';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { useForm } from 'react-hook-form';
+import { createContact } from '../../services/ContactService';
 
 const ContactInstitution: React.FC = () => {
     // Definición de tipos y estado
@@ -58,8 +59,18 @@ const ContactInstitution: React.FC = () => {
 
     // Función para manejar la presentación del mensaje de confirmación
     const onSubmit = async (data: any) => {
-        console.log(data); // Aquí puedes manejar los datos enviados, como enviar una solicitud de API, etc.
+        try {
+            console.log(data); // Verifica que los datos se estén enviando correctamente
+            await createContact(data); // Llama a tu función para enviar los datos a la API
+            history.push(`/process-completed/${id}`); // Redirige al usuario a la página de proceso completado
+        } catch (error) {
+            console.error(error);
+            setErrorToast('Hubo un error al enviar los datos. Inténtalo de nuevo.'); // Muestra un mensaje de error si falla la solicitud
+        }
     };
+    
+
+    
 
     return (
         <IonPage>
@@ -80,7 +91,7 @@ const ContactInstitution: React.FC = () => {
                                 {...register("name", {
                                     required: "El nombre es requerido",
                                     minLength: { value: 2, message: "El nombre debe tener al menos 2 caracteres" },
-                                    maxLength: { value: 50, message: "El nombre no puede tener más de 50 caracteres" }
+                                    maxLength: { value: 200, message: "El nombre no puede tener más de 200 caracteres" }
                                 })}
                             />
                         </IonItem>
@@ -90,44 +101,7 @@ const ContactInstitution: React.FC = () => {
                                 {errors.name.message as string}
                             </IonText>
                         )}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput
-                                label="Apellido materno"
-                                labelPlacement="stacked"
-                                clearInput
-                                color={errors.firstLastName && (touchedFields.firstLastName || dirtyFields.firstLastName) ? "danger" : "primary"}
-                                placeholder="Ingresa tu apellido materno"
-                                {...register("firstLastName", {
-                                    required: "El apellido materno es requerido",
-                                    minLength: { value: 2, message: "El apellido materno debe tener al menos 2 caracteres" },
-                                    maxLength: { value: 50, message: "El apellido materno no puede tener más de 50 caracteres" }
-                                })}
-                            />
-                        </IonItem>
-                        {errors.firstLastName && (touchedFields.firstLastName || dirtyFields.firstLastName) && (
-                            <IonText className='ion-margin-start' color="danger">
-                                {errors.firstLastName.message as string}
-                            </IonText>
-                        )}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput
-                                label="Apellido paterno"
-                                labelPlacement="stacked"
-                                clearInput
-                                color={errors.secondLastName && (touchedFields.secondLastName || dirtyFields.secondLastName) ? "danger" : "primary"}
-                                placeholder="Ingresa tu apellido paterno"
-                                {...register("secondLastName", {
-                                    required: "El apellido paterno es requerido",
-                                    minLength: { value: 2, message: "El apellido paterno debe tener al menos 2 caracteres" },
-                                    maxLength: { value: 50, message: "El apellido paterno no puede tener más de 50 caracteres" }
-                                })}
-                            />
-                        </IonItem>
-                        {errors.secondLastName && (touchedFields.secondLastName || dirtyFields.secondLastName) && (
-                            <IonText className='ion-margin-start' color="danger">
-                                {errors.secondLastName.message as string}
-                            </IonText>
-                        )}
+                        
                         <IonItem className='ion-margin-bottom'>
                             <IonInput
                                 label="Nombre de la persona que buscas"
@@ -156,18 +130,13 @@ const ContactInstitution: React.FC = () => {
                                     required: "El parentesco es requerido"
                                 })}
                             >
-                                <IonSelectOption value="Padre">Padre</IonSelectOption>
-                                <IonSelectOption value="Madre">Madre</IonSelectOption>
-                                <IonSelectOption value="Hermano">Hermano</IonSelectOption>
-                                <IonSelectOption value="Hermana">Hermana</IonSelectOption>
-                                <IonSelectOption value="Abuelo">Abuelo</IonSelectOption>
-                                <IonSelectOption value="Abuela">Abuela</IonSelectOption>
-                                <IonSelectOption value="Tio">Tío</IonSelectOption>
-                                <IonSelectOption value="Tia">Tía</IonSelectOption>
-                                <IonSelectOption value="Primo">Primo</IonSelectOption>
-                                <IonSelectOption value="Prima">Prima</IonSelectOption>
-                                <IonSelectOption value="Amigo">Amigo</IonSelectOption>
-                                <IonSelectOption value="Amiga">Amiga</IonSelectOption>
+                                <IonSelectOption value="Padre">Padre/Madre</IonSelectOption>
+                                <IonSelectOption value="Hermano">Hermano/Hermana</IonSelectOption>
+                                <IonSelectOption value="Abuelo">Abuelo/Abuela</IonSelectOption>
+                                <IonSelectOption value="Tio">Tío/Tía</IonSelectOption>
+                                <IonSelectOption value="Primo">Primo/Prima</IonSelectOption>
+                                <IonSelectOption value="Amigo">Amigo/Amiga</IonSelectOption>
+                                
                             </IonSelect>
                         </IonItem>
                         {errors.relationship && (touchedFields.relationship || dirtyFields.relationship) && (
