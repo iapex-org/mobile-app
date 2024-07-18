@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonInput, IonItem, IonList, IonPage, IonSelect, IonSelectOption, IonText, IonToast } from '@ionic/react';
+import { IonButton, IonContent, IonDatetime, IonDatetimeButton, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSelect, IonSelectOption, IonText, IonToast } from '@ionic/react';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
@@ -6,7 +6,7 @@ import { useHistory, useParams } from 'react-router';
 
 const InputPatientInformation: React.FC = () => {
     // Definición de tipos y estado
-    type FormField = "numberSocial" | "name" | "firtsLastName" | "secondLastName" | "age" | "postura" | "description" | "specialConditions" | "bloodType" | "nationality" | "hairColor" | "hairType" | "eyeColor" | "genere" | "complexion" | "colorSkin" | "hairLength" | "height" ;
+    type FormField = "numberSocial" | "name" | "firtsLastName" | "secondLastName" | "age" | "postura" | "description" | "specialConditions" | "bloodType" | "nationality" | "hairColor" | "hairType" | "eyeColor" | "genere" | "complexion" | "colorSkin" | "hairLength" | "height" | "date";
     const [errorToast, setErrorToast] = useState<string>('');
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
@@ -32,18 +32,11 @@ const InputPatientInformation: React.FC = () => {
             complexion: '',
             colorSkin: '',
             hairLength: '',
-            height: ''
+            height: '', 
+            date: ''
         }
     });
 
-    // Validación personalizada para asegurarse de que al menos se proporcione un numero de seguridad social
-    const validateInputPatientInformation = () => {
-        const values = getValues();
-        if(!values.numberSocial) {
-            setError('numberSocial', {type: 'validate', message: 'Debes proporcionar tu número de seguridad social' });
-            return false;
-        }
-    }
 
     // Marcar todos los campos como "touched" para mostrar errores al usuario
     const markAllFieldsAsTouched = () => {
@@ -84,6 +77,21 @@ const InputPatientInformation: React.FC = () => {
 
                     <h4>Información principal</h4>
                     <IonList>
+                        <IonItem className='ion-margin-bottom'>
+
+                            <IonLabel className='ion-margin-end'>Fecha de desaparición</IonLabel>
+                            
+                            <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+
+                            <IonModal keepContentsMounted={true}>
+                            <IonDatetime 
+                            id="datetime"
+                            
+                            ></IonDatetime>
+                            </IonModal>
+                            
+                        </IonItem>
+                        
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Nombre(s)" 
                             labelPlacement="stacked" 
@@ -147,31 +155,7 @@ const InputPatientInformation: React.FC = () => {
                                 {errors.age.message as string}
                             </IonText>
                         )}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonSelect 
-                            label="Tipo de sangre" 
-                            labelPlacement="stacked" 
-                            color={errors.bloodType && (touchedFields.bloodType || dirtyFields.bloodType) ? "danger" : "primary" }
-                            placeholder="Selecciona el tipo de sangre"
-                            {...register("bloodType", {
-                                required: "El tipo de sangre es requerido"
-                            })}
-                            >
-                                <IonSelectOption value="a+">A+</IonSelectOption>
-                                <IonSelectOption value="a-">A-</IonSelectOption>
-                                <IonSelectOption value="b+">B+</IonSelectOption>
-                                <IonSelectOption value="b-">B-</IonSelectOption>
-                                <IonSelectOption value="ab+">AB+</IonSelectOption>
-                                <IonSelectOption value="ab-">AB-</IonSelectOption>
-                                <IonSelectOption value="o+">O-</IonSelectOption>
-                                <IonSelectOption value="o-">O-</IonSelectOption>
-                            </IonSelect>
-                        </IonItem>
-                        {errors.bloodType && (touchedFields.bloodType || dirtyFields.bloodType) && (
-                            <IonText className='ion-margin-start' color="danger">
-                                {errors.bloodType.message as string}
-                            </IonText>
-                        )}
+                        
                         <IonItem className='ion-margin-bottom'>
                             <IonSelect label="Nacionalidad" 
                             labelPlacement="stacked" 
@@ -199,23 +183,7 @@ const InputPatientInformation: React.FC = () => {
                                 {errors.nationality.message as string}
                             </IonText>
                         )}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput 
-                            label="Número de seguridad social (NSS)" 
-                            labelPlacement="stacked" 
-                            color={errors.numberSocial && (touchedFields.numberSocial || dirtyFields.numberSocial) ? "danger" : "primary"}
-                            placeholder="Ingresa el NSS"
-                            {...register("numberSocial", {
-                                pattern: { value: /^[0-9]{11}$/, message: "El número de teléfono debe tener 11 dígitos" },
-                                validate: validateInputPatientInformation,
-                            })}
-                            ></IonInput>
-                        </IonItem>
-                        {errors.numberSocial && (touchedFields.numberSocial || dirtyFields.numberSocial) && (
-                            <IonText className='ion-margin-start' color="danger">
-                                {errors.numberSocial.message as string}
-                            </IonText>
-                        )}
+                        
                     </IonList>
 
                     <h4>Información morfológica</h4>
