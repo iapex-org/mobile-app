@@ -21,6 +21,7 @@ html, body {
 :root {
     --text-size: 1em;
     --text-bold: normal;
+    --mainColor: #1F89EA;
 }
 
 ion-content {

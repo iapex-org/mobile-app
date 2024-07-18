@@ -1,11 +1,32 @@
-import { Patient } from "./Patient";
+// models/Institution.ts
+
+import { Patient } from './Patient';
 
 export interface Institution {
     id: number;
     name: string;
-    address: string;
-    phone: string;
-    description: string;
+    openingHours: string;
+    mapUrl: string;
+    emails: string;
+    image: string;
     imageUrl: string;
-    patients?: Patient[];
+    type: string;
+    phoneNumbers: string;
+    websites: string;
+    verificationKey: string;
+    registrationDateTime: Date;
+    direction: Direction;
+    membership: Membership;
+    patients: Patient[];
+    active: boolean;
+}
+
+export interface Direction {
+    id: number;
+    // otras propiedades relevantes para la dirección
+}
+
+export interface Membership {
+    id: number;
+    // otras propiedades relevantes para la membresía
 }

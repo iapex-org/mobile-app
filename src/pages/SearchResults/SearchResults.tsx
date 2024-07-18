@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonIcon, IonPage, IonToast } from '@ionic/react';
-import { filterOutline } from 'ionicons/icons';
+import { IonContent, IonPage, IonToast } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
-import PatientService from '../../services/PatientService';
-import { Patient } from '../../models/Patient';
+import PatientService, { Patient } from '../../services/PatientService';
 import { useHistory } from 'react-router';
 import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
 import ErrorOrException from '../../components/Placeholders/ErrorOrException';
@@ -18,11 +16,8 @@ const SearchResults: React.FC = () => {
 
     const fetchPatients = async () => {
         try {
-            // throw new Error('Error ficticio para probar el manejo de errores');
-
             setShowFailedToast(false);
-
-            const fetchedPatients = await PatientService.getPatients();
+            const fetchedPatients = await PatientService.getAllPatients();
             setPatients(fetchedPatients);
             setLoading(false);
             setErrorOccurred(false);
@@ -48,6 +43,10 @@ const SearchResults: React.FC = () => {
         history.push('/upload-images');
     };
 
+    const handleViewPatientDetails = (patientId: number) => {
+        history.push(`/individual-result/${patientId}`);
+    };
+
     return (
         <IonPage>
             <NavbarHeader title="Resultados" />
@@ -66,14 +65,12 @@ const SearchResults: React.FC = () => {
                 )}
 
                 {!loading && patients.length === 0 && !errorOccurred && (
-                    <div>
-                        <ErrorOrException
-                            title="Ningún resultado encontrado"
-                            message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes intentar con otra información o imagenes diferentes."
-                            showHomeButton={true}
-                            onHome={handleGoToHome}
-                        />
-                    </div>
+                    <ErrorOrException
+                        title="Ningún resultado encontrado"
+                        message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes intentar con otra información o imágenes diferentes."
+                        showHomeButton={true}
+                        onHome={handleGoToHome}
+                    />
                 )}
 
                 {loading && (
@@ -90,28 +87,25 @@ const SearchResults: React.FC = () => {
                     <>
                         <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
 
-                        {!loading && patients.length > 0 && (
-                            patients.map((patient, index) => (
-                                <PatientCard
-                                    key={patient.id}
-                                    patient={patient}
-                                    imageUrl={`src/assets/img/patient-${index + 1}.jpg`}
-                                    buttonLabel='Ver resultado'
-                                    link={`/individual-result/${patient.id}`}
-                                />
-                            ))
-                        )}
+                        {patients.map((patient) => (
+                            <PatientCard
+                                key={patient.id}
+                                patient={patient}
+                                buttonLabel='Ver resultado'
+                                link={`/individual-result/${patient.id}`}
+                                onViewDetails={() => handleViewPatientDetails(patient.id)}
+                            />
+                        ))}
                     </>
                 )}
 
-                <IonToast mode='ios'
+                <IonToast
                     isOpen={showFailedToast}
                     onDidDismiss={() => setShowFailedToast(false)}
                     message="Error al obtener los resultados de pacientes. Por favor, inténtelo más tarde."
                     duration={3000}
                     color="danger"
                 />
-
             </IonContent>
         </IonPage>
     );

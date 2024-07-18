@@ -1,0 +1,26 @@
+.card-info {
+    color: var(--mainColor);
+    margin-bottom: 18px;
+}
+.size-img {
+    width: 100%;
+    height: auto;
+    transition: filter 0.1s ease;
+  }
+  
+  .blurred {
+    filter: blur(8px);
+  }
+  
+  .image-container {
+    position: relative;
+  }
+  
+  .toggle-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+  }
