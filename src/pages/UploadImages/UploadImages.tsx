@@ -31,12 +31,12 @@ const UploadImages: React.FC = () => {
                     .filter(photo => photo.format && (photo.format.includes('jpeg') || photo.format.includes('png') || photo.format.includes('bmp') || photo.format.includes('tiff') || photo.format.includes('HEIC')))
                     .map(photo => photo.webPath);
 
-                if (imageUrls.length >= 10) {
+                if (imageUrls.length >= 8) {
                     setImages(imageUrls);
                     history.push('/verify-images');
                 } else if (imageUrls.length > 0) {
                     setImages(imageUrls);
-                    setErrorToast('Debes subir al menos 10 imágenes.');
+                    setErrorToast('Debes subir al menos 8 imágenes.');
                 } else {
                     setErrorToast('Los archivos seleccionados no son imágenes válidas.');
                 }
@@ -70,7 +70,7 @@ const UploadImages: React.FC = () => {
                         <h1>¡Bienvenido!</h1>
                     </IonText>
                     <IonIcon icon={camera} className={styles.cameraIcon}></IonIcon>
-                    <p>¡Bienvenido a 'Encuéntrame'! Sube al menos 10 fotos claras de la persona que estás buscando. Asegúrate de incluir diferentes ángulos y características distintivas. Cada imagen es crucial para encontrar a esa persona. Juntos, podemos lograrlo.</p>
+                    <p>¡Bienvenido a 'Encuéntrame'! Sube al menos 8 fotos claras de la persona que estás buscando. Asegúrate de incluir diferentes ángulos y características distintivas. Cada imagen es crucial para encontrar a esa persona. Juntos, podemos lograrlo.</p>
                     <IonButton color={'light'} expand="block" mode='ios' onClick={openGallery} className={styles.whiteText}>Continuar</IonButton>
                 </div>
 
