@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { IonContent, IonPage, IonToast } from '@ionic/react';
-import PatientCard from '../../components/PatientCard/PatientCard';
-import InstitutionCard from '../../components/InstitutionCard/InstitutionCard';
-import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
-import PatientService from '../../services/PatientService';
-import InstitutionService from '../../services/InstitutionService';
+import { useParams, useHistory } from 'react-router-dom';
+import { IonPage, IonContent, IonToast } from '@ionic/react';
 import { Patient } from '../../models/Patient';
-import { Institution } from '../../models/Institution';
-import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
+import PatientService from '../../services/PatientService';
 import ErrorOrException from '../../components/Placeholders/ErrorOrException';
+import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
+import PatientCard from '../../components/PatientCard/PatientCard';
 
 const IndividualResult: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [patient, setPatient] = useState<Patient | null>(null);
-    const [institution, setInstitution] = useState<Institution | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const history = useHistory();
     const [errorOccurred, setErrorOccurred] = useState<boolean>(false);
@@ -22,22 +18,25 @@ const IndividualResult: React.FC = () => {
 
     const fetchPatient = async () => {
         try {
-            // throw new Error('Error ficticio para probar el manejo de errores');
-
             setShowFailedToast(false);
 
-            const selectedPatient = await PatientService.getPatientById(parseInt(id));
+            // Convierte el ID a número
+            const patientId = Number(id);
+            if (isNaN(patientId)) {
+                throw new Error('ID del paciente no es un número válido');
+            }
+
+            // Obtiene la información del paciente por ID
+            const selectedPatient = await PatientService.getPatientById(patientId);
             if (!selectedPatient) {
-                throw new Error('Patient not found');
+                throw new Error('Paciente no encontrado');
             }
             setPatient(selectedPatient);
 
-            const patientInstitution = await InstitutionService.getInstitutionById(selectedPatient.institutionId);
-            setInstitution(patientInstitution || null);
             setLoading(false);
             setErrorOccurred(false);
         } catch (error) {
-            console.error('Error al obtener el paciente o la institución:', error);
+            console.error('Error al obtener el paciente:', error);
             setLoading(false);
             setErrorOccurred(true);
             setShowFailedToast(true);
@@ -63,11 +62,10 @@ const IndividualResult: React.FC = () => {
             <NavbarHeader title={patient ? `Paciente No. ${patient.id}` : 'Cargando...'} />
 
             <IonContent className='ion-padding'>
-
                 {!loading && errorOccurred && (
                     <ErrorOrException
                         title="Ocurrió un error"
-                        message="Sucedio un error al cargar la información del paciente seleccionado. Por favor, intente cargarla de nuevo o regrese al inicio."
+                        message="Sucedió un error al cargar la información del paciente seleccionado. Por favor, intente cargarla de nuevo o regrese al inicio."
                         showRetryButton={true}
                         showHomeButton={true}
                         onRetry={handleRetry}
@@ -79,44 +77,30 @@ const IndividualResult: React.FC = () => {
                     <>
                         <h5>Detalles del paciente</h5>
                         <CardPlaceholder />
-                        <h5>Institución en la que se encuentra registrado</h5>
-                        <CardPlaceholder />
                     </>
                 )}
 
                 {!errorOccurred && (
                     <>
-
                         <h5>Detalles del paciente</h5>
-
                         {patient && (
                             <PatientCard
                                 patient={patient}
-                                imageUrl={`src/assets/img/patient-${patient.id}.jpg`}
                                 buttonLabel='Contactar'
                                 link={`/contact-institution/${patient.id}`}
-                            />
-                        )}
-
-                        <h5>Institución en la que se encuentra registrado</h5>
-
-                        {institution && (
-                            <InstitutionCard
-                                institution={institution}
-                                showButton={true}
                             />
                         )}
                     </>
                 )}
 
-                <IonToast mode='ios'
+                <IonToast
+                    mode='ios'
                     isOpen={showFailedToast}
                     onDidDismiss={() => setShowFailedToast(false)}
-                    message="Error al obtener la información del paciente o la institución. Por favor, inténtelo más tarde."
+                    message="Error al obtener la información del paciente. Por favor, inténtelo más tarde."
                     duration={3000}
                     color="danger"
                 />
-
             </IonContent>
         </IonPage>
     );

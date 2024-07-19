@@ -36,7 +36,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel })
           {patient.secondLastName && <p><b>• Apellido materno: </b>{patient.secondLastName}</p>}
           <p><b>• Sexo: </b>{patient.gender}</p>
           <p><b>• Edad aproximada: </b>{patient.approximateAge}</p>
-        </div>
+       </div>
 
         <div className="card-info">
           <h2><b>Descripción</b></h2>

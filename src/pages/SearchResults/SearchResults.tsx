@@ -43,10 +43,6 @@ const SearchResults: React.FC = () => {
         history.push('/upload-images');
     };
 
-    const handleViewPatientDetails = (patientId: number) => {
-        history.push(`/individual-result/${patientId}`);
-    };
-
     return (
         <IonPage>
             <NavbarHeader title="Resultados" />
@@ -93,7 +89,6 @@ const SearchResults: React.FC = () => {
                                 patient={patient}
                                 buttonLabel='Ver resultado'
                                 link={`/individual-result/${patient.id}`}
-                                onViewDetails={() => handleViewPatientDetails(patient.id)}
                             />
                         ))}
                     </>
