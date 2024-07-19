@@ -8,6 +8,7 @@ const InputPatientInformation: React.FC = () => {
     // Definición de tipos y estado
     type FormField = "numberSocial" | "name" | "firtsLastName" | "secondLastName" | "age" | "postura" | "description" | "specialConditions" | "bloodType" | "nationality" | "hairColor" | "hairType" | "eyeColor" | "genere" | "complexion" | "colorSkin" | "hairLength" | "height" | "date";
     const [errorToast, setErrorToast] = useState<string>('');
+    const [ dateError, setDateError ] = useState<string>('');
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
 
@@ -64,6 +65,17 @@ const InputPatientInformation: React.FC = () => {
         console.log(data); // Aquí puedes manejar los datos enviados, como enviar una solicitud de API, etc.
     };
 
+    // Función para manejar la validación de la fecha
+    const handleDateChange = (e: any) => {
+        const selectedDate = new Date(e.detail.value);
+        const currentDate = new Date();
+
+        if (selectedDate > currentDate) {
+            setDateError('La fecha de desaparición no puede ser superior a la fecha actual.');
+        } else {
+            setDateError('');
+        }
+    };
     
 
     return (
@@ -79,18 +91,18 @@ const InputPatientInformation: React.FC = () => {
                     <IonList>
                         <IonItem className='ion-margin-bottom'>
 
-                            <IonLabel className='ion-margin-end'>Fecha de desaparición</IonLabel>
-                            
+                        <IonLabel className='ion-margin-end'>Fecha de desaparición</IonLabel>
                             <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
-
-                            <IonModal keepContentsMounted={true}>
-                            <IonDatetime 
-                            id="datetime"
-                            
-                            ></IonDatetime>
-                            </IonModal>
+                                <IonModal keepContentsMounted={true}>
+                                    <IonDatetime id="datetime" onIonChange={handleDateChange}></IonDatetime>
+                                </IonModal>
                             
                         </IonItem>
+                        {dateError && (
+                            <IonText className='ion-margin-start' color="danger">
+                                {dateError}
+                            </IonText>
+                        )}
                         
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Nombre(s)" 
