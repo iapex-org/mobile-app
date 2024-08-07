@@ -76,6 +76,8 @@ const InputPatientInformation: React.FC = () => {
             setDateError('');
         }
     };
+
+    
     
 
     return (
@@ -92,7 +94,8 @@ const InputPatientInformation: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
 
                         <IonLabel className='ion-margin-end'>Fecha de desaparición</IonLabel>
-                            <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+                            <IonDatetimeButton 
+                            datetime="datetime"></IonDatetimeButton>
                                 <IonModal keepContentsMounted={true}>
                                     <IonDatetime id="datetime" onIonChange={handleDateChange}></IonDatetime>
                                 </IonModal>
@@ -159,7 +162,8 @@ const InputPatientInformation: React.FC = () => {
                                 {...register("age", { 
                                     required: 'La edad es obligatorio', 
                                     minLength: { value: 1, message: "La edad debe tener al menos 1 caracteres" },
-                                    maxLength: { value: 3, message: "La edad no puede tener más de 3 caracteres" }
+                                    maxLength: { value: 3, message: "La edad no puede tener más de 3 caracteres" },
+                                    validate: value => Number(value) >= 0 || "La edad no puede ser un número negativo."
                                 })}></IonInput>
                         </IonItem>
                         {errors.age && (touchedFields.age || dirtyFields.age) && (
@@ -167,34 +171,26 @@ const InputPatientInformation: React.FC = () => {
                                 {errors.age.message as string}
                             </IonText>
                         )}
-                        
                         <IonItem className='ion-margin-bottom'>
-                            <IonSelect label="Nacionalidad" 
-                            labelPlacement="stacked" 
-                            color={errors.nationality && (touchedFields.nationality || dirtyFields.nationality) ? "danger" : "primary" }
-                            placeholder="Selecciona la nacionalidad"
-                            {...register("nationality", {
-                                required: "La nacionalidad es requerida"
+                            <IonSelect 
+                            label="Sexo" 
+                            labelPlacement="stacked"
+                            color={errors.genere && (touchedFields.genere || dirtyFields.genere) ? "danger" : "primary" } 
+                            placeholder="Selecciona un sexo"
+                            {...register("genere", {
+                                required: "El sexo es requerido"
                             })}
                             >
-                                <IonSelectOption value="mexicana">Mexicana</IonSelectOption>
-                                <IonSelectOption value="hondurena">Hondureña</IonSelectOption>
-                                <IonSelectOption value="estadounidense">Estadounidense</IonSelectOption>
-                                <IonSelectOption value="brasilena">Brasileña</IonSelectOption>
-                                <IonSelectOption value="argentina">Argentina</IonSelectOption>
-                                <IonSelectOption value="colombiana">Colombiana</IonSelectOption>
-                                <IonSelectOption value="venezolana">Venezolana</IonSelectOption>
-                                <IonSelectOption value="cubana">Cubana</IonSelectOption>
-                                <IonSelectOption value="peruana">Peruana</IonSelectOption>
-                                <IonSelectOption value="chilena">Chilena</IonSelectOption>
-                                <IonSelectOption value="Otros">Otros</IonSelectOption>
+                                <IonSelectOption value="masculino">Masculino</IonSelectOption>
+                                <IonSelectOption value="femenino">Femenino</IonSelectOption>
                             </IonSelect>
                         </IonItem>
-                        {errors.nationality && (touchedFields.nationality || dirtyFields.nationality) && (
+                        {errors.genere && (touchedFields.genere || dirtyFields.genere) && (
                             <IonText className='ion-margin-start' color="danger">
-                                {errors.nationality.message as string}
+                                {errors.genere.message as string}
                             </IonText>
                         )}
+                       
                         
                     </IonList>
 
@@ -209,15 +205,13 @@ const InputPatientInformation: React.FC = () => {
                                 required: "El color de cabello es requerido"
                             })}
                             >
+                                <IonSelectOption value="castanoOscuro">Castaño oscuro</IonSelectOption>
+                                <IonSelectOption value="castanoClaro">Castaño claro</IonSelectOption>
+                                <IonSelectOption value="rubioOscuro">Rubio oscuro</IonSelectOption>
+                                <IonSelectOption value="rubioClaro">Rubio claro</IonSelectOption>
+                                <IonSelectOption value="pelorrojo">Pelirrojo</IonSelectOption>
+                                <IonSelectOption value="gris">Gris</IonSelectOption>
                                 <IonSelectOption value="blanco">Blanco</IonSelectOption>
-                                <IonSelectOption value="rubio">Rubio</IonSelectOption>
-                                <IonSelectOption value="rubio oscuro">Rubio oscuro</IonSelectOption>
-                                <IonSelectOption value="rojo">Rojo</IonSelectOption>
-                                <IonSelectOption value="marron rojizo">Marrón rojizo</IonSelectOption>
-                                <IonSelectOption value="marron claro">Marrón claro</IonSelectOption>
-                                <IonSelectOption value="marron">Marrón</IonSelectOption>
-                                <IonSelectOption value="marron oscuro">Marrón oscuro</IonSelectOption>
-                                <IonSelectOption value="negro">Negro</IonSelectOption>
                                 <IonSelectOption value="otros">Otros</IonSelectOption>
                             </IonSelect>
                         </IonItem>
@@ -233,7 +227,7 @@ const InputPatientInformation: React.FC = () => {
                             color={errors.hairType && (touchedFields.hairType || dirtyFields.hairType) ? "danger" : "primary" }
                             placeholder="Selecciona un tipo de cabello"
                             {...register("hairType", {
-                                required: "El color de cabello es requerido"
+                                required: "El tipo de cabello es requerido"
                             })}
                             >
                                 <IonSelectOption value="liso">Liso</IonSelectOption>
@@ -249,6 +243,7 @@ const InputPatientInformation: React.FC = () => {
                                 {errors.hairType.message as string}
                             </IonText>
                         )}
+                        
                         <IonItem className='ion-margin-bottom'>
                             <IonInput
                                 label="Altura (cm)"
@@ -258,7 +253,7 @@ const InputPatientInformation: React.FC = () => {
                                 {...register("height", {
                                     required: 'La altura es obligatoria',
                                     min: { value: 50, message: "La altura mínima es 50 cm" },
-                                    max: { value: 250, message: "La altura máxima es 250 cm" }
+                                    max: { value: 300, message: "La altura máxima es 300 cm" }
                                 })}
                             ></IonInput>
                         </IonItem>
@@ -300,13 +295,11 @@ const InputPatientInformation: React.FC = () => {
                                 required: "El color de piel es requerido"
                             })}
                             >
-                                <IonSelectOption value="muyClara">Piel muy clara</IonSelectOption>
-                                <IonSelectOption value="clara">Piel clara</IonSelectOption>
-                                <IonSelectOption value="mediaClara">Piel media clara</IonSelectOption>
-                                <IonSelectOption value="media">Piel media</IonSelectOption>
-                                <IonSelectOption value="mediaOscura">Piel media oscura</IonSelectOption>
-                                <IonSelectOption value="oscura">Piel oscura</IonSelectOption>
-                                <IonSelectOption value="muyOscura">Piel muy oscura</IonSelectOption>
+                                <IonSelectOption value="claro">Claro</IonSelectOption>
+                                <IonSelectOption value="morenoClaro">Moreno claro</IonSelectOption>
+                                <IonSelectOption value="moreno">Moreno</IonSelectOption>
+                                <IonSelectOption value="morenoOscuro">Moreno oscuro</IonSelectOption>
+                                <IonSelectOption value="oscura">Negro</IonSelectOption>
                                 <IonSelectOption value="otros">Otros</IonSelectOption>
                             </IonSelect>
                         </IonItem>
@@ -325,15 +318,11 @@ const InputPatientInformation: React.FC = () => {
                                 required: "El color de ojos es requerido"
                             })}
                             >
-                                <IonSelectOption value="ambar">Ámbar</IonSelectOption>
-                                <IonSelectOption value="castano">Castaño</IonSelectOption>
-                                <IonSelectOption value="gris">Gris</IonSelectOption>
                                 <IonSelectOption value="azul">Azul</IonSelectOption>
                                 <IonSelectOption value="verde">Verde</IonSelectOption>
-                                <IonSelectOption value="avellana">Avellana</IonSelectOption>
+                                <IonSelectOption value="cafe">Café</IonSelectOption>
+                                <IonSelectOption value="gris">Gris</IonSelectOption>
                                 <IonSelectOption value="negro">Negro</IonSelectOption>
-                                <IonSelectOption value="violeta">Violeta</IonSelectOption>
-                                <IonSelectOption value="rojo">Rojo</IonSelectOption>
                                 <IonSelectOption value="otros">Otros</IonSelectOption>
                             </IonSelect>
                         </IonItem>
@@ -342,25 +331,7 @@ const InputPatientInformation: React.FC = () => {
                                 {errors.eyeColor.message as string}
                             </IonText>
                         )}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonSelect 
-                            label="Sexo" 
-                            labelPlacement="stacked"
-                            color={errors.genere && (touchedFields.genere || dirtyFields.genere) ? "danger" : "primary" } 
-                            placeholder="Selecciona un sexo"
-                            {...register("genere", {
-                                required: "El sexo es requerido"
-                            })}
-                            >
-                                <IonSelectOption value="masculino">Masculino</IonSelectOption>
-                                <IonSelectOption value="femenino">Femenino</IonSelectOption>
-                            </IonSelect>
-                        </IonItem>
-                        {errors.genere && (touchedFields.genere || dirtyFields.genere) && (
-                            <IonText className='ion-margin-start' color="danger">
-                                {errors.genere.message as string}
-                            </IonText>
-                        )}
+                        
                         <IonItem className='ion-margin-bottom'>
                             <IonSelect 
                             label="Complexión" 
@@ -370,16 +341,10 @@ const InputPatientInformation: React.FC = () => {
                             {...register("complexion", {
                                 required: "La complexion es requerido"
                             })}>
-                                <IonSelectOption value="esbelto">Esbelto</IonSelectOption>
-                                <IonSelectOption value="corpulento">Corpulento</IonSelectOption>
-                                <IonSelectOption value="musculoso">Musculoso</IonSelectOption>
-                                <IonSelectOption value="fornido">Fornido</IonSelectOption>
-                                <IonSelectOption value="fibrado">Fibrado</IonSelectOption>
-                                <IonSelectOption value="gordo">Gordo</IonSelectOption>
-                                <IonSelectOption value="delgaducho">Delgaducho</IonSelectOption>
-                                <IonSelectOption value="vigoroso">Vigoroso</IonSelectOption>
-                                <IonSelectOption value="enjuto">Enjuto</IonSelectOption>
-                                <IonSelectOption value="espaldaAncha">Ancho de espalda</IonSelectOption>
+                                <IonSelectOption value="delgada">Delgada</IonSelectOption>
+                                <IonSelectOption value="atletica">Atlética</IonSelectOption>
+                                <IonSelectOption value="promedio">Promedio</IonSelectOption>
+                                <IonSelectOption value="robusta">Robusta</IonSelectOption>
                                 <IonSelectOption value="otra">Otra</IonSelectOption>
                             </IonSelect>
                         </IonItem>

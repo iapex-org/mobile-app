@@ -153,7 +153,7 @@ const ContactInstitution: React.FC = () => {
                                 placeholder="Ej. 221-236-2345"
                                 {...register("phoneNumber", {
                                     pattern: { value: /^[0-9]{10}$/, message: "El número de teléfono debe tener 10 dígitos" },
-                                    validate: validateContactInfo,
+                                    validate: validateContactInfo
                                 })}
                             />
                         </IonItem>
