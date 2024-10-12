@@ -2,16 +2,26 @@ import { IonButton, IonContent, IonDatetime, IonDatetimeButton, IonInput, IonIte
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router';
 
 const InputPatientInformation: React.FC = () => {
-    // Definición de tipos y estado
-    type FormField = "dateOfDisappearance" | "name" | "lastName" | "secondLastName" | "gender" | "age" | "skinColor" | "eyeColor" | "hairColor" | "hairType" | "hairLength" | "complexion" | "height" | "medicalConditions" | "distinctiveFeatures" | "additionalNotes";
     const [errorToast, setErrorToast] = useState<string>('');
+    const [successToast, setSuccessToast] = useState<string>('');
+    const [showOtherFields, setShowOtherFields] = useState({
+        skinColor: false,
+        eyeColor: false,
+        hairColor: false,
+        hairType: false,
+        hairLength: false,
+        complexion: false,
+    });
     const history = useHistory();
 
+    // Definición de tipos y estado
+    type FormField = "dateOfDisappearance" | "name" | "lastName" | "secondLastName" | "gender" | "age" | "skinColor" | "otherSkinColor" | "eyeColor" | "otherEyeColor" | "hairColor" | "otherHairColor" | "hairType" | "otherHairType" | "hairLength" | "otherHairLength" | "complexion" | "otherComplexion" | "height" | "medicalConditions" | "distinctiveFeatures" | "additionalNotes";
+
     // Configuración del useForm para el manejo del formulario
-    const { register, handleSubmit, trigger, setValue, setFocus, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
+    const { register, handleSubmit, trigger, setValue, setFocus, watch, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
         mode: 'all',
         defaultValues: {
             dateOfDisappearance: '',
@@ -21,17 +31,45 @@ const InputPatientInformation: React.FC = () => {
             gender: '',
             age: '',
             skinColor: '',
+            otherSkinColor: '',
             eyeColor: '',
+            otherEyeColor: '',
             hairColor: '',
+            otherHairColor: '',
             hairType: '',
+            otherHairType: '',
             hairLength: '',
+            otherHairLength: '',
             complexion: '',
+            otherComplexion: '',
             height: '',
             medicalConditions: '',
             distinctiveFeatures: '',
             additionalNotes: ''
         }
     });
+
+    const handleFieldChange = (field: string, value: string) => {
+        console.log(`Cambiando el campo ${field} a ${value}`);
+
+        // Determinar el nombre del campo alternativo (ej: otherSkinColor, otherEyeColor).
+        const otherField = `other${field.charAt(0).toUpperCase() + field.slice(1)}`;
+        console.log(`Campo alternativo determinado: ${otherField}`);
+
+        // Mostrar o ocultar el campo adicional según el valor seleccionado.
+        setShowOtherFields(prevState => ({
+            ...prevState,
+            [field]: value === "otro", // Esto determina si el campo alternativo debe mostrarse
+        }));
+
+        console.log(`Campo adicional ${field} ${value === "otro" ? 'mostrado' : 'ocultado'}`);
+
+        // Limpiar el campo alternativo si se selecciona otra opción distinta de "otro".
+        if (value !== "otro") {
+            setValue(otherField as FormField, '');
+            console.log(`Campo alternativo ${otherField} limpiado`);
+        }
+    };
 
     // Marcar todos los campos como "touched" para mostrar errores al usuario
     const markAllFieldsAsTouched = () => {
@@ -46,8 +84,7 @@ const InputPatientInformation: React.FC = () => {
         const isValid = await trigger();
 
         if (isValid) {
-            const data = await handleSubmit(onSubmit)();
-            history.push(`/processing-information`);
+            await handleSubmit(onSubmit)();
         } else {
             setFocus(Object.keys(errors)[0] as FormField);
             setErrorToast('Complete correctamente todos los campos antes de continuar.');
@@ -55,7 +92,24 @@ const InputPatientInformation: React.FC = () => {
     };
 
     const onSubmit = async (data: any) => {
-        console.log(data); // Aquí puedes manejar los datos enviados, como enviar una solicitud de API, etc.
+        try {
+            const fieldsWithOther = ['skinColor', 'eyeColor', 'hairColor', 'hairType', 'hairLength', 'complexion']; // Campos con opción "Otro"
+
+            // Transformamos los campos dinámicamente usando reduce.
+            const cleanedData = fieldsWithOther.reduce((acc, field) => {
+                const otherField = `other${field.charAt(0).toUpperCase() + field.slice(1)}`;
+                acc[field] = data[field] === 'otro' ? data[otherField] ?? '' : data[field]; // Usar valor alternativo si es "Otro".
+                return acc;
+            }, { ...data }); // Copia inicial de todos los datos.
+
+            // Mostrar los datos en la consola.
+            console.log('Datos enviados:', cleanedData);
+            history.push(`/processing-information`);
+            setSuccessToast('Solicitud enviada correctamente.');
+        } catch (error: any) {
+            console.error('Error:', error.message);
+            setErrorToast('Hubo un error al procesar los datos.');
+        }
     };
 
     return (
@@ -216,18 +270,43 @@ const InputPatientInformation: React.FC = () => {
                                 labelPlacement="stacked"
                                 color={errors.skinColor && (touchedFields.skinColor || dirtyFields.skinColor) ? "danger" : "primary"}
                                 placeholder="Selecciona un color de piel"
+                                onIonChange={(e) => handleFieldChange('skinColor', e.detail.value)}
                                 {...register("skinColor", {
                                     required: "El color de piel es requerido."
                                 })}>
-                                <IonSelectOption value="claro">Claro</IonSelectOption>
-                                <IonSelectOption value="moreno">Moreno</IonSelectOption>
-                                <IonSelectOption value="oscura">Negro</IonSelectOption>
+                                <IonSelectOption value="clara">Clara</IonSelectOption>
+                                <IonSelectOption value="morena">Morena</IonSelectOption>
+                                <IonSelectOption value="oscura">Oscura</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                         {errors.skinColor && (touchedFields.skinColor || dirtyFields.skinColor) && (
                             <div className='ion-margin-start'>
                                 <IonText color="danger">
                                     {errors.skinColor.message as string}
+                                </IonText>
+                            </div>
+                        )}
+                        {/* Otro color de piel */}
+                        {showOtherFields.skinColor && (
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Otro color de piel"
+                                    mode='ios'
+                                    clearInput
+                                    labelPlacement="stacked"
+                                    placeholder="Ingresa un color de piel"
+                                    {...register("otherSkinColor", {
+                                        required: 'El color de piel es requerido.',
+                                        minLength: { value: 2, message: "El color de piel no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 50, message: "El color de piel no puede ser mayor a 50 caracteres." }
+                                    })}>
+
+                                </IonInput>
+                            </IonItem>
+                        )}
+                        {showOtherFields.skinColor && errors.otherSkinColor && (touchedFields.otherSkinColor || dirtyFields.otherSkinColor) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.otherSkinColor.message as string}
                                 </IonText>
                             </div>
                         )}
@@ -238,6 +317,7 @@ const InputPatientInformation: React.FC = () => {
                                 labelPlacement="stacked"
                                 color={errors.eyeColor && (touchedFields.eyeColor || dirtyFields.eyeColor) ? "danger" : "primary"}
                                 placeholder="Selecciona un color de ojos"
+                                onIonChange={(e) => handleFieldChange('eyeColor', e.detail.value)}
                                 {...register("eyeColor", {
                                     required: "El color de ojos es requerido."
                                 })}>
@@ -259,6 +339,29 @@ const InputPatientInformation: React.FC = () => {
                                 </IonText>
                             </div>
                         )}
+                        {/* Otro color de ojos */}
+                        {showOtherFields.eyeColor && (
+                            < IonItem className='ion-margin-bottom'>
+                                <IonInput label="Otro color de ojos"
+                                    mode='ios'
+                                    clearInput
+                                    labelPlacement="stacked"
+                                    placeholder="Ingresa un color de ojos"
+                                    {...register("otherEyeColor", {
+                                        required: 'El color de ojos es requerido.',
+                                        minLength: { value: 2, message: "El color de ojos no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 50, message: "El color de ojos no puede ser mayor a 50 caracteres." }
+                                    })}>
+                                </IonInput>
+                            </IonItem>
+                        )}
+                        {showOtherFields.eyeColor && errors.otherEyeColor && (touchedFields.otherEyeColor || dirtyFields.otherEyeColor) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.otherEyeColor.message as string}
+                                </IonText>
+                            </div>
+                        )}
                         {/* Color de cabello del paciente */}
                         <IonItem className='ion-margin-bottom'>
                             <IonSelect label="Color de cabello"
@@ -266,6 +369,7 @@ const InputPatientInformation: React.FC = () => {
                                 labelPlacement="stacked"
                                 color={errors.hairColor && (touchedFields.hairColor || dirtyFields.hairColor) ? "danger" : "primary"}
                                 placeholder="Selecciona un color de cabello"
+                                onIonChange={(e) => handleFieldChange('hairColor', e.detail.value)}
                                 {...register("hairColor", {
                                     required: "El color de cabello es requerido."
                                 })}>
@@ -276,13 +380,36 @@ const InputPatientInformation: React.FC = () => {
                                 <IonSelectOption value="pelorrojo">Pelirrojo</IonSelectOption>
                                 <IonSelectOption value="gris">Gris</IonSelectOption>
                                 <IonSelectOption value="blanco">Blanco</IonSelectOption>
-                                <IonSelectOption value="otros">Otros</IonSelectOption>
+                                <IonSelectOption value="otro">Otro</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                         {errors.hairColor && (touchedFields.hairColor || dirtyFields.hairColor) && (
                             <div className='ion-margin-start'>
                                 <IonText color="danger">
                                     {errors.hairColor.message as string}
+                                </IonText>
+                            </div>
+                        )}
+                        {/* Otro color de cabello */}
+                        {showOtherFields.hairColor && (
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Otro color de cabello"
+                                    mode='ios'
+                                    clearInput
+                                    labelPlacement="stacked"
+                                    placeholder="Ingresa un color de cabello"
+                                    {...register("otherHairColor", {
+                                        required: 'El color de cabello es requerido.',
+                                        minLength: { value: 2, message: "El color de cabello no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 50, message: "El color de cabello no puede ser mayor a 50 caracteres." }
+                                    })}>
+                                </IonInput>
+                            </IonItem>
+                        )}
+                        {showOtherFields.hairColor && errors.otherHairColor && (touchedFields.otherHairColor || dirtyFields.otherHairColor) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.otherHairColor.message as string}
                                 </IonText>
                             </div>
                         )}
@@ -293,6 +420,7 @@ const InputPatientInformation: React.FC = () => {
                                 labelPlacement="stacked"
                                 color={errors.hairType && (touchedFields.hairType || dirtyFields.hairType) ? "danger" : "primary"}
                                 placeholder="Selecciona un tipo de cabello"
+                                onIonChange={(e) => handleFieldChange('hairType', e.detail.value)}
                                 {...register("hairType", {
                                     required: "El tipo de cabello es requerido."
                                 })}>
@@ -301,13 +429,36 @@ const InputPatientInformation: React.FC = () => {
                                 <IonSelectOption value="rizado">Rizado</IonSelectOption>
                                 <IonSelectOption value="crespo">Crespo</IonSelectOption>
                                 <IonSelectOption value="calvo">Calvo</IonSelectOption>
-                                <IonSelectOption value="otros">Otros</IonSelectOption>
+                                <IonSelectOption value="otro">Otro</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                         {errors.hairType && (touchedFields.hairType || dirtyFields.hairType) && (
                             <div className='ion-margin-start'>
                                 <IonText color="danger">
                                     {errors.hairType.message as string}
+                                </IonText>
+                            </div>
+                        )}
+                        {/* Otro tipo de cabello */}
+                        {showOtherFields.hairType && (
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Otro tipo de cabello"
+                                    mode='ios'
+                                    clearInput
+                                    labelPlacement="stacked"
+                                    placeholder="Ingresa un tipo de cabello"
+                                    {...register("otherHairType", {
+                                        required: 'El tipo de cabello es requerido.',
+                                        minLength: { value: 2, message: "El tipo de cabello no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 50, message: "El tipo de cabello no puede ser mayor a 50 caracteres." }
+                                    })}>
+                                </IonInput>
+                            </IonItem>
+                        )}
+                        {showOtherFields.hairType && errors.otherHairType && (touchedFields.otherHairType || dirtyFields.otherHairType) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.otherHairType.message as string}
                                 </IonText>
                             </div>
                         )}
@@ -318,6 +469,7 @@ const InputPatientInformation: React.FC = () => {
                                 labelPlacement="stacked"
                                 color={errors.hairLength && (touchedFields.hairLength || dirtyFields.hairLength) ? "danger" : "primary"}
                                 placeholder="Selecciona el largo de cabello"
+                                onIonChange={(e) => handleFieldChange('hairLength', e.detail.value)}
                                 {...register("hairLength", {
                                     required: "El largo de cabello es requerido."
                                 })}>
@@ -326,13 +478,36 @@ const InputPatientInformation: React.FC = () => {
                                 <IonSelectOption value="largo">Largo</IonSelectOption>
                                 <IonSelectOption value="rapado">Rapado</IonSelectOption>
                                 <IonSelectOption value="calvo">Calvo</IonSelectOption>
-                                <IonSelectOption value="otros">Otros</IonSelectOption>
+                                <IonSelectOption value="otro">Otro</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                         {errors.hairLength && (touchedFields.hairLength || dirtyFields.hairLength) && (
                             <div className='ion-margin-start'>
                                 <IonText color="danger">
                                     {errors.hairLength.message as string}
+                                </IonText>
+                            </div>
+                        )}
+                        {/* Otro largo de cabello */}
+                        {showOtherFields.hairLength && (
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Otro largo de cabello"
+                                    mode='ios'
+                                    clearInput
+                                    labelPlacement="stacked"
+                                    placeholder="Ingresa un largo de cabello"
+                                    {...register("otherHairLength", {
+                                        required: 'El largo de cabello es requerido.',
+                                        minLength: { value: 2, message: "El largo de cabello no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 50, message: "El largo de cabello no puede ser mayor a 50 caracteres." }
+                                    })}>
+                                </IonInput>
+                            </IonItem>
+                        )}
+                        {showOtherFields.hairLength && errors.otherHairLength && (touchedFields.otherHairLength || dirtyFields.otherHairLength) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.otherHairLength.message as string}
                                 </IonText>
                             </div>
                         )}
@@ -343,6 +518,7 @@ const InputPatientInformation: React.FC = () => {
                                 labelPlacement="stacked"
                                 color={errors.complexion && (touchedFields.complexion || dirtyFields.complexion) ? "danger" : "primary"}
                                 placeholder="Selecciona una complexion"
+                                onIonChange={(e) => handleFieldChange('complexion', e.detail.value)}
                                 {...register("complexion", {
                                     required: "La complexion es requerida."
                                 })}>
@@ -350,13 +526,36 @@ const InputPatientInformation: React.FC = () => {
                                 <IonSelectOption value="atletica">Atlética</IonSelectOption>
                                 <IonSelectOption value="promedio">Promedio</IonSelectOption>
                                 <IonSelectOption value="robusta">Robusta</IonSelectOption>
-                                <IonSelectOption value="otra">Otra</IonSelectOption>
+                                <IonSelectOption value="otro">Otro</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                         {errors.complexion && (touchedFields.complexion || dirtyFields.complexion) && (
                             <div className='ion-margin-start'>
                                 <IonText color="danger">
                                     {errors.complexion.message as string}
+                                </IonText>
+                            </div>
+                        )}
+                        {/* Otra complexión */}
+                        {showOtherFields.complexion && (
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Otra complexión"
+                                    mode='ios'
+                                    clearInput
+                                    labelPlacement="stacked"
+                                    placeholder="Ingresa una complexión"
+                                    {...register("otherComplexion", {
+                                        required: 'La complexión es requerida.',
+                                        minLength: { value: 2, message: "La complexión no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 50, message: "La complexión no puede ser mayor a 50 caracteres." }
+                                    })}>
+                                </IonInput>
+                            </IonItem>
+                        )}
+                        {showOtherFields.complexion && errors.otherComplexion && (touchedFields.otherComplexion || dirtyFields.otherComplexion) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.otherComplexion.message as string}
                                 </IonText>
                             </div>
                         )}
@@ -433,8 +632,17 @@ const InputPatientInformation: React.FC = () => {
                     color={'danger'}
                 />
 
+                <IonToast mode='ios'
+                    isOpen={!!successToast}
+                    position="top"
+                    message={successToast}
+                    duration={3000}
+                    onDidDismiss={() => setSuccessToast('')}
+                    color="success"
+                />
+
             </IonContent>
-        </IonPage>
+        </IonPage >
     );
 };
 

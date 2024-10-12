@@ -5,12 +5,11 @@ import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { createContactRequest } from '../../services/ContactRequestService';
 import { ContactRequest } from '../../models/ContactRequest';
-import { set } from 'date-fns';
 
 const ContactInstitution: React.FC = () => {
     const [errorToast, setErrorToast] = useState<string>('');
     const [successToast, setSuccessToast] = useState<string>('');
-    const [showOtherRelationship, setShowOtherRelationship] = useState<boolean>(false); // Nuevo estado
+    const [showOtherRelationship, setShowOtherRelationship] = useState<boolean>(false);
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
 
@@ -18,7 +17,7 @@ const ContactInstitution: React.FC = () => {
     type FormField = "interestedPersonName" | "missingPersonName" | "relationship" | "otherRelationship" | "phoneNumber" | "email" | "message";
 
     // Configuración del useForm para el manejo del formulario
-    const { register, handleSubmit, setError, trigger, setValue, setFocus, watch, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
+    const { register, handleSubmit, setError, trigger, setValue, setFocus, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
         mode: 'all',
         defaultValues: {
             interestedPersonName: '',
@@ -31,12 +30,10 @@ const ContactInstitution: React.FC = () => {
         }
     });
 
-    // Monitorear el valor actual del select de "relationship"
-    const selectedRelationship = watch('relationship');
-
+    // Función para manejar el cambio en el campo de parentesco
     const handleRelationshipChange = (value: string) => {
-        setShowOtherRelationship(value === "Otro"); // Mostrar input si se selecciona "Otro".
-        if (value !== "Otro") setValue('otherRelationship', ''); // Limpiar campo temporal si cambia.
+        setShowOtherRelationship(value === "otro");
+        if (value !== "otro") setValue('otherRelationship', '');
     };
 
     // Validación personalizada para asegurarse de que al menos se proporcione un número de teléfono o correo electrónico
@@ -60,6 +57,7 @@ const ContactInstitution: React.FC = () => {
     const handleValidateAndSubmit = async () => {
         await markAllFieldsAsTouched();
         const isValid = await trigger();
+
         if (isValid) {
             await handleSubmit(onSubmit)();
         } else {
@@ -74,18 +72,15 @@ const ContactInstitution: React.FC = () => {
             // Crear una copia del objeto de datos con el tipo adecuado.
             const tempData = { ...data } as { relationship: string; otherRelationship?: string };
 
-            // Ajustar el valor de `relationship` si es "Otro".
-            const relationship = tempData.relationship === 'Otro'
-                ? tempData.otherRelationship ?? '' // Uso de "nullish coalescing" para manejar undefined.
+            const relationship = tempData.relationship === 'otro'
+                ? tempData.otherRelationship ?? ''
                 : tempData.relationship;
-
 
             // Crear un nuevo objeto sin `otherRelationship`.
             const cleanedData: ContactRequest = {
                 ...data,
                 relationship
             };
-
 
             const patient = parseInt(id, 10);
             if (isNaN(patient)) {
@@ -106,7 +101,6 @@ const ContactInstitution: React.FC = () => {
             setErrorToast(error.message || 'Hubo un error al enviar los datos. Inténtalo de nuevo.');
         }
     };
-
 
     return (
         <IonPage>
@@ -163,7 +157,7 @@ const ContactInstitution: React.FC = () => {
                                 <IonSelectOption value="Tio">Tío/Tía</IonSelectOption>
                                 <IonSelectOption value="Primo">Primo/Prima</IonSelectOption>
                                 <IonSelectOption value="Amigo">Amigo/Amiga</IonSelectOption>
-                                <IonSelectOption value="Otro">Otro</IonSelectOption>
+                                <IonSelectOption value="otro">Otro</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                         {errors.relationship && (touchedFields.relationship || dirtyFields.relationship) && (
