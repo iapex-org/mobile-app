@@ -19,6 +19,16 @@ h1 {
 .cogIcon {
     font-size: 10rem;
     align-self: center;
+    animation: spin 4s linear infinite; /* Aquí agregas la animación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 img {

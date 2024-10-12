@@ -8,13 +8,22 @@ const ProcessCompleted: React.FC = () => {
             <IonContent color={'primary'} className='ion-padding'>
                 <div className={styles.container}>
                     <IonText>
-                        <h1>¡Lo lograste!</h1>
+                        <h1>Solicitud recibida</h1>
                     </IonText>
                     <IonIcon icon={checkmarkCircle} className={styles.checkmarkIcon}></IonIcon>
-                    <p>Tu solicitud ha sido recibida. Te notificaremos a través de WhatsApp al número proporcionado o por correo electrónico, según los datos que nos proporcionaste. Cada minuto que pasa te acerca más a reunirte con esa persona tan querida.</p>
-                    <IonButton color={'light'} expand="block" mode='ios' routerLink='/search-results' className={styles.whiteText}>Volver a la sección de resultados</IonButton>
+                    <p>
+                        Tu solicitud ha sido registrada. Recibirás actualizaciones a través de WhatsApp o por correo electrónico, según la información que proporcionaste. Estamos comprometidos en ayudarte a reunirte con esa persona importante para ti.
+                    </p>
+                    <IonButton
+                        color={'light'}
+                        expand="block"
+                        mode='ios'
+                        routerLink='/search-results'
+                        className={styles.whiteText}
+                    >
+                        Volver a resultados
+                    </IonButton>
                 </div>
-
                 <img src="src\assets\img\logo-encuentrame.png" alt="Encuéntrame" />
             </IonContent>
         </IonPage>

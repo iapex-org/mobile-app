@@ -26,6 +26,7 @@
     "cors": "^2.8.5",
     "css-loader": "^7.1.2",
     "date-fns": "^3.6.0",
+    "IAPEX-MOBILE-APP": "file:",
     "ionicons": "^7.0.0",
     "material-icons": "^1.13.12",
     "react": "^18.3.1",

@@ -1,15 +1,15 @@
-// models/Patient.ts
+import { Institution } from "./Institution";
 
 export interface Patient {
     id: number;
-    name: string;
-    lastName: string;
-    secondLastName: string;
+    name?: string;
+    lastName?: string;
+    secondLastName?: string;
     gender: string;
     approximateAge: number;
     registrationDateTime: string;
     registeringUserId: number;
-    active: boolean;
+    active?: boolean;
     skinColor: string;
     hair: string;
     complexion: string;
@@ -17,15 +17,9 @@ export interface Patient {
     approximateHeight: number;
     medicalConditions?: string;
     distinctiveFeatures?: string;
-    institution: Institution;
+    institution: string;
     images: Image[];
     additionalNotes?: string;
-}
-
-export interface Institution {
-    id: number;
-    name: string;
-    // otras propiedades relevantes para la institución
 }
 
 export interface Image {

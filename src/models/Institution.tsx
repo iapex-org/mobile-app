@@ -1,32 +1,36 @@
-// models/Institution.ts
-
 import { Patient } from './Patient';
 
 export interface Institution {
     id: number;
     name: string;
+    type: string;
+    direction: Direction;
     openingHours: string;
-    mapUrl: string;
-    emails: string;
+    emails?: string;
+    phoneNumbers?: string;
+    websites?: string;
+    registrationDateTime: Date;
     image: string;
     imageUrl: string;
-    type: string;
-    phoneNumbers: string;
-    websites: string;
-    verificationKey: string;
-    registrationDateTime: Date;
-    direction: Direction;
+    mapUrl?: string;
+    verificationKey?: string;
     membership: Membership;
     patients: Patient[];
-    active: boolean;
+    active?: boolean;
 }
 
 export interface Direction {
     id: number;
-    // otras propiedades relevantes para la dirección
+    state: string;
+    city: string;
+    postalCode: string;
+    neighborhood: string;
+    street: string;
+    number: string;
 }
 
 export interface Membership {
-    id: number;
-    // otras propiedades relevantes para la membresía
+    startDate: Date;
+    endDate: Date;
+    status: boolean;
 }

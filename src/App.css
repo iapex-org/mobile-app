@@ -15,8 +15,10 @@ html, body {
 
 .size-img {
     width: 100%;
-    height: 100%;
-}
+    transition: filter 0.1s ease;
+    object-fit: cover;
+    max-height: 200px;
+  }
 
 :root {
     --text-size: 1em;

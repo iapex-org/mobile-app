@@ -38,10 +38,9 @@ import AccessibilitySettings from './pages/AccessibilitySettings/AccessibilitySe
 import VerifyImages from './pages/VerifyImages/VerifyImages';
 import SearchResults from './pages/SearchResults/SearchResults';
 import IndividualResult from './pages/IndividualResult/IndividualResult';
-import InstitutionInformation from './pages/InstitutionInformation/InstitutionInformation';
 import ContactInstitution from './pages/ContactInstitution/ContactInstitution';
 import ProcessCompleted from './pages/ProcessCompleted/ProcessCompleted';
-import LoadingImages from './pages/LoadingImages/LoadingImages';
+import ProcessingInformation from './pages/ProcessingInformation/ProcessingInformation';
 import InputPatientInformation from './pages/InputPatientInformation/InputPatientInformation';
 
 setupIonicReact();
@@ -63,8 +62,8 @@ const App: React.FC = () => (
           <Route exact path="/input-patient-information">
             <InputPatientInformation />
           </Route>
-          <Route exact path="/loading-images">
-            <LoadingImages />
+          <Route exact path="/processing-information">
+            <ProcessingInformation />
           </Route>
           <Route exact path="/search-results">
             <SearchResults />
@@ -72,13 +71,10 @@ const App: React.FC = () => (
           <Route exact path="/individual-result/:id">
             <IndividualResult />
           </Route>
-          <Route exact path="/institution-information/:id">
-            <InstitutionInformation />
-          </Route>
           <Route exact path="/contact-institution/:id">
             <ContactInstitution />
           </Route>
-          <Route exact path="/process-completed/:id">
+          <Route exact path="/process-completed">
             <ProcessCompleted />
           </Route>
           <Route exact path="/">

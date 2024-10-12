@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { IonContent, IonPage, IonToast } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
-import PatientService, { Patient } from '../../services/PatientService';
+import PatientService from '../../services/PatientService';
 import { useHistory } from 'react-router';
 import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
 import ErrorOrException from '../../components/Placeholders/ErrorOrException';
+import { Patient } from '../../models/Patient';
 
 const SearchResults: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -63,7 +64,7 @@ const SearchResults: React.FC = () => {
                 {!loading && patients.length === 0 && !errorOccurred && (
                     <ErrorOrException
                         title="Ningún resultado encontrado"
-                        message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes intentar con otra información o imágenes diferentes."
+                        message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes revisar la información o intentar con imágenes diferentes."
                         showHomeButton={true}
                         onHome={handleGoToHome}
                     />
@@ -85,6 +86,7 @@ const SearchResults: React.FC = () => {
 
                         {patients.map((patient) => (
                             <PatientCard
+                                isDetailedView={false}
                                 key={patient.id}
                                 patient={patient}
                                 buttonLabel='Ver resultado'
@@ -94,11 +96,12 @@ const SearchResults: React.FC = () => {
                     </>
                 )}
 
-                <IonToast
+                <IonToast mode='ios'
                     isOpen={showFailedToast}
-                    onDidDismiss={() => setShowFailedToast(false)}
+                    position='top'
                     message="Error al obtener los resultados de pacientes. Por favor, inténtelo más tarde."
                     duration={3000}
+                    onDidDismiss={() => setShowFailedToast(false)}
                     color="danger"
                 />
             </IonContent>

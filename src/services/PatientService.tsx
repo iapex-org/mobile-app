@@ -1,5 +1,3 @@
-// services/PatientService.ts
-
 import axios from 'axios';
 import { Patient } from '../models/Patient';
 
@@ -23,4 +21,3 @@ class PatientService {
 }
 
 export default new PatientService();
-export type { Patient };

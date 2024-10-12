@@ -3,10 +3,9 @@ import { Institution } from '../../models/Institution';
 
 interface InstitutionCardProps {
     institution: Institution;
-    showButton?: boolean;
 }
 
-const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, showButton = true }) => {
+const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
     return (
         <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
             <img className="size-img" src={institution.imageUrl} alt={`Imagen de ${institution.name}`} />
@@ -14,15 +13,56 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, showButt
                 <IonCardTitle>{institution.name}</IonCardTitle>
             </IonCardHeader>
             <IonCardContent mode='ios'>
-                <p><b>Dirección:</b> {institution.address}</p>
-                <p><b>Teléfono:</b> {institution.phone}</p>
-                <p><b>Descripción:</b> {institution.description}</p>
+
+                <h2><b>Información general</b></h2>
+                <div className='ion-padding-vertical'>
+                    <p><b>Dirección:</b> {institution.direction.state}, {institution.direction.city}, {institution.direction.postalCode}, {institution.direction.neighborhood}, {institution.direction.street} {institution.direction.number}</p>
+                    <p><b>Horario de apertura:</b> {institution.openingHours}</p>
+                </div>
+
+                <h2><b>Información de contacto</b></h2>
+                <div className='ion-padding-vertical'>
+                    {institution.phoneNumbers && (
+                        <p><b>Teléfono:</b> {institution.phoneNumbers}</p>
+                    )}
+                    {institution.emails && (
+                        <p><b>Email:</b> {institution.emails}</p>
+                    )}
+                    {institution.websites && (
+                        <p>
+                            <b>Sitio web:</b> <a href={`http://${institution.websites}`} target="_blank" rel="noopener noreferrer">{institution.websites}</a>
+                        </p>
+                    )}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {institution.phoneNumbers && (
+                        <IonButton
+                            color='tertiary'
+
+                            expand="block"
+                            href={`tel:${institution.phoneNumbers}`}
+                            mode='ios'
+                            style={{ flexGrow: 1, marginRight: '8px' }}
+                        >
+                            Llamar institución
+                        </IonButton>
+                    )}
+                    {institution.mapUrl && (
+                        <IonButton
+                            color='tertiary'
+                            href={institution.mapUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            mode='ios'
+                            title='Ver en Google Maps'
+                        >
+                            Ver en el mapa
+                        </IonButton>
+                    )}
+                </div>
+
             </IonCardContent>
-            {showButton && (
-                <IonButton mode='ios' expand="block" className='ion-padding-bottom ion-padding-horizontal' routerLink={`/institution-information/${institution.id}`}>
-                    Ver más
-                </IonButton>
-            )}
         </IonCard>
     );
 };
