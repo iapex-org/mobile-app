@@ -107,7 +107,7 @@ const ContactInstitution: React.FC = () => {
             <NavbarHeader title="Contactar" />
             <IonContent className='ion-padding'>
                 <form onSubmit={e => e.preventDefault()}>
-                    <p>Llene los campos con los datos requeridos para concluir su solicitud de contacto con la institución de salud que resguarda al paciente extraviado.</p>
+                    <p>Llene los campos con los datos requeridos para concluir su solicitud de contacto con la institución que resguarda a la persona desaparecida.</p>
                     <IonList mode='ios'>
                         {/* Nombre del interesado */}
                         <IonItem className='ion-margin-bottom'>
@@ -151,12 +151,17 @@ const ContactInstitution: React.FC = () => {
                                 {...register("relationship", {
                                     required: "El parentesco con la persona extraviada es requerido."
                                 })}>
-                                <IonSelectOption value="Padre">Padre/Madre</IonSelectOption>
-                                <IonSelectOption value="Hermano">Hermano/Hermana</IonSelectOption>
-                                <IonSelectOption value="Abuelo">Abuelo/Abuela</IonSelectOption>
-                                <IonSelectOption value="Tio">Tío/Tía</IonSelectOption>
-                                <IonSelectOption value="Primo">Primo/Prima</IonSelectOption>
-                                <IonSelectOption value="Amigo">Amigo/Amiga</IonSelectOption>
+                                <IonSelectOption value="Madre">Madre</IonSelectOption>
+                                <IonSelectOption value="Padre">Padre</IonSelectOption>
+                                <IonSelectOption value="Hermano/a">Hermano/a</IonSelectOption>
+                                <IonSelectOption value="Hijo/a">Hijo/a</IonSelectOption>
+                                <IonSelectOption value="Esposo/a">Esposo/a</IonSelectOption>
+                                <IonSelectOption value="Pareja">Pareja</IonSelectOption>
+                                <IonSelectOption value="Abuelo/a">Abuelo/a</IonSelectOption>
+                                <IonSelectOption value="Tío/a">Tío/a</IonSelectOption>
+                                <IonSelectOption value="Primo/a">Primo/a</IonSelectOption>
+                                <IonSelectOption value="Amigo/a">Amigo/a</IonSelectOption>
+                                <IonSelectOption value="Conocido/a">Conocido/a</IonSelectOption>
                                 <IonSelectOption value="otro">Otro</IonSelectOption>
                             </IonSelect>
                         </IonItem>
@@ -170,13 +175,15 @@ const ContactInstitution: React.FC = () => {
                         {/* Otro parentesco con la persona extraviada */}
                         {showOtherRelationship && (
                             <IonItem className='ion-margin-bottom'>
-                                <IonInput label="Especifica tu parentesco con la persona extraviada"
+                                <IonInput label="Otro parentesco"
                                     mode='ios'
                                     labelPlacement="stacked"
                                     color={errors.otherRelationship && (touchedFields.otherRelationship || dirtyFields.otherRelationship) ? "danger" : "primary"}
-                                    placeholder="Selecciona tu parentesco con la persona extraviada"
+                                    placeholder="Ingresa un parentesco"
                                     {...register("otherRelationship", {
-                                        required: "Es necesario especificar tu parentesco con la persona extraviada."
+                                        required: "El parentesco con la persona extraviada es requerido.",
+                                        minLength: { value: 2, message: "El parentesco no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 25, message: "El parentesco no puede ser mayor a 25 caracteres." }
                                     })}>
                                 </IonInput>
                             </IonItem>

@@ -16,7 +16,7 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
 
                 <h2><b>Información general</b></h2>
                 <div className='ion-padding-vertical'>
-                    <p><b>Dirección:</b> {institution.direction.state}, {institution.direction.city}, {institution.direction.postalCode}, {institution.direction.neighborhood}, {institution.direction.street} {institution.direction.number}</p>
+                    <p><b>Dirección:</b> {institution.direction.state}, {institution.direction.city}, {institution.direction.postalCode}, {institution.direction.neighborhood}, {institution.direction.street}, {institution.direction.number}</p>
                     <p><b>Horario de apertura:</b> {institution.openingHours}</p>
                 </div>
 
@@ -39,9 +39,8 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
                     {institution.phoneNumbers && (
                         <IonButton
                             color='tertiary'
-
                             expand="block"
-                            href={`tel:${institution.phoneNumbers}`}
+                            href={`tel:${institution.phoneNumbers.split(',')[0].trim()}`}
                             mode='ios'
                             style={{ flexGrow: 1, marginRight: '8px' }}
                         >
@@ -51,11 +50,12 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
                     {institution.mapUrl && (
                         <IonButton
                             color='tertiary'
+                            expand="block"
                             href={institution.mapUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             mode='ios'
-                            title='Ver en Google Maps'
+                            style={{ flexGrow: 1, marginRight: '8px' }}
                         >
                             Ver en el mapa
                         </IonButton>
