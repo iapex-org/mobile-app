@@ -78,7 +78,9 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
           <div className={styles['card-info']}>
             <h2><b>Fecha y lugar de registro</b></h2>
             <div className="ion-padding-vertical">
-              <p>Fue registrado en el sistema el <b>{formatted2Date}</b>, en las instalaciones del <b>{patient.institution}</b>.</p>
+              <p>
+                Fue registrado en el sistema el <b>{formatted2Date}</b>, en las instalaciones del <b>{patient.institution.name}</b>, ubicado en <b>{capitalize(patient.institution.direction.city)} {capitalize(patient.institution.direction.state)}</b>.
+              </p>
             </div>
           </div>
         )}
@@ -99,7 +101,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
             <p className="ion-padding-vertical">
               {capitalize(patient.gender === 'masculino' ? 'Hombre' : 'Mujer')} de aproximadamente {patient.approximateAge} años,
               {patient.name ? ` identificado como ${capitalize(patient.name)} ${capitalize(patient.lastName || '')} ${capitalize(patient.secondLastName || '')}` : ' persona no identificada'},
-              fue ingresado en el sistema del {patient.institution} el {formatted1Date}.
+              fue ingresado en el sistema el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
             </p>
           )}
         </div>

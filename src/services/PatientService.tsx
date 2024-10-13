@@ -15,7 +15,7 @@ class PatientService {
     }
 
     async getPatientsByInstitution(): Promise<Patient[]> {
-        const response = await axios.get<Patient[]>(`${API_URL}/current-user/institution`);
+        const response = await axios.get<Patient[]>(`${API_URL}/me/institution`);
         return response.data;
     }
 }

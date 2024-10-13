@@ -11,7 +11,7 @@ class InstitutionService {
     }
 
     async getInstitutionByName(name: string): Promise<Institution | null> {
-        const response = await axios.get<Institution>(`${API_URL}/name/${name}/activated`);
+        const response = await axios.get<Institution>(`${API_URL}/name/${name}/active`);
         return response.data;
     }
 

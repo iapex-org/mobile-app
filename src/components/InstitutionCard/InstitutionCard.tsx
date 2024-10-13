@@ -5,6 +5,8 @@ interface InstitutionCardProps {
     institution: Institution;
 }
 
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
     return (
         <IonCard mode='ios' className='ion-no-padding ion-no-margin ion-margin-bottom'>
@@ -16,8 +18,8 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
 
                 <h2><b>Información general</b></h2>
                 <div className='ion-padding-vertical'>
-                    <p><b>Dirección:</b> {institution.direction.state}, {institution.direction.city}, {institution.direction.postalCode}, {institution.direction.neighborhood}, {institution.direction.street}, {institution.direction.number}</p>
-                    <p><b>Horario de apertura:</b> {institution.openingHours}</p>
+                    <p><b>Dirección:</b> {capitalize(institution.direction.state)}, {capitalize(institution.direction.city)}, {institution.direction.postalCode}, {capitalize(institution.direction.neighborhood)}, {capitalize(institution.direction.street)}, {institution.direction.number}</p>
+                    <p><b>Horario de apertura:</b> {capitalize(institution.openingHours)}</p>
                 </div>
 
                 <h2><b>Información de contacto</b></h2>

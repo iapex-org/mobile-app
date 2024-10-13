@@ -52,7 +52,7 @@ const AccessibilitySettingCard: React.FC<AccessibilitySettingCardProps> = ({ tit
                     {items.map((item, index) => (
                         <IonItem key={index} mode='ios' lines='none'>
                             <IonIcon icon={item.icon} slot='start'></IonIcon>
-                            <p>{item.text}</p>
+                            <p className='ion-margin-end'>{item.text}</p>
                             {item.component === 'range' ? (
                                 <IonRange
                                     id={item.id}

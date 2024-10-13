@@ -5,6 +5,7 @@ import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { createContactRequest } from '../../services/ContactRequestService';
 import { ContactRequest } from '../../models/ContactRequest';
+import { usePatient } from '../../contexts/PatientContext';
 
 const ContactInstitution: React.FC = () => {
     const [errorToast, setErrorToast] = useState<string>('');
@@ -12,6 +13,7 @@ const ContactInstitution: React.FC = () => {
     const [showOtherRelationship, setShowOtherRelationship] = useState<boolean>(false);
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
+    const { fullName } = usePatient(); // Usa el contexto
 
     // Definir los campos del formulario
     type FormField = "interestedPersonName" | "missingPersonName" | "relationship" | "otherRelationship" | "phoneNumber" | "email" | "message";
@@ -21,7 +23,7 @@ const ContactInstitution: React.FC = () => {
         mode: 'all',
         defaultValues: {
             interestedPersonName: '',
-            missingPersonName: 'Luis David Pérez García', // Valor por defecto para el nombre de la persona buscada
+            missingPersonName: fullName, // Valor por defecto para el nombre de la persona buscada
             relationship: '',
             otherRelationship: '',
             phoneNumber: '',

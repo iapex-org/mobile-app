@@ -1,8 +1,12 @@
 import { IonContent, IonIcon, IonPage, IonText } from '@ionic/react';
 import { cog } from 'ionicons/icons';
 import styles from './ProcessingInformation.module.css';
+import { useHistory } from 'react-router';
 
 const ProcessingInformation: React.FC = () => {
+
+    const history = useHistory();
+
     return (
         <IonPage>
             <IonContent color={'primary'} className='ion-padding'>
@@ -10,7 +14,7 @@ const ProcessingInformation: React.FC = () => {
                     <IonText>
                         <h1>Procesando información...</h1>
                     </IonText>
-                    <IonIcon icon={cog} className={styles.cogIcon}></IonIcon>
+                    <IonIcon icon={cog} className={styles.cogIcon} onClick={() => history.push(`/search-results`)}></IonIcon>
                     <p>Nuestro algoritmo está buscando las mejores coincidencias en nuestra base de datos basándose en las imagenes y la información que proporcionaste. Por favor, no cierres la aplicación mientras esta pantalla esté activa.</p>
                 </div>
 

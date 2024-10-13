@@ -3,6 +3,7 @@ import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
+import { usePatient } from '../../contexts/PatientContext';
 
 const InputPatientInformation: React.FC = () => {
     const [errorToast, setErrorToast] = useState<string>('');
@@ -10,12 +11,13 @@ const InputPatientInformation: React.FC = () => {
     const [showOtherFields, setShowOtherFields] = useState({ hairColor: false });
     const [hideHairFields, setHideHairFields] = useState<boolean>(false);
     const history = useHistory();
+    const { setFullName } = usePatient(); // Usa el contexto para establecer el nombre completo del paciente.
 
     // Definición de tipos y estado
     type FormField = "dateOfDisappearance" | "name" | "lastName" | "secondLastName" | "gender" | "age" | "skinColor" | "eyeColor" | "hairColor" | "otherHairColor" | "hairType" | "hairLength" | "complexion" | "height" | "medicalConditions" | "distinctiveFeatures" | "additionalNotes";
 
     // Configuración del useForm para el manejo del formulario
-    const { register, handleSubmit, trigger, setValue, setFocus, watch, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
+    const { register, handleSubmit, trigger, setValue, setFocus, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
         mode: 'all',
         defaultValues: {
             dateOfDisappearance: '',
@@ -70,7 +72,6 @@ const InputPatientInformation: React.FC = () => {
 
     const handleValidateAndSubmit = async () => {
         await markAllFieldsAsTouched();
-        const isValid = await trigger();
 
         // Validar solo los campos que no están ocultos
         const fieldsToValidate: FormField[] = ['hairLength', 'hairColor', 'otherHairColor', 'hairType'];
@@ -94,6 +95,12 @@ const InputPatientInformation: React.FC = () => {
                 acc[field] = data[field] === 'otro' ? data[otherField] ?? '' : data[field]; // Usar valor alternativo si es "Otro".
                 return acc;
             }, { ...data }); // Copia inicial de todos los datos.
+
+            // Combinar nombres y apellidos
+            const fullName = `${data.name} ${data.lastName} ${data.secondLastName || ''}`.trim();
+
+            // Establecer el nombre completo en el contexto
+            setFullName(fullName);
 
             // Mostrar los datos en la consola.
             console.log('Datos enviados:', cleanedData);
@@ -137,7 +144,7 @@ const InputPatientInformation: React.FC = () => {
                                             return true;
                                         },
                                     })}
-                                    min="1900-01-01"
+                                    min="2024-01-01"
                                     max={new Date().toISOString()}
                                     value={new Date().toISOString()}
                                 />
@@ -241,7 +248,7 @@ const InputPatientInformation: React.FC = () => {
                                 {...register("age", {
                                     required: 'La edad es requerida.',
                                     min: { value: 0, message: "La edad no puede ser menor a 0 años." },
-                                    max: { value: 150, message: "La edad no puede ser mayor a 150 años." },
+                                    max: { value: 100, message: "La edad no puede ser mayor a 100 años." },
                                     validate: value => Number.isInteger(Number(value)) || "La edad debe ser un número entero."
                                 })}></IonInput>
                         </IonItem>

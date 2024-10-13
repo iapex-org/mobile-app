@@ -39,8 +39,7 @@ const IndividualResult: React.FC = () => {
             console.log('Paciente encontrado:', selectedPatient);
 
             // Obtiene la institución asociada usando el ID dentro de 'patient.institution.id'
-            const institutionName = selectedPatient.institution;
-            const patientInstitution = await InstitutionService.getInstitutionByName(institutionName);
+            const patientInstitution = await InstitutionService.getInstitutionById(selectedPatient.institution.id);
             
             if (!patientInstitution) {
                 throw new Error('Institución asociada no encontrada');
@@ -80,10 +79,10 @@ const IndividualResult: React.FC = () => {
                     <ErrorOrException
                         title="Ocurrió un error"
                         message="Sucedió un error al cargar la información del paciente o la institución. Por favor, intente cargarla de nuevo o regrese al inicio."
-                        showRetryButton={true}
-                        showHomeButton={true}
-                        onRetry={handleRetry}
-                        onHome={handleGoToHome}
+                        customButtons={[
+                            { text: "Reintentar", action: handleRetry },
+                            { text: "Ir a inicio", action: handleGoToHome },
+                        ]}
                     />
                 )}
 

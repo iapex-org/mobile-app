@@ -21,7 +21,10 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    height: 100vh;
+}
+
+.fullHeight {
+    height: 90vh; /* Estilo opcional */
 }
 
 .placeholderImg {

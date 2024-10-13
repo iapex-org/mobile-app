@@ -17,7 +17,7 @@ export interface Patient {
     approximateHeight: number;
     medicalConditions?: string;
     distinctiveFeatures?: string;
-    institution: string;
+    institution: Institution;
     images: Image[];
     additionalNotes?: string;
 }
