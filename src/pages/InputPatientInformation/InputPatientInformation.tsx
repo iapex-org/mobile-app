@@ -89,21 +89,44 @@ const InputPatientInformation: React.FC = () => {
         try {
             const fieldsWithOther = ['hairColor']; // Campos con opción "Otro"
 
-            // Transformamos los campos dinámicamente usando reduce.
+            // Usar el valor alternativo si el campo contiene "otro"
             const cleanedData = fieldsWithOther.reduce((acc, field) => {
                 const otherField = `other${field.charAt(0).toUpperCase() + field.slice(1)}`;
-                acc[field] = data[field] === 'otro' ? data[otherField] ?? '' : data[field]; // Usar valor alternativo si es "Otro".
+                acc[field] = data[field] === 'otro' ? data[otherField] ?? '' : data[field];
                 return acc;
-            }, { ...data }); // Copia inicial de todos los datos.
+            }, { ...data });
 
-            // Combinar nombres y apellidos
+            // Combinar los campos de cabello
+            const hairDetails = [
+                cleanedData.hairLength,
+                cleanedData.hairType,
+                cleanedData.hairColor
+            ].filter(Boolean).join(', '); // Filtrar valores vacíos y unirlos con comas
+
+            // Crear el objeto final solo con los campos necesarios
+            const finalData = {
+                additionalNotes: cleanedData.additionalNotes,
+                age: cleanedData.age,
+                complexion: cleanedData.complexion,
+                dateOfDisappearance: cleanedData.dateOfDisappearance,
+                distinctiveFeatures: cleanedData.distinctiveFeatures,
+                eyeColor: cleanedData.eyeColor,
+                gender: cleanedData.gender,
+                hair: hairDetails,
+                height: cleanedData.height,
+                lastName: cleanedData.lastName,
+                medicalConditions: cleanedData.medicalConditions,
+                name: cleanedData.name,
+                secondLastName: cleanedData.secondLastName,
+                skinColor: cleanedData.skinColor,
+            };
+
+            // Establecer el nombre completo (opcionalmente)
             const fullName = `${data.name} ${data.lastName} ${data.secondLastName || ''}`.trim();
-
-            // Establecer el nombre completo en el contexto
             setFullName(fullName);
 
-            // Mostrar los datos en la consola.
-            console.log('Datos enviados:', cleanedData);
+            console.log('Datos enviados:', finalData);
+
             history.push(`/processing-information`);
             setSuccessToast('Solicitud enviada correctamente.');
         } catch (error: any) {
