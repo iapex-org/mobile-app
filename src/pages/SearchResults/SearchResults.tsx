@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonSkeletonText, IonToast } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
-import PatientService from '../../services/PatientService';
 import { useHistory } from 'react-router';
 import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
 import ErrorOrException from '../../components/Placeholders/ErrorOrException';
@@ -14,16 +13,16 @@ import { useSearchContext } from '../../contexts/SearchContext';
 const ITEMS_PER_PAGE = 10; // Número de pacientes a mostrar por página
 
 const SearchResults: React.FC = () => {
-    // const [patients, setPatients] = useState<Patient[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const history = useHistory();
     const [errorOccurred, setErrorOccurred] = useState<boolean>(false);
     const [showFailedToast, setShowFailedToast] = useState<boolean>(false);
-    const [noResultsFound, setNoResultsFound] = useState<boolean>(false); // Nuevo estado para manejar resultados vacíos
+    const [noResultsFound, setNoResultsFound] = useState<boolean>(false);
+
+    const { searchResults } = useSearchContext(); // Obtener resultados del contexto
 
     // Estados para la paginación
     const [currentPage, setCurrentPage] = useState<number>(1);
-    // const totalPages = Math.ceil(patients.length / ITEMS_PER_PAGE);
     
     // Estados para los filtros
     const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
@@ -32,20 +31,14 @@ const SearchResults: React.FC = () => {
     const [genderFilter, setGenderFilter] = useState<string | undefined>(undefined);
     const [stateFilter, setStateFilter] = useState<string | undefined>(undefined);
     
-    const { searchResults } = useSearchContext(); // Obtener resultados del contexto
-    const totalPages = Math.ceil(searchResults!.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(searchResults.length / ITEMS_PER_PAGE);
 
     const fetchPatients = async () => {
         try {
             setShowFailedToast(false);
-            // const fetchedPatients = await PatientService.getAllPatients();
-            // setPatients(fetchedPatients);
-            // console.log('Pacientes:', fetchedPatients);
-            // setFilteredPatients(fetchedPatients); // Inicialmente, los pacientes filtrados son todos
-            setFilteredPatients(searchResults!); // Inicialmente, los pacientes filtrados son todos
             setLoading(false);
             setErrorOccurred(false);
-            setNoResultsFound(false); // Resetea el estado al cargar pacientes
+            setNoResultsFound(false);
         } catch (error) {
             console.error('Error al obtener los pacientes:', error);
             setLoading(false);
@@ -81,7 +74,6 @@ const SearchResults: React.FC = () => {
     }, [genderFilter, minAge, maxAge, stateFilter]);
 
     const applyFilters = () => {
-        // let filtered = patients;
         let filtered = searchResults;
 
         if (genderFilter) {
@@ -111,8 +103,7 @@ const SearchResults: React.FC = () => {
         setMinAge(0);
         setMaxAge(100);
         setStateFilter(undefined);
-        // setFilteredPatients(patients); // Restablecer a todos los pacientes
-        setFilteredPatients(searchResults!); // Restablecer a todos los pacientes
+        setFilteredPatients(searchResults); // Restablecer a todos los pacientes
         setCurrentPage(1); // Volver a la primera página
         setNoResultsFound(false); // Resetear el estado de no resultados
     };
@@ -134,8 +125,7 @@ const SearchResults: React.FC = () => {
                     />
                 )}
 
-                {/* {!loading && patients.length === 0 && !errorOccurred && ( */}
-                {!loading && searchResults!.length === 0 && !errorOccurred && (
+                {!loading && searchResults.length === 0 && !errorOccurred && (
                     <ErrorOrException
                         title="Ningún resultado encontrado"
                         message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes revisar la información o intentar con imágenes diferentes."
@@ -159,7 +149,7 @@ const SearchResults: React.FC = () => {
                     </>
                 )}
 
-                {!loading && !errorOccurred && (
+                {!loading && !errorOccurred && searchResults.length !== 0 && (
                     <>
                         <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
 
@@ -275,7 +265,7 @@ const SearchResults: React.FC = () => {
                         </IonModal>
 
                         {/* Manejando el caso de resultados vacíos después de aplicar filtros */}
-                        {!loading && noResultsFound && (
+                        {!loading && noResultsFound && searchResults.length !== 0 && (
                             <ErrorOrException
                                 title="Ningún resultado encontrado"
                                 message={
@@ -287,17 +277,7 @@ const SearchResults: React.FC = () => {
                             />
                         )}
 
-                        {/* {currentPatients.map((patient) => (
-                            <PatientCard
-                                isDetailedView={false}
-                                key={patient.id}
-                                patient={patient}
-                                buttonLabel='Ver resultado'
-                                link={`/individual-result/${patient.id}`}
-                            />
-                        ))} */}
-
-                        {searchResults && searchResults.map((patient) => (
+                        {currentPatients.map((patient) => (
                             <PatientCard
                                 isDetailedView={false}
                                 key={patient.id}
