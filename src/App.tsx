@@ -43,6 +43,7 @@ import ProcessCompleted from './pages/ProcessCompleted/ProcessCompleted';
 import ProcessingInformation from './pages/ProcessingInformation/ProcessingInformation';
 import InputPatientInformation from './pages/InputPatientInformation/InputPatientInformation';
 import { PatientProvider } from './contexts/PatientContext';
+import { SearchProvider } from './contexts/SearchContext';
 
 setupIonicReact();
 
@@ -50,6 +51,7 @@ const App: React.FC = () => (
   <IonApp>
     <ImageProvider>
       <PatientProvider>
+        <SearchProvider>
           <IonReactRouter>
             <IonRouterOutlet>
               <Route exact path="/accessibility-settings">
@@ -87,6 +89,7 @@ const App: React.FC = () => (
               </Route>
             </IonRouterOutlet>
           </IonReactRouter>
+        </SearchProvider>
       </PatientProvider>
     </ImageProvider>
   </IonApp>

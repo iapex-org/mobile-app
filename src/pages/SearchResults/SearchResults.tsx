@@ -9,6 +9,7 @@ import ErrorOrException from '../../components/Placeholders/ErrorOrException';
 import { Patient } from '../../models/Patient';
 import { arrowBack, arrowForward, filterCircleOutline, trashBinOutline } from 'ionicons/icons';
 import styles from './SearchResults.module.css';
+import { useSearchContext } from '../../contexts/SearchContext';
 
 const ITEMS_PER_PAGE = 10; // Número de pacientes a mostrar por página
 
@@ -30,6 +31,8 @@ const SearchResults: React.FC = () => {
     const [maxAge, setMaxAge] = React.useState<number>(100);
     const [genderFilter, setGenderFilter] = useState<string | undefined>(undefined);
     const [stateFilter, setStateFilter] = useState<string | undefined>(undefined);
+
+    const { searchResults } = useSearchContext(); // Obtener resultados del contexto
 
     const fetchPatients = async () => {
         try {

@@ -4,12 +4,15 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { usePatient } from '../../contexts/PatientContext';
+import PatientService from '../../services/PatientService';
+import { useSearchContext } from '../../contexts/SearchContext';
 
 const InputPatientInformation: React.FC = () => {
     const [errorToast, setErrorToast] = useState<string>('');
     const [successToast, setSuccessToast] = useState<string>('');
     const [showOtherFields, setShowOtherFields] = useState({ hairColor: false });
     const [hideHairFields, setHideHairFields] = useState<boolean>(false);
+    const { setSearchResults } = useSearchContext();
     const history = useHistory();
     const { setFullName } = usePatient(); // Usa el contexto para establecer el nombre completo del paciente.
 
@@ -104,7 +107,7 @@ const InputPatientInformation: React.FC = () => {
             ].filter(Boolean).join(', '); // Filtrar valores vacíos y unirlos con comas
 
             // Crear el objeto final solo con los campos necesarios
-            const finalData = {
+            const finalData: { [key: string]: any } = {
                 additionalNotes: cleanedData.additionalNotes,
                 age: cleanedData.age,
                 complexion: cleanedData.complexion,
@@ -126,6 +129,19 @@ const InputPatientInformation: React.FC = () => {
             setFullName(fullName);
 
             console.log('Datos enviados:', finalData);
+
+            // Crear un objeto FormData para enviar al endpoint de búsqueda
+            const formData = new FormData();
+            for (const key in finalData) {
+                formData.append(key, finalData[key as keyof typeof finalData]);
+            }
+
+            // Realizar la búsqueda de pacientes
+            const searchResults = await PatientService.searchPatients(formData);
+            console.log('Resultados de búsqueda:', searchResults);
+
+            // Guardar resultados en el contexto
+            setSearchResults(searchResults);
 
             history.push(`/processing-information`);
             setSuccessToast('Solicitud enviada correctamente.');
