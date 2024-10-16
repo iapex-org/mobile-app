@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonRange, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonSkeletonText, IonToast } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonSkeletonText, IonToast } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import PatientService from '../../services/PatientService';
@@ -14,7 +14,7 @@ import { useSearchContext } from '../../contexts/SearchContext';
 const ITEMS_PER_PAGE = 10; // Número de pacientes a mostrar por página
 
 const SearchResults: React.FC = () => {
-    const [patients, setPatients] = useState<Patient[]>([]);
+    // const [patients, setPatients] = useState<Patient[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const history = useHistory();
     const [errorOccurred, setErrorOccurred] = useState<boolean>(false);
@@ -23,23 +23,26 @@ const SearchResults: React.FC = () => {
 
     // Estados para la paginación
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const totalPages = Math.ceil(patients.length / ITEMS_PER_PAGE);
-
+    // const totalPages = Math.ceil(patients.length / ITEMS_PER_PAGE);
+    
     // Estados para los filtros
     const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
     const [minAge, setMinAge] = React.useState<number>(0);
     const [maxAge, setMaxAge] = React.useState<number>(100);
     const [genderFilter, setGenderFilter] = useState<string | undefined>(undefined);
     const [stateFilter, setStateFilter] = useState<string | undefined>(undefined);
-
+    
     const { searchResults } = useSearchContext(); // Obtener resultados del contexto
+    const totalPages = Math.ceil(searchResults!.length / ITEMS_PER_PAGE);
 
     const fetchPatients = async () => {
         try {
             setShowFailedToast(false);
-            const fetchedPatients = await PatientService.getAllPatients();
-            setPatients(fetchedPatients);
-            setFilteredPatients(fetchedPatients); // Inicialmente, los pacientes filtrados son todos
+            // const fetchedPatients = await PatientService.getAllPatients();
+            // setPatients(fetchedPatients);
+            // console.log('Pacientes:', fetchedPatients);
+            // setFilteredPatients(fetchedPatients); // Inicialmente, los pacientes filtrados son todos
+            setFilteredPatients(searchResults!); // Inicialmente, los pacientes filtrados son todos
             setLoading(false);
             setErrorOccurred(false);
             setNoResultsFound(false); // Resetea el estado al cargar pacientes
@@ -78,13 +81,14 @@ const SearchResults: React.FC = () => {
     }, [genderFilter, minAge, maxAge, stateFilter]);
 
     const applyFilters = () => {
-        let filtered = patients;
+        // let filtered = patients;
+        let filtered = searchResults;
 
         if (genderFilter) {
-            filtered = filtered.filter(patient => patient.gender === genderFilter);
+            filtered = filtered!.filter(patient => patient.gender === genderFilter);
         }
 
-        filtered = filtered.filter(
+        filtered = filtered!.filter(
             patient => patient.approximateAge >= minAge && patient.approximateAge <= maxAge
         );
 
@@ -107,7 +111,8 @@ const SearchResults: React.FC = () => {
         setMinAge(0);
         setMaxAge(100);
         setStateFilter(undefined);
-        setFilteredPatients(patients); // Restablecer a todos los pacientes
+        // setFilteredPatients(patients); // Restablecer a todos los pacientes
+        setFilteredPatients(searchResults!); // Restablecer a todos los pacientes
         setCurrentPage(1); // Volver a la primera página
         setNoResultsFound(false); // Resetear el estado de no resultados
     };
@@ -129,7 +134,8 @@ const SearchResults: React.FC = () => {
                     />
                 )}
 
-                {!loading && patients.length === 0 && !errorOccurred && (
+                {/* {!loading && patients.length === 0 && !errorOccurred && ( */}
+                {!loading && searchResults!.length === 0 && !errorOccurred && (
                     <ErrorOrException
                         title="Ningún resultado encontrado"
                         message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes revisar la información o intentar con imágenes diferentes."
@@ -281,7 +287,17 @@ const SearchResults: React.FC = () => {
                             />
                         )}
 
-                        {currentPatients.map((patient) => (
+                        {/* {currentPatients.map((patient) => (
+                            <PatientCard
+                                isDetailedView={false}
+                                key={patient.id}
+                                patient={patient}
+                                buttonLabel='Ver resultado'
+                                link={`/individual-result/${patient.id}`}
+                            />
+                        ))} */}
+
+                        {searchResults && searchResults.map((patient) => (
                             <PatientCard
                                 isDetailedView={false}
                                 key={patient.id}
