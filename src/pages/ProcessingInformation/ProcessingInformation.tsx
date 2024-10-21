@@ -3,19 +3,18 @@ import { cog } from 'ionicons/icons';
 import styles from './ProcessingInformation.module.css';
 import { useHistory } from 'react-router';
 import { useEffect } from 'react';
+import { useSearchContext } from '../../contexts/SearchContext'; // Asegúrate de importar tu contexto
 
 const ProcessingInformation: React.FC = () => {
     const history = useHistory();
+    const { isLoading } = useSearchContext(); // Obtener resultados y errores
 
-    // Redirigir automáticamente después de 5 segundos
     useEffect(() => {
-        const timer = setTimeout(() => {
-            history.push('/search-results'); // Redirige a la página de resultados
-        }, 5000); // 5000 ms = 5 segundos
-
-        // Limpiar el temporizador al desmontar el componente
-        return () => clearTimeout(timer);
-    }, [history]);
+        // Redirigir a /search-results cuando la llamada a la API haya terminado
+        if (!isLoading) {
+            history.replace('/search-results');
+        }
+    }, [isLoading, history]);
 
     return (
         <IonPage>
@@ -24,11 +23,13 @@ const ProcessingInformation: React.FC = () => {
                     <IonText>
                         <h1>Procesando información...</h1>
                     </IonText>
-                    <IonIcon icon={cog} className={styles.cogIcon} onClick={() => history.push(`/search-results`)}></IonIcon>
-                    <p>Nuestro algoritmo está buscando las mejores coincidencias en nuestra base de datos basándose en las imágenes y la información que proporcionaste. Por favor, no cierres la aplicación mientras esta pantalla esté activa.</p>
+                    <IonIcon color='light' icon={cog} className={styles.cogIcon}></IonIcon>
+                    <p>
+                        Nuestro algoritmo está buscando las mejores coincidencias en nuestra base de datos basándose en las imágenes y la información que proporcionaste.
+                        Por favor, no cierres la aplicación mientras esta pantalla esté activa.
+                    </p>
                 </div>
-
-                <img src="src/assets/img/logo-encuentrame.png" alt="Encuéntrame" />
+                <img src="src/assets/img/logo-encuentrame.png" alt='Logotipo de "Encuéntrame"' />
             </IonContent>
         </IonPage>
     );

@@ -22,6 +22,15 @@ h1 {
     animation: spin 4s linear infinite; /* Aquí agregas la animación */
 }
 
+.errorIcon {
+    font-size: 10rem;
+    align-self: center;
+}
+
+.blueText {
+    --ion-color-contrast: #3880ff !important;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);

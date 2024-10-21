@@ -10,8 +10,11 @@ import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import InstitutionCard from '../../components/InstitutionCard/InstitutionCard';
 import { Institution } from '../../models/Institution';
+import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
 
 const IndividualResult: React.FC = () => {
+    useTextToSpeechClick();
+
     const { id } = useParams<{ id: string }>();
     const [patient, setPatient] = useState<Patient | null>(null);
     const [institution, setInstitution] = useState<Institution | null>(null);
@@ -72,7 +75,7 @@ const IndividualResult: React.FC = () => {
 
     return (
         <IonPage>
-            <NavbarHeader title={patient ? `Paciente No. ${patient.id}` : 'Cargando...'} />
+            <NavbarHeader title={patient ? `Paciente No. ${patient.id}` : ''} />
 
             <IonContent className='ion-padding'>
                 {!loading && errorOccurred && (

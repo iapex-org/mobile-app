@@ -47,7 +47,7 @@ const ImageSelectCard: React.FC<ImageSelectCardProps> = ({ imageUrl, onSelect, i
             onTouchMove={handleTouchEnd}
             onClick={handleClick}
         >
-            <img src={imageUrl} className={styles.image} />
+            <img src={imageUrl} className={styles.image} alt='Imagen subida' />
             {isSelected && (
                 <IonIcon icon={checkmarkCircle} className={styles.selectionIcon} style={{ color: '#ffffff' }} />
             )}

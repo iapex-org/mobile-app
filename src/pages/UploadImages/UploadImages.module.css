@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    height: 100vh;
+    height: 80vh;
 }
 
 h1 {
@@ -19,13 +19,14 @@ h1 {
 
 .accessibilityIcon {
     font-size: 2rem;
-    color: #fff;
+    color: #ffffff;
 }
 
 .cameraIcon {
     font-size: 10rem;
     margin-bottom: 20px;
     align-self: center;
+    color: #ffffff;
 }
 
 .container p {
@@ -38,6 +39,10 @@ img {
     margin: 0 auto;
 }
 
-.whiteText {
+.blueText {
     --ion-color-contrast: #3880ff !important;
+}
+
+.whiteText {
+    color: #fff;
 }

@@ -55,3 +55,7 @@
     font-size: 10rem;
     align-self: center;
 }
+
+.blueText {
+    --ion-color-contrast: #3880ff !important;
+}

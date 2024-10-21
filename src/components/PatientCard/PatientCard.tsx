@@ -41,7 +41,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
                   <img
                     src={img.imageUrl}
                     className={`${styles['size-img']} ${blurStates[index] ? styles['blurred'] : ''}`}
-                    alt={`Paciente ${index + 1}`}
+                    alt={`Foto número ${index + 1} del paciente ${patient.id || `${patient.name} ${patient.lastName} ${patient.secondLastName}`}`}
                   />
                   {/* Botón para alternar el blur */}
                   <IonIcon
@@ -75,8 +75,8 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
 
       <IonCardContent mode="ios">
         {isDetailedView && (
-          <div className={styles['card-info']}>
-            <h2><b>Fecha y lugar de registro</b></h2>
+          <div>
+            <h2 className={styles['bold']}>Fecha y lugar de registro</h2>
             <div className="ion-padding-vertical">
               <p>
                 Fue registrado en el sistema el <b>{formatted2Date}</b>, en las instalaciones del <b>{patient.institution.name}</b>, ubicado en <b>{capitalize(patient.institution.direction.city)} {capitalize(patient.institution.direction.state)}</b>.
@@ -85,8 +85,8 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
           </div>
         )}
 
-        <div className={styles['card-info']}>
-          <h2><b>Información personal</b></h2>
+        <div>
+          <h2 className={styles['bold']}>Información personal</h2>
           {isDetailedView ? (
             <>
               <div className="ion-padding-vertical">
@@ -101,13 +101,13 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
             <p className="ion-padding-vertical">
               {capitalize(patient.gender === 'masculino' ? 'Hombre' : 'Mujer')} de aproximadamente {patient.approximateAge} años,
               {patient.name ? ` identificado como ${capitalize(patient.name)} ${capitalize(patient.lastName || '')} ${capitalize(patient.secondLastName || '')}` : ' persona no identificada'},
-              fue ingresado en el sistema el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
+              ingreso en el sistema el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
             </p>
           )}
         </div>
 
-        <div className={styles['card-info']}>
-          <h2><b>Descripción morfológica</b></h2>
+        <div >
+          <h2 className={styles['bold']}>Descripción morfológica</h2>
           {isDetailedView ? (
             <>
               <div className="ion-padding-vertical">
@@ -116,8 +116,6 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
                 <p><b>Cabello:</b> {capitalize(patient.hair)}</p>
                 <p><b>Complexión:</b> {capitalize(patient.complexion)}</p>
                 <p><b>Estatura aproximada:</b> {heightInMeters} metros</p>
-                {patient.medicalConditions && <p><b>Condiciones médicas:</b> {capitalize(patient.medicalConditions)}</p>}
-                {patient.distinctiveFeatures && <p><b>Señas particulares:</b> {capitalize(patient.distinctiveFeatures)}</p>}
               </div>
             </>
           ) : (
@@ -128,11 +126,13 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
           )}
         </div>
 
-        {isDetailedView && patient.additionalNotes && (
-          <div className={styles['card-info']}>
-            <h2><b>Notas adicionales</b></h2>
+        {isDetailedView && (patient.additionalNotes || patient.medicalConditions || patient.distinctiveFeatures) && (
+          <div >
+            <h2><b>Información adicional</b></h2>
             <div className="ion-padding-vertical">
-              <p>{capitalize(patient.additionalNotes)}</p>
+              {patient.additionalNotes && <p><b>Notas adicionales:</b> {capitalize(patient.additionalNotes)}</p>}
+              {patient.medicalConditions && <p><b>Condiciones médicas:</b> {capitalize(patient.medicalConditions)}</p>}
+              {patient.distinctiveFeatures && <p><b>Señas particulares:</b> {capitalize(patient.distinctiveFeatures)}</p>}
             </div>
           </div>
         )}

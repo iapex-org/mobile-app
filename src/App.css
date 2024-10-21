@@ -2,15 +2,29 @@
 
 html.md {
     --ion-default-font: 'Poppins' !important;
+    --ion-font-family: 'Poppins' !important;
 }
 
-html, body {
+html,
+body {
+    --ion-font-family: 'Poppins' !important;
     font-family: 'Poppins', sans-serif;
     height: 100%;
     margin: 0;
     padding: 0;
-    font-size: var(--text-size, 1em);
-    font-weight: var(--text-bold, normal);
+}
+
+.custom-popover {
+    --width: 375px;
+    --height: auto;
+}
+
+.custom-popover ion-content {
+    font-size: 14px;
+}
+
+.swiper-pagination-bullet-active {
+    background: #F4F4F4 !important;
 }
 
 .size-img {
@@ -18,61 +32,126 @@ html, body {
     transition: filter 0.1s ease;
     object-fit: cover;
     max-height: 200px;
-  }
-
-:root {
-    --text-size: 1em;
-    --text-bold: normal;
-    --mainColor: #1F89EA;
 }
 
 ion-content {
-    --ion-background-color: #F4F4F4;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-ion-toolbar {
-    --ion-toolbar-background: #ffffff;
-}
-
 ion-card {
     border-radius: 20px;
-    --ion-box-shadow: none;
     box-shadow: none;
-    background-color: #ffffff;
     border: 2px solid #E0E0E0;
 }
 
-p {
-    color: #343A40;
+:root {
+    /* Variables de accesibilidad */
+    --text-font-size: 1rem;
+    /* Tamaño de texto por defecto */
+    --text-font-weight: normal;
+    /* Peso por defecto */
+    --background-color: #F4F4F4;
+    /* Fondo claro */
+    --text-color: #343A40;
+    /* Texto oscuro */
+
+    /* Alternativas para modo de alto contraste */
+    --high-contrast-background: #343A40;
+    --high-contrast-text: #F4F4F4;
+    --high-contrast-weight: bold;
 }
 
-/* CSS para los ajustes de accesibilidad */
-.high-contrast-dark html, .high-contrast-dark body, .high-contrast-dark ion-content {
-    --ion-background-color: #000000 !important;
-    --ion-text-color: #ffffff !important;
-    --ion-item-background: #000000 !important;
-    --ion-item-text-color: #ffffff !important;
-    --ion-button-text-color: #ffffff !important;
-    --ion-label-color: #ffffff !important;
-    --ion-text-color: #ffffff !important;
+body,
+html {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: var(--text-font-size);
+    font-weight: var(--text-font-weight);
 }
 
-.high-contrast-dark ion-card {
-    background-color: #000000 !important;
+ion-content,
+ion-page,
+ion-header,
+ion-footer,
+ion-toolbar {
+    --ion-background-color: var(--background-color);
+    --ion-color: var(--text-color);
 }
 
-.high-contrast-dark ion-item {
-    background-color: #000000 !important;
+ion-card,
+ion-card-content,
+ion-card-title,
+ion-card-subtitle {
+    --ion-background-color: var(--background-color);
+    --ion-color: var(--text-color);
+    --ion-text-color: var(--text-color);
 }
 
-.high-contrast-dark ion-toolbar {
-    --ion-toolbar-background: #000000 !important;
-    --ion-toolbar-text-color: #ffffff !important;
+ion-toolbar {
+    --ion-toolbar-background: var(--background-color);
+    --ion-toolbar-color: var(--text-color);
 }
 
-.high-contrast-dark p {
-    color: #ffffff !important;
+p,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+a,
+span {
+    color: var(--text-color);
+}
+
+button,
+ion-button {
+    font-weight: var(--text-font-weight);
+    --ion-color: var(--text-color);
+    --ion-text-color: var(--text-color);
+    --ion-background-color: var(--background-color);
+}
+
+input,
+textarea,
+ion-select,
+ion-input,
+ion-textarea,
+ion-searchbar,
+ion-label {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    --ion-color: var(--text-color);
+    --ion-text-color: var(--text-color);
+    font-size: var(--text-font-size);
+}
+
+.item.sc-ion-label-md-h,
+.item .sc-ion-label-md-h,
+.item.sc-ion-label-ios-h,
+.item .sc-ion-label-ios-h {
+    color: var(--text-color);
+}
+
+::placeholder {
+    color: var(--text-color);
+}
+
+ion-toggle {
+    --ion-background-color: var(--background-color);
+    --ion-color-checked: var(--text-color);
+}
+
+ion-toast {
+    --ion-background-color: var(--background-color);
+    --ion-color: var(--text-color);
+}
+
+/* alert */
+.alert-wrapper.sc-ion-alert-ios,
+h2 {
+    --background: var(--background-color);
+    --ion-text-color: var(--text-color);
 }

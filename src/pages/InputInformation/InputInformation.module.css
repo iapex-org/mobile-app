@@ -1,0 +1,32 @@
+/* Contenedor principal que alinea las imágenes en horizontal */
+.help-examples-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas por fila */
+    gap: 15px; /* Espacio entre las imágenes */
+    justify-items: center; /* Centra cada imagen horizontalmente */
+}
+
+/* Estilo para cada ejemplo individual */
+.help-example {
+    text-align: center; /* Centra el texto debajo de la imagen */
+}
+
+/* Estilo para las imágenes */
+.help-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Mantiene la proporción de la imagen sin distorsión */
+    border-radius: 8px; /* Esquinas ligeramente redondeadas */
+}
+
+/* Estilo para las etiquetas de cada imagen */
+.help-label {
+    margin-top: 5px;
+    margin-bottom: auto;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.help-title {
+    margin-top: 0px;
+}

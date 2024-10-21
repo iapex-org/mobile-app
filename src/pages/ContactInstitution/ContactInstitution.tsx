@@ -6,10 +6,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { createContactRequest } from '../../services/ContactRequestService';
 import { ContactRequest } from '../../models/ContactRequest';
 import { usePatient } from '../../contexts/PatientContext';
+import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
 
 const ContactInstitution: React.FC = () => {
+    useTextToSpeechClick();
+
     const [errorToast, setErrorToast] = useState<string>('');
-    const [successToast, setSuccessToast] = useState<string>('');
     const [showOtherRelationship, setShowOtherRelationship] = useState<boolean>(false);
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
@@ -95,8 +97,7 @@ const ContactInstitution: React.FC = () => {
 
             const responseData = await createContactRequest(contactData);
             if (responseData) {
-                history.push(`/process-completed`);
-                setSuccessToast('Solicitud enviada correctamente.');
+                history.replace(`/process-completed`);
             }
         } catch (error: any) {
             console.error(error);
@@ -106,10 +107,16 @@ const ContactInstitution: React.FC = () => {
 
     return (
         <IonPage>
-            <NavbarHeader title="Contactar" />
+            <NavbarHeader
+                confirmBeforeBack
+                alertMessage='Si vuelves, perderás los datos ingresados.'
+                title="Contactar" />
+
             <IonContent className='ion-padding'>
                 <form onSubmit={e => e.preventDefault()}>
                     <p>Llene los campos con los datos requeridos para concluir su solicitud de contacto con la institución que resguarda a la persona desaparecida.</p>
+
+                    <h5>Información de contacto</h5>
                     <IonList mode='ios'>
                         {/* Nombre del interesado */}
                         <IonItem className='ion-margin-bottom'>
@@ -120,7 +127,7 @@ const ContactInstitution: React.FC = () => {
                                 color={errors.interestedPersonName && (touchedFields.interestedPersonName || dirtyFields.interestedPersonName) ? "danger" : "primary"}
                                 placeholder="Ingresa tu nombre completo"
                                 {...register("interestedPersonName", {
-                                    required: "El nombre completo es requerido",
+                                    required: "El nombre completo es requerido.",
                                     minLength: { value: 2, message: "El nombre completo no puede ser menor a 2 caracteres." },
                                     maxLength: { value: 100, message: "El nombre completo no puede ser mayor a 100 caracteres." }
                                 })}
@@ -139,16 +146,25 @@ const ContactInstitution: React.FC = () => {
                                 clearInput
                                 labelPlacement="stacked"
                                 readonly
-                                {...register("missingPersonName")}
+                                {...register("missingPersonName", {
+                                    required: "El nombre de la persona extraviada es requerido."
+                                })}
                             />
                         </IonItem>
+                        {errors.missingPersonName && (touchedFields.missingPersonName || dirtyFields.missingPersonName) && (
+                            <div className='ion-margin-start'>
+                                <IonText color="danger">
+                                    {errors.missingPersonName.message as string}
+                                </IonText>
+                            </div>
+                        )}
                         {/* Parentesco con la persona extraviada */}
                         <IonItem className='ion-margin-bottom'>
                             <IonSelect label="Parentesco con la persona extraviada"
                                 mode='ios'
                                 labelPlacement="stacked"
                                 color={errors.relationship && (touchedFields.relationship || dirtyFields.relationship) ? "danger" : "primary"}
-                                placeholder="Selecciona tu parentesco con la persona extraviada"
+                                placeholder="Selecciona tu parentesco"
                                 onIonChange={(e) => handleRelationshipChange(e.detail.value)}
                                 {...register("relationship", {
                                     required: "El parentesco con la persona extraviada es requerido."
@@ -246,6 +262,7 @@ const ContactInstitution: React.FC = () => {
                         {/* Mensaje de la solicitud */}
                         <IonItem className='ion-margin-bottom'>
                             <IonTextarea
+                                rows={3}
                                 label="Mensaje (Opcional)"
                                 labelPlacement="stacked"
                                 placeholder="Algún mensaje o nota para la persona encargada de dar seguimiento a tu solicitud"
@@ -273,15 +290,6 @@ const ContactInstitution: React.FC = () => {
                     duration={3000}
                     onDidDismiss={() => setErrorToast('')}
                     color={'danger'}
-                />
-
-                <IonToast mode='ios'
-                    isOpen={!!successToast}
-                    position="top"
-                    message={successToast}
-                    duration={3000}
-                    onDidDismiss={() => setSuccessToast('')}
-                    color="success"
                 />
 
             </IonContent>

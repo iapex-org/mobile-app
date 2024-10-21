@@ -1,14 +1,17 @@
 import React, { Key, useContext, useState, useEffect } from 'react';
-import { IonAlert, IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonPage, IonToast } from '@ionic/react';
-import { addOutline, trashOutline } from 'ionicons/icons';
+import { IonAlert, IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonPage, IonPopover, IonToast } from '@ionic/react';
+import { addOutline, informationCircle, trashOutline } from 'ionicons/icons';
 import ImageSelectCard from '../../components/ImageSelectCard/ImageSelectCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { ImageContext } from '../../contexts/ImageContext';
 import { Camera } from '@capacitor/camera';
 import { useHistory } from 'react-router-dom';
 import styles from './VerifyImages.module.css';
+import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
 
 const VerifyImages: React.FC = () => {
+    useTextToSpeechClick();
+
     const { images, selectedImages, setSelectedImages, setImages } = useContext(ImageContext);
     const history = useHistory();
     const [selectionMode, setSelectionMode] = useState(false);
@@ -51,27 +54,27 @@ const VerifyImages: React.FC = () => {
     };
 
     const addImages = async () => {
-        if (images.length >= 12) {
-            setErrorToast('Has alcanzado el límite de 12 imágenes.');
+        if (images.length >= 6) {
+            setErrorToast('Has alcanzado el límite de 6 imágenes.');
             return;
         }
-    
+
         try {
             const addImages = await Camera.pickImages({
                 quality: 100,
-                limit: 12 - images.length,
+                limit: 6 - images.length,
                 height: 4080,
                 width: 4080,
             });
-    
+
             console.log('Imágenes seleccionadas:', addImages);
-    
+
             let specificError = false; // Indicador para rastrear si se lanzó un error específico.
-    
+
             if (addImages.photos.length > 0) {
                 const validImageUrls = await Promise.all(
                     addImages.photos
-                        .slice(0, 12 - images.length)
+                        .slice(0, 6 - images.length)
                         .filter((photo) =>
                             photo.format &&
                             (photo.format.includes('jpeg') ||
@@ -86,24 +89,24 @@ const VerifyImages: React.FC = () => {
                                 // Obtener la imagen para verificar su tamaño
                                 const response = await fetch(photo.webPath);
                                 const blob = await response.blob();
-    
+
                                 // Validar si la imagen excede los 5 MB
                                 if (blob.size > 5 * 1024 * 1024) {
                                     setErrorToast('Una imagen supera el tamaño máximo permitido de 5 MB.');
                                     specificError = true; // Marcar que se lanzó un error específico.
                                     return null; // Retornar null si la imagen excede el peso permitido
                                 }
-    
+
                                 // Crear un objeto de imagen para obtener las dimensiones
                                 const img = new Image();
                                 img.src = URL.createObjectURL(blob);
-    
+
                                 // Validar las dimensiones de la imagen
                                 await new Promise((resolve, reject) => {
                                     img.onload = () => {
                                         const maxWidth = 4080;
                                         const maxHeight = 4080;
-    
+
                                         if (img.width > maxWidth || img.height > maxHeight) {
                                             setErrorToast(
                                                 `Una imagen supera las dimensiones máximas permitidas (${maxWidth}x${maxHeight} píxeles).`
@@ -119,7 +122,7 @@ const VerifyImages: React.FC = () => {
                                         reject(error);
                                     };
                                 });
-    
+
                                 // Si todo es válido, retornar la URL de la imagen
                                 return photo.webPath;
                             } catch (error) {
@@ -129,10 +132,10 @@ const VerifyImages: React.FC = () => {
                             }
                         })
                 );
-    
+
                 // Filtrar las imágenes válidas (no nulas)
                 const filteredValidImages = validImageUrls.filter((url) => url !== null);
-    
+
                 if (filteredValidImages.length > 0) {
                     setImages((prevImages) => [...prevImages, ...filteredValidImages]);
                     setSuccessToast(
@@ -150,47 +153,30 @@ const VerifyImages: React.FC = () => {
             setErrorToast('Error al abrir la galería. Por favor, intenta nuevamente.');
         }
     };
-    
+
     const handleImageFullscreen = (fullscreen: boolean) => {
         setIsImageFullscreen(fullscreen);
     };
 
     const handleContinue = () => {
-        if (images.length < 8) {
-            setErrorToast('Debes tener al menos 8 imágenes antes de continuar.');
+        if (images.length < 3) {
+            setErrorToast('Debes tener al menos 3 imágenes antes de continuar.');
         } else {
             // Redirige a la siguiente página
-            history.push('/input-patient-information');
+            history.push('/input-information');
         }
-    };
-
-    const renderFloatingButton = () => {
-        if (selectedImages.length > 0 && !isImageFullscreen) {
-            return (
-                <IonFab vertical="bottom" horizontal="end" slot="fixed">
-                    <IonFabButton onClick={removeSelectedImages}>
-                        <IonIcon icon={trashOutline} />
-                    </IonFabButton>
-                </IonFab>
-            );
-        } else if (!isImageFullscreen) {
-            return (
-                <IonFab vertical="bottom" horizontal="end" slot="fixed">
-                    <IonFabButton onClick={addImages}>
-                        <IonIcon icon={addOutline} />
-                    </IonFabButton>
-                </IonFab>
-            );
-        }
-        return null;
     };
 
     return (
         <IonPage>
-            <NavbarHeader title="Verificar fotos" />
+            <NavbarHeader
+                confirmBeforeBack
+                title="Verificar fotos"
+                alertMessage="Si vuelves, perderás las imágenes seleccionadas."
+            />
 
             <IonContent className='ion-padding'>
-                <p>Verifica tus fotos para asegurarte de que son las correctas antes de iniciar la búsqueda, puedes eliminar o subir más fotos.</p>
+                <p className='ion-padding-bottom' >Verifica tus fotos para asegurarte de que son las correctas antes de iniciar la búsqueda. Puedes eliminar o subir más fotos.</p>
 
                 <div className={styles.imageGrid}>
                     {images.map((image: string, index: Key | null | undefined) => (
@@ -205,11 +191,55 @@ const VerifyImages: React.FC = () => {
                     ))}
                 </div>
 
-                {renderFloatingButton()}
+                {!isImageFullscreen && (
+                    <IonFab vertical="bottom" horizontal="end" slot="fixed">
+                        {selectedImages.length > 0 ? (
+                            <IonFabButton aria-label='Eliminar imágenes' onClick={removeSelectedImages}>
+                                <IonIcon color='light' icon={trashOutline} />
+                            </IonFabButton>
+                        ) : (
+                            <IonFabButton aria-label='Subir fotos' onClick={addImages}>
+                                <IonIcon color='light' icon={addOutline} />
+                            </IonFabButton>
+                        )}
+                    </IonFab>
+                )}
 
-                <IonButton mode='ios' expand="block" onClick={handleContinue} className='ion-margin-top'>
-                    Continuar
-                </IonButton>
+                <div className='ion-margin-top' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <IonButton
+                        mode='ios'
+                        expand="block"
+                        onClick={handleContinue}
+                        style={{ flexGrow: 999, marginRight: '4px' }}>
+                        Continuar
+                    </IonButton>
+                    <IonButton
+                        aria-label='Requisitos sobre las imágenes'
+                        color={'primary'}
+                        mode='ios'
+                        expand='block'
+                        id="info"
+                        style={{ flexGrow: 1, marginLeft: '4px' }}>
+                        <IonIcon color='light' icon={informationCircle}></IonIcon>
+                        <IonPopover
+                            mode="ios"
+                            trigger="info"
+                            side='top'
+                            alignment='center'
+                            className="custom-popover"
+                        >
+                            <IonContent class="ion-padding">
+                                <ul className='ion-no-margin'>
+                                    <p className='ion-no-margin'><li>Deben ser entre 3 y 6 imágenes.</li></p>
+                                    <p className='ion-no-margin'><li>El tamaño máximo por imagen es de 5 MB.</li></p>
+                                    <p className='ion-no-margin'><li>Resolución máxima permitida: 4080x4080 píxeles.</li></p>
+                                    <p className='ion-no-margin'><li>Formatos admitidos: JPG, JPEG, PNG, BMP, TIFF, HEIC.</li></p>
+                                    <p className='ion-no-margin'><li>Usa imágenes claras del rostro y desde diferentes ángulos.</li></p>
+                                </ul>
+                            </IonContent>
+                        </IonPopover>
+                    </IonButton>
+                </div>
             </IonContent>
 
             <IonAlert mode='ios'
@@ -249,6 +279,7 @@ const VerifyImages: React.FC = () => {
                 duration={3000}
                 onDidDismiss={() => setSuccessToast('')}
                 color="success"
+                style={{ color: 'white' }}
             />
         </IonPage>
     );

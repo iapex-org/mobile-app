@@ -16,13 +16,13 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
             </IonCardHeader>
             <IonCardContent mode='ios'>
 
-                <h2><b>Información general</b></h2>
+                <h2 style={{ fontWeight: 'bold' }}>Información general</h2>
                 <div className='ion-padding-vertical'>
                     <p><b>Dirección:</b> {capitalize(institution.direction.state)}, {capitalize(institution.direction.city)}, {institution.direction.postalCode}, {capitalize(institution.direction.neighborhood)}, {capitalize(institution.direction.street)}, {institution.direction.number}</p>
                     <p><b>Horario de apertura:</b> {capitalize(institution.openingHours)}</p>
                 </div>
 
-                <h2><b>Información de contacto</b></h2>
+                <h2 style={{ fontWeight: 'bold' }}>Información de contacto</h2>
                 <div className='ion-padding-vertical'>
                     {institution.phoneNumbers && (
                         <p><b>Teléfono:</b> {institution.phoneNumbers}</p>
@@ -44,7 +44,7 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
                             expand="block"
                             href={`tel:${institution.phoneNumbers.split(',')[0].trim()}`}
                             mode='ios'
-                            style={{ flexGrow: 1, marginRight: '8px' }}
+                            style={{ flexGrow: 1 }}
                         >
                             Llamar institución
                         </IonButton>

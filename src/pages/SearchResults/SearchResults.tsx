@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonSkeletonText, IonToast } from '@ionic/react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonSkeletonText } from '@ionic/react';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { useHistory } from 'react-router';
@@ -9,56 +9,46 @@ import { Patient } from '../../models/Patient';
 import { arrowBack, arrowForward, filterCircleOutline, trashBinOutline } from 'ionicons/icons';
 import styles from './SearchResults.module.css';
 import { useSearchContext } from '../../contexts/SearchContext';
+import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
+import { useSearchResults } from '../../hooks/useSearchResults';
+import { ImageContext } from '../../contexts/ImageContext';
 
-const ITEMS_PER_PAGE = 10; // Número de pacientes a mostrar por página
+const ITEMS_PER_PAGE = 4; // Número de pacientes a mostrar por página
 
 const SearchResults: React.FC = () => {
-    const [loading, setLoading] = useState<boolean>(true);
+    useTextToSpeechClick();
     const history = useHistory();
-    const [errorOccurred, setErrorOccurred] = useState<boolean>(false);
-    const [showFailedToast, setShowFailedToast] = useState<boolean>(false);
-    const [noResultsFound, setNoResultsFound] = useState<boolean>(false);
 
-    const { searchResults } = useSearchContext(); // Obtener resultados del contexto
+    // Obtener resultados del contexto
+    const { searchResults, searchError, isLoading, formData, setFormData } = useSearchContext();
+    const { searchPatients } = useSearchResults();
+    const { setImages } = useContext(ImageContext);
 
-    // Estados para la paginación
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    
     // Estados para los filtros
     const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
     const [minAge, setMinAge] = React.useState<number>(0);
     const [maxAge, setMaxAge] = React.useState<number>(100);
     const [genderFilter, setGenderFilter] = useState<string | undefined>(undefined);
     const [stateFilter, setStateFilter] = useState<string | undefined>(undefined);
-    
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    // Estados para la paginación
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const totalPages = Math.ceil(searchResults.length / ITEMS_PER_PAGE);
 
-    const fetchPatients = async () => {
-        try {
-            setShowFailedToast(false);
-            setLoading(false);
-            setErrorOccurred(false);
-            setNoResultsFound(false);
-        } catch (error) {
-            console.error('Error al obtener los pacientes:', error);
-            setLoading(false);
-            setErrorOccurred(true);
-            setShowFailedToast(true);
+    const handleRetry = async () => {
+        if (formData) {
+            history.replace(`/processing-information`);
+            await searchPatients(formData); // Relanzar la búsqueda con el mismo FormData
         }
     };
 
-    useEffect(() => {
-        fetchPatients();
-    }, []);
-
-    const handleRetry = () => {
-        setLoading(true);
-        setErrorOccurred(false);
-        fetchPatients();
+    const handleGoToHome = () => {
+        history.replace('/upload-images');
     };
 
-    const handleGoToHome = () => {
-        history.push('/upload-images');
+    const handleReviewInformation = () => {
+        history.replace('/verify-images');
     };
 
     const modal = useRef<HTMLIonModalElement>(null);
@@ -71,7 +61,7 @@ const SearchResults: React.FC = () => {
     // useEffect para aplicar los filtros automáticamente cuando cambian
     useEffect(() => {
         applyFilters();
-    }, [genderFilter, minAge, maxAge, stateFilter]);
+    }, [genderFilter, minAge, maxAge, stateFilter, searchQuery]);
 
     const applyFilters = () => {
         let filtered = searchResults;
@@ -88,14 +78,22 @@ const SearchResults: React.FC = () => {
             filtered = filtered.filter(patient => patient.institution.direction.state === stateFilter);
         }
 
+        if (searchQuery.trim() !== '') {
+            filtered = filtered.filter(patient =>
+                (patient.name ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (patient.lastName ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (patient.secondLastName ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.skinColor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.hair.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.complexion.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.eyeColor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.institution.direction.state.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.institution.direction.city.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+
         setFilteredPatients(filtered);
         setCurrentPage(1);
-
-        if (filtered.length === 0) {
-            setNoResultsFound(true);
-        } else {
-            setNoResultsFound(false);
-        }
     };
 
     const clearFilters = () => {
@@ -103,21 +101,34 @@ const SearchResults: React.FC = () => {
         setMinAge(0);
         setMaxAge(100);
         setStateFilter(undefined);
+        setSearchQuery('');
         setFilteredPatients(searchResults); // Restablecer a todos los pacientes
-        setCurrentPage(1); // Volver a la primera página
-        setNoResultsFound(false); // Resetear el estado de no resultados
+        setCurrentPage(1);
     };
+
+    useEffect(() => {
+        if (searchResults.length !== 0) {
+            setFormData(null);
+            setImages([]);
+            console.log('Limpiando FormData e imágenes...');
+        }
+    }, []);
 
     return (
         <IonPage>
-            <NavbarHeader title="Resultados" />
+            <NavbarHeader
+                confirmBeforeBack
+                title="Resultados encontrados"
+                alertMessage='Si vuelves, perderás los resultados de la búsqueda actual.'
+                backHandlerType='historyReplace'
+            />
 
             <IonContent className='ion-padding'>
 
-                {errorOccurred && (
+                {!isLoading && searchError && (
                     <ErrorOrException
                         title="Ocurrió un error"
-                        message="Sucedio un error al cargar los resultados de los pacientes. Por favor, intente cargarlos de nuevo o regrese al inicio."
+                        message="Sucedio un error al procesar la información proporcionada. Por favor, intente cargarlos de nuevo o regrese al inicio e intentelo más tarde."
                         customButtons={[
                             { text: "Reintentar", action: handleRetry },
                             { text: "Ir a inicio", action: handleGoToHome },
@@ -125,17 +136,18 @@ const SearchResults: React.FC = () => {
                     />
                 )}
 
-                {!loading && searchResults.length === 0 && !errorOccurred && (
+                {!isLoading && searchResults.length === 0 && !searchError && (
                     <ErrorOrException
                         title="Ningún resultado encontrado"
                         message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes revisar la información o intentar con imágenes diferentes."
                         customButtons={[
+                            { text: "Revisar información", action: handleReviewInformation },
                             { text: "Ir a inicio", action: handleGoToHome },
                         ]}
                     />
                 )}
 
-                {loading && (
+                {isLoading && (
                     <>
                         <div className='ion-padding-vertical'>
                             <IonSkeletonText animated={true} style={{ width: '100%' }}></IonSkeletonText>
@@ -149,14 +161,14 @@ const SearchResults: React.FC = () => {
                     </>
                 )}
 
-                {!loading && !errorOccurred && searchResults.length !== 0 && (
+                {!isLoading && !searchError && searchResults.length !== 0 && (
                     <>
                         <p>Las siguientes imágenes pueden ser no aptas para cualquier tipo de público. Se recomienda discreción.</p>
 
                         <div className='ion-padding-bottom' style={{ display: 'flex', width: '100%', gap: '5px' }}>
-                            <IonButton style={{ flex: 1 }}
+                            <IonButton size='small' style={{ flex: 1 }}
                                 id="open-modal"
-                                fill={genderFilter || stateFilter || minAge !== 0 || maxAge !== 100 ? 'solid' : 'outline'}
+                                fill={searchQuery || genderFilter || stateFilter || minAge !== 0 || maxAge !== 100 ? 'solid' : 'outline'}
                                 mode="ios"
                                 color="secondary"
                                 expand="block"
@@ -165,11 +177,12 @@ const SearchResults: React.FC = () => {
                                 Filtrar resultados
                             </IonButton>
 
-                            <IonButton style={{ flex: 1 }}
+                            <IonButton size='small' style={{ flex: 1 }}
                                 fill="outline"
                                 mode="ios"
                                 color="danger"
                                 expand="block"
+                                disabled={!searchQuery && !genderFilter && !stateFilter && minAge === 0 && maxAge === 100}
                                 onClick={clearFilters}
                             >
                                 <IonIcon slot="start" icon={trashBinOutline} />
@@ -177,16 +190,22 @@ const SearchResults: React.FC = () => {
                             </IonButton>
                         </div>
 
-                        <IonModal mode='ios' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+                        {/* Barra de búsqueda y filtros */}
+                        <IonModal className={styles['ion-modal']} mode='ios' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
                             <div className={styles['block']}>
                                 <IonContent className="ion-padding">
-                                    <IonSearchbar placeholder=" Buscar por palabra clave" animated></IonSearchbar>
-
+                                    <IonSearchbar
+                                        placeholder="Buscar por palabra clave"
+                                        value={searchQuery}
+                                        onIonInput={e => setSearchQuery(e.detail.value!)} // Actualizar estado en tiempo real
+                                        animated
+                                    />
                                     <IonList>
                                         {/* Tipo de Institución */}
                                         <IonItem>
-                                            <IonLabel>Sexo de la persona desaparecida</IonLabel>
                                             <IonSelect
+                                                labelPlacement='stacked'
+                                                label="Sexo de la persona desaparecida"
                                                 placeholder="Selecciona un sexo"
                                                 value={genderFilter}
                                                 onIonChange={e => setGenderFilter(e.detail.value)}>
@@ -196,7 +215,7 @@ const SearchResults: React.FC = () => {
                                         </IonItem>
 
                                         {/* Rango de Edades */}
-                                        <IonItem className='ion-margin-vertical'>
+                                        <IonItem className='ion-margin-top'>
                                             <div style={{ display: 'flex', width: '100%', gap: '10px' }}>
                                                 <div style={{ flex: 1 }}>
                                                     <IonLabel position="stacked">Edad mínima</IonLabel>
@@ -251,12 +270,45 @@ const SearchResults: React.FC = () => {
 
                                         {/* Entidad Federativa */}
                                         <IonItem>
-                                            <IonLabel>Entidad federativa de la institución</IonLabel>
+                                            {/* <IonLabel>Entidad federativa de la institución</IonLabel> */}
                                             <IonSelect
+                                                labelPlacement='stacked'
+                                                label="Entidad federativa de la institución"
                                                 placeholder="Selecciona un estado"
                                                 value={stateFilter}
                                                 onIonChange={e => setStateFilter(e.detail.value)}>
                                                 <IonSelectOption value="aguascalientes">Aguascalientes</IonSelectOption>
+                                                <IonSelectOption value="baja california">Baja California</IonSelectOption>
+                                                <IonSelectOption value="baja california sur">Baja California Sur</IonSelectOption>
+                                                <IonSelectOption value="campeche">Campeche</IonSelectOption>
+                                                <IonSelectOption value="coahuila">Coahuila</IonSelectOption>
+                                                <IonSelectOption value="colima">Colima</IonSelectOption>
+                                                <IonSelectOption value="chiapas">Chiapas</IonSelectOption>
+                                                <IonSelectOption value="chihuahua">Chihuahua</IonSelectOption>
+                                                <IonSelectOption value="cdmx">Ciudad de México</IonSelectOption>
+                                                <IonSelectOption value="durango">Durango</IonSelectOption>
+                                                <IonSelectOption value="guanajuato">Guanajuato</IonSelectOption>
+                                                <IonSelectOption value="guerrero">Guerrero</IonSelectOption>
+                                                <IonSelectOption value="hidalgo">Hidalgo</IonSelectOption>
+                                                <IonSelectOption value="jalisco">Jalisco</IonSelectOption>
+                                                <IonSelectOption value="mexico">Estado de México</IonSelectOption>
+                                                <IonSelectOption value="michoacan">Michoacán</IonSelectOption>
+                                                <IonSelectOption value="morelos">Morelos</IonSelectOption>
+                                                <IonSelectOption value="nayarit">Nayarit</IonSelectOption>
+                                                <IonSelectOption value="nuevo leon">Nuevo León</IonSelectOption>
+                                                <IonSelectOption value="oaxaca">Oaxaca</IonSelectOption>
+                                                <IonSelectOption value="puebla">Puebla</IonSelectOption>
+                                                <IonSelectOption value="queretaro">Querétaro</IonSelectOption>
+                                                <IonSelectOption value="quintana roo">Quintana Roo</IonSelectOption>
+                                                <IonSelectOption value="san luis potosi">San Luis Potosí</IonSelectOption>
+                                                <IonSelectOption value="sinaloa">Sinaloa</IonSelectOption>
+                                                <IonSelectOption value="sonora">Sonora</IonSelectOption>
+                                                <IonSelectOption value="tabasco">Tabasco</IonSelectOption>
+                                                <IonSelectOption value="tamaulipas">Tamaulipas</IonSelectOption>
+                                                <IonSelectOption value="tlaxcala">Tlaxcala</IonSelectOption>
+                                                <IonSelectOption value="veracruz">Veracruz</IonSelectOption>
+                                                <IonSelectOption value="yucatan">Yucatán</IonSelectOption>
+                                                <IonSelectOption value="zacatecas">Zacatecas</IonSelectOption>
                                             </IonSelect>
                                         </IonItem>
                                     </IonList>
@@ -265,13 +317,13 @@ const SearchResults: React.FC = () => {
                         </IonModal>
 
                         {/* Manejando el caso de resultados vacíos después de aplicar filtros */}
-                        {!loading && noResultsFound && searchResults.length !== 0 && (
+                        {!isLoading && filteredPatients.length === 0 && (
                             <ErrorOrException
-                                title="Ningún resultado encontrado"
+                                title="No hay coincidencias"
                                 message={
-                                    `Lo sentimos, no se encontraron pacientes que coincidan con los filtros activos para el sexo ${genderFilter || 'no especificado'}, ` +
+                                    `No se encontraron coincidencias con los filtros activos para el sexo ${genderFilter || 'no especificado'}, ` +
                                     `la edad de ${minAge} a ${maxAge}, ` +
-                                    `y el estado ${stateFilter || 'no especificado'}. `
+                                    `el estado ${stateFilter || 'no especificado'}` + (searchQuery ? `, y la búsqueda de "${searchQuery}".` : '.')
                                 }
                                 fullHeight={false}
                             />
@@ -314,15 +366,6 @@ const SearchResults: React.FC = () => {
                         </p>
                     </>
                 )}
-
-                <IonToast mode='ios'
-                    isOpen={showFailedToast}
-                    position='top'
-                    message="Error al obtener los resultados de pacientes. Por favor, inténtelo más tarde."
-                    duration={3000}
-                    onDidDismiss={() => setShowFailedToast(false)}
-                    color="danger"
-                />
             </IonContent>
         </IonPage>
     );

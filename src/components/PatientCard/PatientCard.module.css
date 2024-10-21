@@ -1,8 +1,3 @@
-.cardInfo {
-  color: var(--mainColor);
-  margin-bottom: 18px;
-}
-
 .size-img {
   width: 100%;
   transition: filter 0.1s ease;
@@ -11,7 +6,7 @@
 }
 
 .blurred {
-  filter: blur(5px);
+  filter: blur(6px);
 }
 
 .image-container {
@@ -25,4 +20,8 @@
   font-size: 26px;
   color: white;
   cursor: pointer;
+}
+
+.bold {
+  font-weight: bold !important;
 }
