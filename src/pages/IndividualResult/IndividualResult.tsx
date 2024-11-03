@@ -11,11 +11,13 @@ import PatientCard from '../../components/PatientCard/PatientCard';
 import InstitutionCard from '../../components/InstitutionCard/InstitutionCard';
 import { Institution } from '../../models/Institution';
 import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
+import { useSearchContext } from '../../contexts/SearchContext';
 
 const IndividualResult: React.FC = () => {
     useTextToSpeechClick();
 
     const { id } = useParams<{ id: string }>();
+    const { searchResults } = useSearchContext();
     const [patient, setPatient] = useState<Patient | null>(null);
     const [institution, setInstitution] = useState<Institution | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -33,22 +35,17 @@ const IndividualResult: React.FC = () => {
                 throw new Error('ID del paciente no es un número válido');
             }
 
-            // Obtiene la información del paciente
-            const selectedPatient = await PatientService.getPatientById(patientId);
+            // Busca el paciente en `searchResults`
+            const selectedPatient = searchResults.find(patient => patient.id === patientId);
             if (!selectedPatient) {
-                throw new Error('Paciente no encontrado');
+                throw new Error('Paciente no encontrado en los resultados de búsqueda');
             }
+
+            // Asigna el paciente y su institución directamente desde `searchResults`
             setPatient(selectedPatient);
+            setInstitution(selectedPatient.institution);
             console.log('Paciente encontrado:', selectedPatient);
 
-            // Obtiene la institución asociada usando el ID dentro de 'patient.institution.id'
-            const patientInstitution = await InstitutionService.getInstitutionById(selectedPatient.institution.id);
-            
-            if (!patientInstitution) {
-                throw new Error('Institución asociada no encontrada');
-            }
-
-            setInstitution(patientInstitution);
             setLoading(false);
             setErrorOccurred(false);
         } catch (error) {

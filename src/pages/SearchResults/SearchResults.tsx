@@ -112,6 +112,7 @@ const SearchResults: React.FC = () => {
             setImages([]);
             console.log('Limpiando FormData e imágenes...');
         }
+        console.log('SearchResults:', searchResults);
     }, []);
 
     return (
