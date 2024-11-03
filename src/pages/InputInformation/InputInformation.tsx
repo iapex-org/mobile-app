@@ -29,7 +29,7 @@ const InputInformation: React.FC = () => {
     const { images } = useContext(ImageContext);
 
     // Definición de tipos y estado
-    type FormField = "dateOfDisappearance" | "name" | "lastName" | "secondLastName" | "gender" | "age" | "skinColor" | "eyeColor" | "hairColor" | "otherHairColor" | "hairType" | "hairLength" | "complexion" | "height" | "medicalConditions" | "distinctiveFeatures" | "additionalNotes";
+    type FormField = "dateOfDisappearance" | "name" | "lastName" | "secondLastName" | "gender" | "age" | "skinColor" | "eyeColor" | "hairColor" | "otherHairColor" | "hairType" | "hairLength" | "complexion" | "height" | "medicalConditions" | "distinctiveFeatures";
 
     // Configuración del useForm para el manejo del formulario
     const { register, handleSubmit, trigger, setValue, setFocus, formState: { errors, touchedFields, dirtyFields }, getValues } = useForm({
@@ -51,7 +51,6 @@ const InputInformation: React.FC = () => {
             height: '',
             medicalConditions: '',
             distinctiveFeatures: '',
-            additionalNotes: ''
         }
     });
 
@@ -217,7 +216,6 @@ const InputInformation: React.FC = () => {
             approximateHeight: Number(cleanedData.height), // Conversión a número
             medicalConditions: cleanedData.medicalConditions.trim(),
             distinctiveFeatures: cleanedData.distinctiveFeatures.trim(),
-            additionalNotes: cleanedData.additionalNotes.trim(),
             registrationDateTime: formatDate(adjustedDate),
         };
 
@@ -318,7 +316,6 @@ const InputInformation: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Nombre o nombres"
                                 mode='ios'
-                                clearInput
                                 labelPlacement="stacked"
                                 placeholder="Ingrese el nombre"
                                 {...register("name", {
@@ -338,7 +335,6 @@ const InputInformation: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Apellido paterno"
                                 mode='ios'
-                                clearInput
                                 labelPlacement="stacked"
                                 placeholder="Ingrese el apellido paterno"
                                 {...register("lastName", {
@@ -358,7 +354,6 @@ const InputInformation: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Apellido materno (opcional)"
                                 mode='ios'
-                                clearInput
                                 labelPlacement="stacked"
                                 placeholder="Ingrese el apellido materno"
                                 {...register("secondLastName", {
@@ -379,7 +374,7 @@ const InputInformation: React.FC = () => {
                                 mode='ios'
                                 labelPlacement="stacked"
                                 color={errors.gender && (touchedFields.gender || dirtyFields.gender) ? "danger" : "primary"}
-                                placeholder="Seleccione un sexo"
+                                placeholder="Seleccione el sexo"
                                 {...register("gender", {
                                     required: "El sexo es requerido."
                                 })}>
@@ -398,7 +393,6 @@ const InputInformation: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Edad"
                                 mode='ios'
-                                clearInput
                                 labelPlacement="stacked"
                                 type='number'
                                 placeholder="Ingrese la edad"
@@ -426,7 +420,7 @@ const InputInformation: React.FC = () => {
                                 mode='ios'
                                 labelPlacement="stacked"
                                 color={errors.skinColor && (touchedFields.skinColor || dirtyFields.skinColor) ? "danger" : "primary"}
-                                placeholder="Seleccione un color de piel"
+                                placeholder="Seleccione el color de piel"
                                 {...register("skinColor", {
                                     required: "El color de piel es requerido."
                                 })}>
@@ -486,7 +480,7 @@ const InputInformation: React.FC = () => {
                                 mode='ios'
                                 labelPlacement="stacked"
                                 color={errors.eyeColor && (touchedFields.eyeColor || dirtyFields.eyeColor) ? "danger" : "primary"}
-                                placeholder="Seleccione un color de ojos"
+                                placeholder="Seleccione el color de ojos"
                                 {...register("eyeColor", {
                                     required: "El color de ojos es requerido."
                                 })}>
@@ -574,7 +568,7 @@ const InputInformation: React.FC = () => {
                                 mode='ios'
                                 labelPlacement="stacked"
                                 color={errors.hairLength && (touchedFields.hairLength || dirtyFields.hairLength) ? "danger" : "primary"}
-                                placeholder="Seleccione la longitud del cabello"
+                                placeholder="Seleccione la longitud"
                                 {...register("hairLength", {
                                     required: "La longitud del cabello es requerida."
                                 })}
@@ -658,7 +652,7 @@ const InputInformation: React.FC = () => {
                                     mode='ios'
                                     labelPlacement="stacked"
                                     color={errors.hairType && (touchedFields.hairType || dirtyFields.hairType) ? "danger" : "primary"}
-                                    placeholder="Seleccione un tipo de cabello"
+                                    placeholder="Seleccione el tipo de cabello"
                                     {...register("hairType", {
                                         required: "El tipo de cabello es requerido."
                                     })}>
@@ -742,7 +736,7 @@ const InputInformation: React.FC = () => {
                                     mode='ios'
                                     labelPlacement="stacked"
                                     color={errors.hairColor && (touchedFields.hairColor || dirtyFields.hairColor) ? "danger" : "primary"}
-                                    placeholder="Seleccione un color de cabello"
+                                    placeholder="Seleccione el color de cabello"
                                     onIonChange={(e) => handleFieldChange('hairColor', e.detail.value)}
                                     {...register("hairColor", {
                                         required: "El color de cabello es requerido."
@@ -818,9 +812,8 @@ const InputInformation: React.FC = () => {
                             <IonItem className='ion-margin-bottom'>
                                 <IonInput label="Otro color de cabello"
                                     mode='ios'
-                                    clearInput
                                     labelPlacement="stacked"
-                                    placeholder="Ingrese un color de cabello"
+                                    placeholder="Ingrese el color de cabello"
                                     {...register("otherHairColor", {
                                         required: 'El color de cabello es requerido.',
                                         minLength: { value: 2, message: "El color de cabello no puede ser menor a 2 caracteres." },
@@ -841,7 +834,7 @@ const InputInformation: React.FC = () => {
                                 mode='ios'
                                 labelPlacement="stacked"
                                 color={errors.complexion && (touchedFields.complexion || dirtyFields.complexion) ? "danger" : "primary"}
-                                placeholder="Seleccione una complexion"
+                                placeholder="Seleccione la complexion"
                                 {...register("complexion", {
                                     required: "La complexion es requerida."
                                 })}>
@@ -906,7 +899,6 @@ const InputInformation: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Altura (cm)"
                                 mode='ios'
-                                clearInput
                                 labelPlacement="stacked"
                                 placeholder="Ingrese la altura en centímetros"
                                 type="number"
@@ -944,19 +936,6 @@ const InputInformation: React.FC = () => {
                                 placeholder="Describir cualquier lesión, cicatriz o marca distintiva"
                                 {...register("distinctiveFeatures", {
                                     maxLength: { value: 255, message: "Las señas particulares no pueden ser mayores a 255 caracteres." }
-                                })}
-                            ></IonTextarea>
-                        </IonItem>
-                        {/* Notas adicionales */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonTextarea
-                                rows={3}
-                                label="Notas adicionales (opcional)"
-                                mode='ios'
-                                labelPlacement="stacked"
-                                placeholder="Escribir cualquier información adicional relevante sobre el persona que pueda ayudar en su identificación"
-                                {...register("additionalNotes", {
-                                    maxLength: { value: 255, message: "Las notas adicionales no pueden ser mayores a 255 caracteres." }
                                 })}
                             ></IonTextarea>
                         </IonItem>

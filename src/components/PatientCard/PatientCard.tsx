@@ -20,7 +20,7 @@ interface PatientCardProps {
 const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, isDetailedView }) => {
   const [blurStates, setBlurStates] = useState<boolean[]>(patient.images.map(() => true));
   const formatted1Date = format(new Date(patient.registrationDateTime), "dd/MM/yyyy", { locale: es });
-  const formatted2Date = format(new Date(patient.registrationDateTime), "EEEE dd 'de' MMMM 'de' yyyy 'a las' hh:mm a", { locale: es });
+  // const formatted2Date = format(new Date(patient.registrationDateTime), "EEEE dd 'de' MMMM 'de' yyyy 'a las' hh:mm a", { locale: es });
   const heightInMeters = (patient.approximateHeight / 100).toFixed(2);
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -74,7 +74,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
       </div>
 
       <IonCardContent mode="ios">
-        {isDetailedView && (
+        {/* {isDetailedView && (
           <div>
             <h2 className={styles['bold']}>Fecha y lugar de registro</h2>
             <div className="ion-padding-vertical">
@@ -83,16 +83,14 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
               </p>
             </div>
           </div>
-        )}
+        )} */}
 
         <div>
           <h2 className={styles['bold']}>Información personal</h2>
           {isDetailedView ? (
             <>
               <div className="ion-padding-vertical">
-                {patient.name && <p><b>Nombre:</b> {capitalize(patient.name)}</p>}
-                {patient.lastName && <p><b>Apellido paterno:</b> {capitalize(patient.lastName)}</p>}
-                {patient.secondLastName && <p><b>Apellido materno:</b> {capitalize(patient.secondLastName)}</p>}
+                <p><b>Nombre:</b> {capitalize(patient.name!)} {patient.lastName && `${capitalize(patient.lastName.charAt(0))}.`}</p>
                 <p><b>Sexo:</b> {capitalize(patient.gender)}</p>
                 <p><b>Edad aproximada:</b> {patient.approximateAge}</p>
               </div>
@@ -100,8 +98,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
           ) : (
             <p className="ion-padding-vertical">
               {capitalize(patient.gender === 'masculino' ? 'Hombre' : 'Mujer')} de aproximadamente {patient.approximateAge} años,
-              {patient.name ? ` identificado como ${capitalize(patient.name)} ${capitalize(patient.lastName || '')} ${capitalize(patient.secondLastName || '')}` : ' persona no identificada'},
-              ingreso en el sistema el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
+              {patient.name ? ` identificado como ${capitalize(patient.name!)}${patient.lastName ? ` ${capitalize(patient.lastName.charAt(0))}.` : ''}` : ' persona no identificada'} registrado el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
             </p>
           )}
         </div>
@@ -126,12 +123,11 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
           )}
         </div>
 
-        {isDetailedView && (patient.additionalNotes || patient.medicalConditions || patient.distinctiveFeatures) && (
+        {isDetailedView && (patient.additionalNotes || patient.distinctiveFeatures) && (
           <div >
             <h2><b>Información adicional</b></h2>
             <div className="ion-padding-vertical">
               {patient.additionalNotes && <p><b>Notas adicionales:</b> {capitalize(patient.additionalNotes)}</p>}
-              {patient.medicalConditions && <p><b>Condiciones médicas:</b> {capitalize(patient.medicalConditions)}</p>}
               {patient.distinctiveFeatures && <p><b>Señas particulares:</b> {capitalize(patient.distinctiveFeatures)}</p>}
             </div>
           </div>

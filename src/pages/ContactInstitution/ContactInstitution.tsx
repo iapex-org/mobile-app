@@ -123,7 +123,6 @@ const ContactInstitution: React.FC = () => {
                             <IonInput label="Nombre completo"
                                 inputmode="text"
                                 labelPlacement="stacked"
-                                clearInput
                                 color={errors.interestedPersonName && (touchedFields.interestedPersonName || dirtyFields.interestedPersonName) ? "danger" : "primary"}
                                 placeholder="Ingresa tu nombre completo"
                                 {...register("interestedPersonName", {
@@ -143,7 +142,6 @@ const ContactInstitution: React.FC = () => {
                         {/* Nombre de la persona extraviada */}
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Nombre de la persona extraviada"
-                                clearInput
                                 labelPlacement="stacked"
                                 readonly
                                 {...register("missingPersonName", {
@@ -216,7 +214,6 @@ const ContactInstitution: React.FC = () => {
                         {/* Número de telefono del interesado */}
                         <IonItem className='ion-margin-bottom'>
                             <IonInput label="Número de teléfono (opcional)"
-                                clearInput
                                 inputmode="tel"
                                 minlength={10}
                                 maxlength={10}
@@ -240,7 +237,6 @@ const ContactInstitution: React.FC = () => {
                         <IonItem className='ion-margin-bottom'>
                             <IonInput
                                 label="Correo electrónico (opcional)"
-                                clearInput
                                 inputmode="email"
                                 labelPlacement="stacked"
                                 color={errors.email && (touchedFields.email || dirtyFields.email) ? "danger" : "primary"}
