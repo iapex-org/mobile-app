@@ -20,7 +20,7 @@ const SearchResults: React.FC = () => {
     const history = useHistory();
 
     // Obtener resultados del contexto
-    const { searchResults, searchError, isLoading, formData, setFormData } = useSearchContext();
+    const { searchResults, searchError, isLoading, formData, setFormData, setSelectedPatientId } = useSearchContext();
     const { searchPatients } = useSearchResults();
     const { setImages } = useContext(ImageContext);
 
@@ -49,6 +49,11 @@ const SearchResults: React.FC = () => {
 
     const handleReviewInformation = () => {
         history.replace('/verify-images');
+    };
+
+    const handleSelectPatient = (patientId: number) => {
+        setSelectedPatientId(patientId);
+        history.push(`/individual-result`);
     };
 
     const modal = useRef<HTMLIonModalElement>(null);
@@ -192,7 +197,7 @@ const SearchResults: React.FC = () => {
                         </div>
 
                         {/* Barra de búsqueda y filtros */}
-                        <IonModal className={styles['ion-modal']} mode='ios' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+                        <IonModal className={styles['ionModal']} mode='ios' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
                             <div className={styles['block']}>
                                 <IonContent className="ion-padding">
                                     <IonSearchbar
@@ -336,7 +341,7 @@ const SearchResults: React.FC = () => {
                                 key={patient.id}
                                 patient={patient}
                                 buttonLabel='Ver resultado'
-                                link={`/individual-result/${patient.id}`}
+                                onSelect={() => handleSelectPatient(patient.id)}
                             />
                         ))}
 

@@ -46,3 +46,7 @@ img {
 .whiteText {
     color: #fff;
 }
+
+.ionModal {
+    --height: 100%;
+}

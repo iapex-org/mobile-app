@@ -10,6 +10,8 @@ interface SearchContextType {
     setIsLoading: (loading: boolean) => void;
     formData: FormData | null;
     setFormData: (data: FormData | null) => void;
+    selectedPatientId: number | null;
+    setSelectedPatientId: (id: number | null) => void;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -19,9 +21,21 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [searchError, setSearchError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<FormData | null>(null);
+    const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
 
     return (
-        <SearchContext.Provider value={{ searchResults, setSearchResults, searchError, setSearchError, isLoading, setIsLoading, formData, setFormData }}>
+        <SearchContext.Provider value={{
+            searchResults,
+            setSearchResults,
+            searchError,
+            setSearchError,
+            isLoading,
+            setIsLoading,
+            formData,
+            setFormData,
+            selectedPatientId,
+            setSelectedPatientId,
+        }}>
             {children}
         </SearchContext.Provider>
     );

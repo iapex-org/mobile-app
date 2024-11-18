@@ -224,7 +224,7 @@ const UploadImages: React.FC = () => {
               >
                 <IonContent class="ion-padding">
                   <ul className='ion-no-margin'>
-                    <p className='ion-no-margin'><li>Deben ser entre 3 y 6 imágenes.</li></p>
+                    <p className='ion-no-margin'><li>Debes subir entre 3 y 6 imágenes.</li></p>
                     <p className='ion-no-margin'><li>El tamaño máximo por imagen es de 5 MB.</li></p>
                     <p className='ion-no-margin'><li>Resolución máxima permitida: 4080x4080 píxeles.</li></p>
                     <p className='ion-no-margin'><li>Formatos admitidos: JPG, JPEG, PNG, BMP, TIFF, HEIC.</li></p>
@@ -246,7 +246,7 @@ const UploadImages: React.FC = () => {
             <p style={{ margin: 0 }}>
               Acepto los <b style={{cursor: 'pointer'}} id='terms-and-conditions'>términos y condiciones</b>
             </p>
-            <IonModal className='ion-padding' mode='ios' ref={modal} trigger="terms-and-conditions" initialBreakpoint={0.5} breakpoints={[0, 0.5, 0.75, 1]}>
+            <IonModal className={`${styles.ionModal} ion-padding`} mode='ios' ref={modal} trigger="terms-and-conditions" initialBreakpoint={0.5} breakpoints={[0, 0.5, 0.75, 1]}>
               <div style={{ padding: '25px', overflowY: 'auto' }}>
                 <h2>Términos y condiciones de uso</h2>
                 <p><strong>1. Introducción:</strong> Bienvenido a nuestra aplicación. Al utilizar la aplicación, aceptas los presentes términos y condiciones. Si no estás de acuerdo con ellos, te pedimos que no utilices la aplicación. Nos reservamos el derecho de modificar estos términos en cualquier momento, y es tu responsabilidad revisarlos regularmente. El uso continuado de la aplicación después de cualquier cambio constituirá la aceptación de dichos cambios.</p>

@@ -12,12 +12,12 @@ import styles from './PatientCard.module.css';
 
 interface PatientCardProps {
   patient: Patient;
-  link: string;
+  onSelect: () => void;
   buttonLabel: string;
   isDetailedView: boolean;
 }
 
-const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, isDetailedView }) => {
+const PatientCard: React.FC<PatientCardProps> = ({ patient, onSelect, buttonLabel, isDetailedView }) => {
   const [blurStates, setBlurStates] = useState<boolean[]>(patient.images.map(() => true));
   const formatted1Date = format(new Date(patient.registrationDateTime), "dd/MM/yyyy", { locale: es });
   // const formatted2Date = format(new Date(patient.registrationDateTime), "EEEE dd 'de' MMMM 'de' yyyy 'a las' hh:mm a", { locale: es });
@@ -74,16 +74,16 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
       </div>
 
       <IonCardContent mode="ios">
-        {/* {isDetailedView && (
+        {isDetailedView && (
           <div>
             <h2 className={styles['bold']}>Fecha y lugar de registro</h2>
             <div className="ion-padding-vertical">
               <p>
-                Fue registrado en el sistema el <b>{formatted2Date}</b>, en las instalaciones del <b>{patient.institution.name}</b>, ubicado en <b>{capitalize(patient.institution.direction.city)} {capitalize(patient.institution.direction.state)}</b>.
+                Fue registrado en el sistema el <b>{formatted1Date}</b>, en las instalaciones del <b>{patient.institution.name}</b>, ubicado en <b>{capitalize(patient.institution.direction.city)} {capitalize(patient.institution.direction.state)}</b>.
               </p>
             </div>
           </div>
-        )} */}
+        )}
 
         <div>
           <h2 className={styles['bold']}>Información personal</h2>
@@ -123,17 +123,16 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, link, buttonLabel, i
           )}
         </div>
 
-        {isDetailedView && (patient.additionalNotes || patient.distinctiveFeatures) && (
+        {isDetailedView && (patient.distinctiveFeatures) && (
           <div >
             <h2><b>Información adicional</b></h2>
             <div className="ion-padding-vertical">
-              {patient.additionalNotes && <p><b>Notas adicionales:</b> {capitalize(patient.additionalNotes)}</p>}
               {patient.distinctiveFeatures && <p><b>Señas particulares:</b> {capitalize(patient.distinctiveFeatures)}</p>}
             </div>
           </div>
         )}
 
-        <IonButton routerLink={link} expand="block" mode="ios">
+        <IonButton onClick={onSelect} expand="block" mode="ios">
           {buttonLabel}
         </IonButton>
       </IonCardContent>

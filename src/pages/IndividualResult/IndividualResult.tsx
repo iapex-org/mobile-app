@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { IonPage, IonContent, IonToast } from '@ionic/react';
 import { Patient } from '../../models/Patient';
-import PatientService from '../../services/PatientService';
-import InstitutionService from '../../services/InstitutionService';
 import ErrorOrException from '../../components/Placeholders/ErrorOrException';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import CardPlaceholder from '../../components/Placeholders/CardPlaceholder';
@@ -16,8 +14,7 @@ import { useSearchContext } from '../../contexts/SearchContext';
 const IndividualResult: React.FC = () => {
     useTextToSpeechClick();
 
-    const { id } = useParams<{ id: string }>();
-    const { searchResults } = useSearchContext();
+    const { searchResults, selectedPatientId, setSelectedPatientId } = useSearchContext();
     const [patient, setPatient] = useState<Patient | null>(null);
     const [institution, setInstitution] = useState<Institution | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -27,16 +24,14 @@ const IndividualResult: React.FC = () => {
 
     const fetchPatientAndInstitution = async () => {
         try {
-            setShowFailedToast(false);
 
-            // Convierte el ID del paciente a número
-            const patientId = Number(id);
-            if (isNaN(patientId)) {
-                throw new Error('ID del paciente no es un número válido');
+            // Asegúrate de que haya un paciente seleccionado
+            if (!selectedPatientId) {
+                throw new Error('No se ha seleccionado ningún paciente');
             }
 
-            // Busca el paciente en `searchResults`
-            const selectedPatient = searchResults.find(patient => patient.id === patientId);
+            // Busca el paciente en `searchResults` utilizando el `selectedPatientId` del contexto
+            const selectedPatient = searchResults.find(patient => patient.id === selectedPatientId);
             if (!selectedPatient) {
                 throw new Error('Paciente no encontrado en los resultados de búsqueda');
             }
@@ -58,7 +53,7 @@ const IndividualResult: React.FC = () => {
 
     useEffect(() => {
         fetchPatientAndInstitution();
-    }, [id]);
+    });
 
     const handleRetry = () => {
         setLoading(true);
@@ -70,9 +65,13 @@ const IndividualResult: React.FC = () => {
         history.push('/upload-images');
     };
 
+    const handleSelectPatient = () => {
+        history.push(`/contact-institution`);
+    };
+
     return (
         <IonPage>
-            <NavbarHeader title={patient ? `Paciente No. ${patient.id}` : ''} />
+            <NavbarHeader title="Ficha del paciente" />
 
             <IonContent className='ion-padding'>
                 {!loading && errorOccurred && (
@@ -104,7 +103,7 @@ const IndividualResult: React.FC = () => {
                                 isDetailedView={true}
                                 patient={patient}
                                 buttonLabel='Contactar'
-                                link={`/contact-institution/${patient.id}`}
+                                onSelect={() => handleSelectPatient()}
                             />
                         )}
 

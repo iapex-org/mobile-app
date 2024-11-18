@@ -1,15 +1,11 @@
 .block {
-    width: 100%;
-    height: 315px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  width: 100%;
+  height: 315px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  /* .ion-modal {
-    --height: 100%;
-  }
-   */
-  ion-modal {
-    --height: auto;
-  }
+.ionModal {
+  --height: auto;
+}

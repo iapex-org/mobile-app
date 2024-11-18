@@ -484,7 +484,7 @@ const InputInformation: React.FC = () => {
                                 {...register("eyeColor", {
                                     required: "El color de ojos es requerido."
                                 })}>
-                                <IonSelectOption value="cafe">Café</IonSelectOption>
+                                <IonSelectOption value="café">Café</IonSelectOption>
                                 <IonSelectOption value="azul">Azul</IonSelectOption>
                                 <IonSelectOption value="verde">Verde</IonSelectOption>
                                 <IonSelectOption value="gris">Gris</IonSelectOption>

@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { IonButton, IonContent, IonInput, IonItem, IonList, IonPage, IonSelect, IonSelectOption, IonText, IonTextarea, IonToast } from '@ionic/react';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { createContactRequest } from '../../services/ContactRequestService';
 import { ContactRequest } from '../../models/ContactRequest';
 import { usePatient } from '../../contexts/PatientContext';
+import { useSearchContext } from '../../contexts/SearchContext';
 import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
+import ErrorOrException from '../../components/Placeholders/ErrorOrException';
+import { useSearchResults } from '../../hooks/useSearchResults';
 
 const ContactInstitution: React.FC = () => {
     useTextToSpeechClick();
 
+    const { selectedPatientId } = useSearchContext();
+    const { searchPatients } = useSearchResults();
     const [errorToast, setErrorToast] = useState<string>('');
     const [showOtherRelationship, setShowOtherRelationship] = useState<boolean>(false);
-    const { id } = useParams<{ id: string }>();
+    const [showForm, setShowForm] = useState<boolean>(true);
     const history = useHistory();
-    const { fullName } = usePatient(); // Usa el contexto
+    const { fullName } = usePatient();
 
     // Definir los campos del formulario
     type FormField = "interestedPersonName" | "missingPersonName" | "relationship" | "otherRelationship" | "phoneNumber" | "email" | "message";
@@ -33,6 +38,14 @@ const ContactInstitution: React.FC = () => {
             message: '',
         }
     });
+
+    const handleGoToHome = () => {
+        history.replace('/upload-images');
+    };
+
+    const handleReviewInformation = () => {
+        history.replace('/verify-images');
+    };
 
     // Función para manejar el cambio en el campo de parentesco
     const handleRelationshipChange = (value: string) => {
@@ -70,31 +83,32 @@ const ContactInstitution: React.FC = () => {
         }
     };
 
-    // Función para enviar la solicitud de contacto
     const onSubmit: SubmitHandler<ContactRequest> = async (data) => {
         try {
-            // Crear una copia del objeto de datos con el tipo adecuado.
+
+            if (!selectedPatientId) {
+                setErrorToast('Sucedio un error al asociar la solicitud con un paciente.');
+                return;
+            }
+
+            // Crear una copia del objeto de datos con el tipo adecuado
             const tempData = { ...data } as { relationship: string; otherRelationship?: string };
 
             const relationship = tempData.relationship === 'otro'
                 ? tempData.otherRelationship ?? ''
                 : tempData.relationship;
 
-            // Crear un nuevo objeto sin `otherRelationship`.
+            // Crear un nuevo objeto sin `otherRelationship`
             const cleanedData: ContactRequest = {
                 ...data,
                 relationship
             };
 
-            const patient = parseInt(id, 10);
-            if (isNaN(patient)) {
-                setErrorToast('ID de paciente no válido.');
-                return;
-            }
+            // Agregar el `selectedPatientId` como `patient` en `contactData`
+            const contactData = { ...cleanedData, patient: selectedPatientId };
+            console.log(contactData); // Verificar datos enviados
 
-            const contactData = { ...cleanedData, patient };
-            console.log(contactData); // Verificar datos enviados.
-
+            // Llamar a la función de creación de solicitud de contacto
             const responseData = await createContactRequest(contactData);
             if (responseData) {
                 history.replace(`/process-completed`);
@@ -105,6 +119,14 @@ const ContactInstitution: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        // Verificar si hay fullName al cargar el componente
+        if (!fullName) {
+            setErrorToast("El nombre de la persona extraviada no está disponible.");
+            setShowForm(false); // Oculta el formulario
+        }
+    }, [fullName]);
+
     return (
         <IonPage>
             <NavbarHeader
@@ -113,170 +135,183 @@ const ContactInstitution: React.FC = () => {
                 title="Contactar" />
 
             <IonContent className='ion-padding'>
-                <form onSubmit={e => e.preventDefault()}>
-                    <p>Llene los campos con los datos requeridos para concluir su solicitud de contacto con la institución que resguarda a la persona desaparecida.</p>
+                {/* Mostrar formulario o mensaje de error */}
+                {showForm ? (
+                    <form onSubmit={e => e.preventDefault()}>
+                        <p>Llene los campos con los datos requeridos para concluir su solicitud de contacto con la institución que resguarda a la persona desaparecida.</p>
 
-                    <h5>Información de contacto</h5>
-                    <IonList mode='ios'>
-                        {/* Nombre del interesado */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput label="Nombre completo"
-                                inputmode="text"
-                                labelPlacement="stacked"
-                                color={errors.interestedPersonName && (touchedFields.interestedPersonName || dirtyFields.interestedPersonName) ? "danger" : "primary"}
-                                placeholder="Ingresa tu nombre completo"
-                                {...register("interestedPersonName", {
-                                    required: "El nombre completo es requerido.",
-                                    minLength: { value: 2, message: "El nombre completo no puede ser menor a 2 caracteres." },
-                                    maxLength: { value: 100, message: "El nombre completo no puede ser mayor a 100 caracteres." }
-                                })}
-                            />
-                        </IonItem>
-                        {errors.interestedPersonName && (touchedFields.interestedPersonName || dirtyFields.interestedPersonName) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.interestedPersonName.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                        {/* Nombre de la persona extraviada */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput label="Nombre de la persona extraviada"
-                                labelPlacement="stacked"
-                                readonly
-                                {...register("missingPersonName", {
-                                    required: "El nombre de la persona extraviada es requerido."
-                                })}
-                            />
-                        </IonItem>
-                        {errors.missingPersonName && (touchedFields.missingPersonName || dirtyFields.missingPersonName) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.missingPersonName.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                        {/* Parentesco con la persona extraviada */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonSelect label="Parentesco con la persona extraviada"
-                                mode='ios'
-                                labelPlacement="stacked"
-                                color={errors.relationship && (touchedFields.relationship || dirtyFields.relationship) ? "danger" : "primary"}
-                                placeholder="Selecciona tu parentesco"
-                                onIonChange={(e) => handleRelationshipChange(e.detail.value)}
-                                {...register("relationship", {
-                                    required: "El parentesco con la persona extraviada es requerido."
-                                })}>
-                                <IonSelectOption value="Madre">Madre</IonSelectOption>
-                                <IonSelectOption value="Padre">Padre</IonSelectOption>
-                                <IonSelectOption value="Hermano/a">Hermano/a</IonSelectOption>
-                                <IonSelectOption value="Hijo/a">Hijo/a</IonSelectOption>
-                                <IonSelectOption value="Esposo/a">Esposo/a</IonSelectOption>
-                                <IonSelectOption value="Pareja">Pareja</IonSelectOption>
-                                <IonSelectOption value="Abuelo/a">Abuelo/a</IonSelectOption>
-                                <IonSelectOption value="Tío/a">Tío/a</IonSelectOption>
-                                <IonSelectOption value="Primo/a">Primo/a</IonSelectOption>
-                                <IonSelectOption value="Amigo/a">Amigo/a</IonSelectOption>
-                                <IonSelectOption value="Conocido/a">Conocido/a</IonSelectOption>
-                                <IonSelectOption value="otro">Otro</IonSelectOption>
-                            </IonSelect>
-                        </IonItem>
-                        {errors.relationship && (touchedFields.relationship || dirtyFields.relationship) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.relationship.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                        {/* Otro parentesco con la persona extraviada */}
-                        {showOtherRelationship && (
+                        <h5>Información de contacto</h5>
+                        <IonList mode='ios'>
+                            {/* Nombre del interesado */}
                             <IonItem className='ion-margin-bottom'>
-                                <IonInput label="Otro parentesco"
+                                <IonInput label="Nombre completo"
+                                    inputmode="text"
+                                    labelPlacement="stacked"
+                                    color={errors.interestedPersonName && (touchedFields.interestedPersonName || dirtyFields.interestedPersonName) ? "danger" : "primary"}
+                                    placeholder="Ingresa tu nombre completo"
+                                    {...register("interestedPersonName", {
+                                        required: "El nombre completo es requerido.",
+                                        minLength: { value: 2, message: "El nombre completo no puede ser menor a 2 caracteres." },
+                                        maxLength: { value: 100, message: "El nombre completo no puede ser mayor a 100 caracteres." }
+                                    })}
+                                />
+                            </IonItem>
+                            {errors.interestedPersonName && (touchedFields.interestedPersonName || dirtyFields.interestedPersonName) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.interestedPersonName.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                            {/* Nombre de la persona extraviada */}
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Nombre de la persona extraviada"
+                                    placeholder="Se llena automáticamente en la búsqueda"
+                                    labelPlacement="stacked"
+                                    readonly
+                                    {...register("missingPersonName", {
+                                        required: "El nombre de la persona extraviada es requerido."
+                                    })}
+                                />
+                            </IonItem>
+                            {errors.missingPersonName && (touchedFields.missingPersonName || dirtyFields.missingPersonName) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.missingPersonName.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                            {/* Parentesco con la persona extraviada */}
+                            <IonItem className='ion-margin-bottom'>
+                                <IonSelect label="Parentesco con la persona extraviada"
                                     mode='ios'
                                     labelPlacement="stacked"
-                                    color={errors.otherRelationship && (touchedFields.otherRelationship || dirtyFields.otherRelationship) ? "danger" : "primary"}
-                                    placeholder="Ingresa un parentesco"
-                                    {...register("otherRelationship", {
-                                        required: "El parentesco con la persona extraviada es requerido.",
-                                        minLength: { value: 2, message: "El parentesco no puede ser menor a 2 caracteres." },
-                                        maxLength: { value: 25, message: "El parentesco no puede ser mayor a 25 caracteres." }
+                                    color={errors.relationship && (touchedFields.relationship || dirtyFields.relationship) ? "danger" : "primary"}
+                                    placeholder="Selecciona tu parentesco"
+                                    onIonChange={(e) => handleRelationshipChange(e.detail.value)}
+                                    {...register("relationship", {
+                                        required: "El parentesco con la persona extraviada es requerido."
                                     })}>
-                                </IonInput>
+                                    <IonSelectOption value="Madre">Madre</IonSelectOption>
+                                    <IonSelectOption value="Padre">Padre</IonSelectOption>
+                                    <IonSelectOption value="Hermano/a">Hermano/a</IonSelectOption>
+                                    <IonSelectOption value="Hijo/a">Hijo/a</IonSelectOption>
+                                    <IonSelectOption value="Esposo/a">Esposo/a</IonSelectOption>
+                                    <IonSelectOption value="Pareja">Pareja</IonSelectOption>
+                                    <IonSelectOption value="Abuelo/a">Abuelo/a</IonSelectOption>
+                                    <IonSelectOption value="Tío/a">Tío/a</IonSelectOption>
+                                    <IonSelectOption value="Primo/a">Primo/a</IonSelectOption>
+                                    <IonSelectOption value="Amigo/a">Amigo/a</IonSelectOption>
+                                    <IonSelectOption value="Conocido/a">Conocido/a</IonSelectOption>
+                                    <IonSelectOption value="otro">Otro</IonSelectOption>
+                                </IonSelect>
                             </IonItem>
-                        )}
-                        {showOtherRelationship && errors.otherRelationship && (touchedFields.otherRelationship || dirtyFields.otherRelationship) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.otherRelationship.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                        {/* Número de telefono del interesado */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput label="Número de teléfono (opcional)"
-                                inputmode="tel"
-                                minlength={10}
-                                maxlength={10}
-                                labelPlacement="stacked"
-                                color={errors.phoneNumber && (touchedFields.phoneNumber || dirtyFields.phoneNumber) ? "danger" : "primary"}
-                                placeholder="Ej. 2705006910"
-                                {...register("phoneNumber", {
-                                    pattern: { value: /^[0-9]{10}$/, message: "El número de teléfono debe tener 10 dígitos." },
-                                    validate: validateContactInfo
-                                })}
-                            />
-                        </IonItem>
-                        {errors.phoneNumber && (touchedFields.phoneNumber || dirtyFields.phoneNumber) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.phoneNumber.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                        {/* Correo electrónico del interesado */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonInput
-                                label="Correo electrónico (opcional)"
-                                inputmode="email"
-                                labelPlacement="stacked"
-                                color={errors.email && (touchedFields.email || dirtyFields.email) ? "danger" : "primary"}
-                                placeholder="Ej. contacto@dominio.com"
-                                {...register("email", {
-                                    maxLength: { value: 100, message: "El correo electrónico no puede ser mayor a 100 caracteres." },
-                                    pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "Ingrese una dirección de correo electrónico válida." },
-                                    validate: validateContactInfo,
-                                })}
-                            />
-                        </IonItem>
-                        {errors.email && (touchedFields.email || dirtyFields.email) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.email.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                        {/* Mensaje de la solicitud */}
-                        <IonItem className='ion-margin-bottom'>
-                            <IonTextarea
-                                rows={3}
-                                label="Mensaje (Opcional)"
-                                labelPlacement="stacked"
-                                placeholder="Algún mensaje o nota para la persona encargada de dar seguimiento a tu solicitud"
-                                {...register("message", {
-                                    maxLength: { value: 255, message: "El mensaje no puede ser mayor a 255 caracteres." }
-                                })}
-                            />
-                        </IonItem>
-                        {errors.message && (touchedFields.message || dirtyFields.message) && (
-                            <div className='ion-margin-start'>
-                                <IonText color="danger">
-                                    {errors.message.message as string}
-                                </IonText>
-                            </div>
-                        )}
-                    </IonList>
-                    <IonButton type='button' onClick={handleValidateAndSubmit} className='ion-margin-top' expand="block" mode='ios'>Enviar solicitud</IonButton>
-                </form>
+                            {errors.relationship && (touchedFields.relationship || dirtyFields.relationship) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.relationship.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                            {/* Otro parentesco con la persona extraviada */}
+                            {showOtherRelationship && (
+                                <IonItem className='ion-margin-bottom'>
+                                    <IonInput label="Otro parentesco"
+                                        mode='ios'
+                                        labelPlacement="stacked"
+                                        color={errors.otherRelationship && (touchedFields.otherRelationship || dirtyFields.otherRelationship) ? "danger" : "primary"}
+                                        placeholder="Ingresa un parentesco"
+                                        {...register("otherRelationship", {
+                                            required: "El parentesco con la persona extraviada es requerido.",
+                                            minLength: { value: 2, message: "El parentesco no puede ser menor a 2 caracteres." },
+                                            maxLength: { value: 25, message: "El parentesco no puede ser mayor a 25 caracteres." }
+                                        })}>
+                                    </IonInput>
+                                </IonItem>
+                            )}
+                            {showOtherRelationship && errors.otherRelationship && (touchedFields.otherRelationship || dirtyFields.otherRelationship) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.otherRelationship.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                            {/* Número de telefono del interesado */}
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput label="Número de teléfono (opcional)"
+                                    inputmode="tel"
+                                    minlength={10}
+                                    maxlength={10}
+                                    labelPlacement="stacked"
+                                    color={errors.phoneNumber && (touchedFields.phoneNumber || dirtyFields.phoneNumber) ? "danger" : "primary"}
+                                    placeholder="Ej. 2705006910"
+                                    {...register("phoneNumber", {
+                                        pattern: { value: /^[0-9]{10}$/, message: "El número de teléfono debe tener 10 dígitos." },
+                                        validate: validateContactInfo
+                                    })}
+                                />
+                            </IonItem>
+                            {errors.phoneNumber && (touchedFields.phoneNumber || dirtyFields.phoneNumber) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.phoneNumber.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                            {/* Correo electrónico del interesado */}
+                            <IonItem className='ion-margin-bottom'>
+                                <IonInput
+                                    label="Correo electrónico (opcional)"
+                                    inputmode="email"
+                                    labelPlacement="stacked"
+                                    color={errors.email && (touchedFields.email || dirtyFields.email) ? "danger" : "primary"}
+                                    placeholder="Ej. contacto@dominio.com"
+                                    {...register("email", {
+                                        maxLength: { value: 100, message: "El correo electrónico no puede ser mayor a 100 caracteres." },
+                                        pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "Ingrese una dirección de correo electrónico válida." },
+                                        validate: validateContactInfo,
+                                    })}
+                                />
+                            </IonItem>
+                            {errors.email && (touchedFields.email || dirtyFields.email) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.email.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                            {/* Mensaje de la solicitud */}
+                            <IonItem className='ion-margin-bottom'>
+                                <IonTextarea
+                                    rows={3}
+                                    label="Mensaje (Opcional)"
+                                    labelPlacement="stacked"
+                                    placeholder="Algún mensaje o nota para la persona encargada de dar seguimiento a tu solicitud"
+                                    {...register("message", {
+                                        maxLength: { value: 255, message: "El mensaje no puede ser mayor a 255 caracteres." }
+                                    })}
+                                />
+                            </IonItem>
+                            {errors.message && (touchedFields.message || dirtyFields.message) && (
+                                <div className='ion-margin-start'>
+                                    <IonText color="danger">
+                                        {errors.message.message as string}
+                                    </IonText>
+                                </div>
+                            )}
+                        </IonList>
+                        <IonButton type='button' onClick={handleValidateAndSubmit} className='ion-margin-top' expand="block" mode='ios'>Enviar solicitud</IonButton>
+                    </form>
+                ) : (
+                    <ErrorOrException
+                        title="Ocurrió un error"
+                        message="El nombre de la persona extraviada no se pudo obtener del formulario de búsqueda. Por favor, intente revise que haya sido ingresado o regrese al inicio."
+                    customButtons={[
+                        { text: "Revisar información", action: handleReviewInformation },
+                        { text: "Ir a inicio", action: handleGoToHome },
+                    ]}
+                    />
+                )}
 
                 {/* Manejo de errores en todo el formulario */}
                 <IonToast mode='ios'

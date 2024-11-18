@@ -49,19 +49,6 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
                             Llamar institución
                         </IonButton>
                     )}
-                    {institution.mapUrl && (
-                        <IonButton
-                            color='tertiary'
-                            expand="block"
-                            href={institution.mapUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            mode='ios'
-                            style={{ flexGrow: 1, marginRight: '8px' }}
-                        >
-                            Ver en el mapa
-                        </IonButton>
-                    )}
                 </div>
 
             </IonCardContent>

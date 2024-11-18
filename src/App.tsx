@@ -74,10 +74,10 @@ const App: React.FC = () => (
                 <Route exact path="/search-results">
                   <SearchResults />
                 </Route>
-                <Route exact path="/individual-result/:id">
+                <Route exact path="/individual-result">
                   <IndividualResult />
                 </Route>
-                <Route exact path="/contact-institution/:id">
+                <Route exact path="/contact-institution">
                   <ContactInstitution />
                 </Route>
                 <Route exact path="/process-completed">
