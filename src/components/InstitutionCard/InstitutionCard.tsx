@@ -30,11 +30,6 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution }) => {
                     {institution.emails && (
                         <p><b>Email:</b> {institution.emails}</p>
                     )}
-                    {institution.websites && (
-                        <p>
-                            <b>Sitio web:</b> <a href={`http://${institution.websites}`} target="_blank" rel="noopener noreferrer">{institution.websites}</a>
-                        </p>
-                    )}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

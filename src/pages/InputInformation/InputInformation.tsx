@@ -574,9 +574,9 @@ const InputInformation: React.FC = () => {
                                 })}
                                 onIonChange={(e) => handleFieldChange('hairLength', e.detail.value)}>
                                 <IonSelectOption value="calvo">Calvo</IonSelectOption>
-                                <IonSelectOption value="corto">Corto (Por encima de los hombros)</IonSelectOption>
-                                <IonSelectOption value="medio">Medio (Hasta los hombros)</IonSelectOption>
-                                <IonSelectOption value="largo">Largo (Más allá de los hombros)</IonSelectOption>
+                                <IonSelectOption value="corto">Corto</IonSelectOption>
+                                <IonSelectOption value="medio">Medio</IonSelectOption>
+                                <IonSelectOption value="largo">Largo</IonSelectOption>
                             </IonSelect>
 
                             {/* Botón de ayuda para abrir el popover */}

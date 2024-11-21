@@ -8,7 +8,6 @@ export interface Institution {
     openingHours: string;
     emails?: string;
     phoneNumbers?: string;
-    websites?: string;
     registrationDateTime: Date;
     image: string;
     imageUrl: string;
