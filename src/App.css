@@ -14,6 +14,11 @@ body {
     padding: 0;
 }
 
+h1 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
 .custom-popover {
     --width: 375px;
     --height: auto;

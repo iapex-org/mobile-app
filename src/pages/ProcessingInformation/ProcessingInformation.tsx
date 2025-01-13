@@ -25,8 +25,8 @@ const ProcessingInformation: React.FC = () => {
                     </IonText>
                     <IonIcon color='light' icon={cog} className={styles.cogIcon}></IonIcon>
                     <p>
-                        Nuestro algoritmo está buscando las mejores coincidencias en nuestra base de datos basándose en las imágenes y la información que proporcionaste.
-                        Por favor, no cierres la aplicación mientras esta pantalla esté activa.
+                        Se están buscando las mejores coincidencias basadas en las imágenes e información que proporcionaste. <br />
+                        No cierres la aplicación mientras esta pantalla esté activa.
                     </p>
                 </div>
                 <img src="src/assets/img/logo-encuentrame.png" alt='Logotipo de "Encuéntrame"' />

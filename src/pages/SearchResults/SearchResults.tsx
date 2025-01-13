@@ -134,7 +134,7 @@ const SearchResults: React.FC = () => {
                 {!isLoading && searchError && (
                     <ErrorOrException
                         title="Ocurrió un error"
-                        message="Sucedio un error al procesar la información proporcionada. Por favor, intente cargarlos de nuevo o regrese al inicio e intentelo más tarde."
+                        message="Sucedio un error al procesar la información proporcionada. Intente cargarlos de nuevo o regrese al inicio e intentelo más tarde."
                         customButtons={[
                             { text: "Reintentar", action: handleRetry },
                             { text: "Ir a inicio", action: handleGoToHome },
@@ -145,7 +145,7 @@ const SearchResults: React.FC = () => {
                 {!isLoading && searchResults.length === 0 && !searchError && (
                     <ErrorOrException
                         title="Ningún resultado encontrado"
-                        message="Lo sentimos, no se encontraron pacientes que coincidan con los parámetros de búsqueda que nos proporcionaste. Puedes revisar la información o intentar con imágenes diferentes."
+                        message="No se encontraron pacientes con los parámetros de búsqueda proporcionados. Revisa la información o intenta con fotos diferentes."
                         customButtons={[
                             { text: "Revisar información", action: handleReviewInformation },
                             { text: "Ir a inicio", action: handleGoToHome },

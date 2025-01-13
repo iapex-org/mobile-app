@@ -190,8 +190,8 @@ const UploadImages: React.FC = () => {
 
           <IonIcon icon={camera} className={styles.cameraIcon} aria-label="Icono de cámara"></IonIcon>
 
-          <p >
-            Sube entre 3 y 6 fotos del rostro de la persona desaparecida, asegurándote de que cumplan con el peso, tamaño y formato permitidos. Las imágenes desde diferentes ángulos y con rasgos reconocibles facilitarán la búsqueda.
+          <p>
+          Sube de 3 a 6 fotos del rostro de la persona desaparecida, asegurándote de que cumplan con los requisitos de peso, tamaño y formato.
           </p>
 
           <div className='ion-margin-top' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

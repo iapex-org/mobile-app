@@ -305,7 +305,7 @@ const ContactInstitution: React.FC = () => {
                 ) : (
                     <ErrorOrException
                         title="Ocurrió un error"
-                        message="El nombre de la persona extraviada no se pudo obtener del formulario de búsqueda. Por favor, intente revise que haya sido ingresado o regrese al inicio."
+                        message="El nombre de la persona extraviada no se pudo obtener del formulario de búsqueda. Revise que haya sido ingresado o regrese al inicio."
                     customButtons={[
                         { text: "Revisar información", action: handleReviewInformation },
                         { text: "Ir a inicio", action: handleGoToHome },

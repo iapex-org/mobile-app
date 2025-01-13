@@ -6,12 +6,6 @@
     height: 80vh;
 }
 
-h1 {
-    font-size: 2.3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 .fixed-button {
     position: absolute;
     z-index: 9999;
@@ -24,7 +18,6 @@ h1 {
 
 .cameraIcon {
     font-size: 10rem;
-    margin-bottom: 20px;
     align-self: center;
     color: #ffffff;
 }

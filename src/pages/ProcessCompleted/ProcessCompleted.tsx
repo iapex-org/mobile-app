@@ -14,11 +14,12 @@ const ProcessCompleted: React.FC = () => {
             <IonContent color={'primary'} className='ion-padding'>
                 <div className={styles.container}>
                     <IonText>
-                        <h1>Solicitud recibida</h1>
+                        <h1>Solicitud enviada</h1>
                     </IonText>
                     <IonIcon icon={checkmarkCircle} className={styles.checkmarkIcon}></IonIcon>
                     <p>
-                        Tu solicitud ha sido registrada. Recibirás actualizaciones a través de WhatsApp o por correo electrónico, según la información que proporcionaste. Estamos comprometidos en ayudarte a reunirte con esa persona importante para ti.
+                        Recibirás actualizaciones por celular o correo electrónico.
+                        <br /> Estamos comprometidos en ayudarte a reunirte con esa persona.
                     </p>
                     <IonButton
                         color={'light'}

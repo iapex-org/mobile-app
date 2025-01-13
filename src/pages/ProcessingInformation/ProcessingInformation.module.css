@@ -6,12 +6,6 @@
     height: 100vh;
 }
 
-h1 {
-    font-size: 2.3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 .container p {
     color: #fff;
 }
@@ -19,7 +13,7 @@ h1 {
 .cogIcon {
     font-size: 10rem;
     align-self: center;
-    animation: spin 4s linear infinite; /* Aquí agregas la animación */
+    animation: spin 4s linear infinite;
 }
 
 .errorIcon {
