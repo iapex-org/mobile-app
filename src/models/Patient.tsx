@@ -19,6 +19,9 @@ export interface Patient {
     distinctiveFeatures?: string;
     institution: Institution;
     images: Image[];
+    
+    // Search-specific field (only present in search results)
+    similarity_percentage?: number;
 }
 
 export interface Image {
