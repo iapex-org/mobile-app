@@ -149,7 +149,7 @@ Este proyecto fue desarrollado por el equipo de autores:
 
 Con la asesoría y guía conceptual de:
 
-- Arturo Escobar García
+- Escobar García Arturo
 
 Y con el apoyo académico de la
 
