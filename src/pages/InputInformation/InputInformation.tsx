@@ -12,6 +12,7 @@ import useTextToSpeechClick from '../../hooks/UseTextToSpeechClick';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useSearchResults } from '../../hooks/useSearchResults';
+import { SearchValidationError } from '../../models/SearchTypes';
 
 const InputInformation: React.FC = () => {
     useTextToSpeechClick();
@@ -169,85 +170,112 @@ const InputInformation: React.FC = () => {
     };
 
     const onSubmit = async (data: any) => {
-        const fieldsWithOther = ['hairColor']; // Campos con opción "Otro"
+        try {
+            const fieldsWithOther = ['hairColor']; // Campos con opción "Otro"
 
-        // Usar el valor alternativo si el campo contiene "otro"
-        const cleanedData = fieldsWithOther.reduce((acc, field) => {
-            const otherField = `other${field.charAt(0).toUpperCase() + field.slice(1)}`;
-            acc[field] = data[field] === 'otro' ? data[otherField] ?? '' : data[field];
-            return acc;
-        }, { ...data });
+            // Usar el valor alternativo si el campo contiene "otro"
+            const cleanedData = fieldsWithOther.reduce((acc, field) => {
+                const otherField = `other${field.charAt(0).toUpperCase() + field.slice(1)}`;
+                acc[field] = data[field] === 'otro' ? data[otherField] ?? '' : data[field];
+                return acc;
+            }, { ...data });
 
-        // Combinar los campos de cabello
-        const hairDetails = [
-            cleanedData.hairLength,
-            cleanedData.hairType,
-            cleanedData.hairColor
-        ].filter(Boolean).join(', '); // Filtrar valores vacíos y unirlos con comas
+            // Combinar los campos de cabello
+            const hairDetails = [
+                cleanedData.hairLength,
+                cleanedData.hairType,
+                cleanedData.hairColor
+            ].filter(Boolean).join(', '); // Filtrar valores vacíos y unirlos con comas
 
-        // Crear el objeto final solo con los campos necesarios
-        const formatDate = (fecha: string | number | Date) => {
-            const date = new Date(fecha);
-            // Verifica que la fecha sea válida
-            if (isNaN(date.getTime())) {
-                throw new Error("Fecha inválida");
+            // Crear el objeto final solo con los campos necesarios
+            const formatDate = (fecha: string | number | Date) => {
+                const date = new Date(fecha);
+                // Verifica que la fecha sea válida
+                if (isNaN(date.getTime())) {
+                    throw new Error("Fecha inválida");
+                }
+
+                // Formatea la fecha a "YYYY-MM-DD"
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Asegura que el mes sea de dos dígitos
+                const day = String(date.getDate()).padStart(2, '0'); // Asegura que el día sea de dos dígitos
+                return `${year}-${month}-${day}`; // Formato correcto
+            };
+
+            const adjustedDate = new Date(cleanedData.dateOfDisappearance);
+            adjustedDate.setDate(adjustedDate.getDate() + 1); // Ajustar si se envía con un día de retraso
+
+            const finalData: { [key: string]: any } = {
+                name: cleanedData.name.trim(),
+                lastName: cleanedData.lastName.trim(),
+                secondLastName: cleanedData.secondLastName.trim(),
+                gender: cleanedData.gender.trim(),
+                approximateAge: Number(cleanedData.age), // Conversión a número
+                skinColor: cleanedData.skinColor.trim(),
+                hair: hairDetails.trim(),
+                complexion: cleanedData.complexion.trim(),
+                eyeColor: cleanedData.eyeColor.trim(),
+                approximateHeight: Number(cleanedData.height), // Conversión a número
+                medicalConditions: cleanedData.medicalConditions.trim(),
+                distinctiveFeatures: cleanedData.distinctiveFeatures.trim(),
+                registrationDateTime: formatDate(adjustedDate),
+            };
+
+            // Establecer el nombre completo (opcionalmente)
+            const fullName = `${data.name} ${data.lastName} ${data.secondLastName || ''}`.trim();
+            setFullName(fullName);
+
+            console.log('🔍 Preparando búsqueda ad-hoc de paciente...');
+            console.log('📋 Datos del formulario:', finalData);
+            console.log('📸 Imágenes:', images.length);
+            console.log('🎯 Modo de búsqueda: hybrid (hardcoded)');
+            console.log('📊 Similitud mínima: 50% (hardcoded)');
+
+            // Crear un objeto FormData para enviar al endpoint de búsqueda
+            const searchFormData = new FormData();
+            
+            // ⚠️ IMPORTANTE: NO incluir source_patient_id para búsqueda ad-hoc
+            // Solo agregar los datos del formulario
+            for (const key in finalData) {
+                const value = finalData[key as keyof typeof finalData];
+                if (value !== null && value !== undefined && value !== '') {
+                    searchFormData.append(key, value.toString());
+                }
             }
 
-            // Formatea la fecha a "YYYY-MM-DD"
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Asegura que el mes sea de dos dígitos
-            const day = String(date.getDate()).padStart(2, '0'); // Asegura que el día sea de dos dígitos
-            return `${year}-${month}-${day}`; // Formato correcto
-        };
+            // Convertir las imágenes seleccionadas (URLs) a archivos File
+            for (const [index, imageUrl] of images.entries()) {
+                const file = await urlToFile(imageUrl, `face_${index}.jpg`, 'image/jpeg');
+                searchFormData.append('face_images', file);
+            }
 
-        const adjustedDate = new Date(cleanedData.dateOfDisappearance);
-        adjustedDate.setDate(adjustedDate.getDate() + 1); // Ajustar si se envía con un día de retraso
+            // Log para debugging
+            console.log('📦 FormData preparado:');
+            for (const pair of searchFormData.entries()) {
+                if (pair[1] instanceof File) {
+                    console.log(`  - ${pair[0]}: ${pair[1].name} (${pair[1].size} bytes)`);
+                } else {
+                    console.log(`  - ${pair[0]}: ${pair[1]}`);
+                }
+            }
 
-        const finalData: { [key: string]: any } = {
-            name: cleanedData.name.trim(),
-            lastName: cleanedData.lastName.trim(),
-            secondLastName: cleanedData.secondLastName.trim(),
-            gender: cleanedData.gender.trim(),
-            approximateAge: Number(cleanedData.age), // Conversión a número
-            skinColor: cleanedData.skinColor.trim(),
-            hair: hairDetails.trim(),
-            complexion: cleanedData.complexion.trim(),
-            eyeColor: cleanedData.eyeColor.trim(),
-            approximateHeight: Number(cleanedData.height), // Conversión a número
-            medicalConditions: cleanedData.medicalConditions.trim(),
-            distinctiveFeatures: cleanedData.distinctiveFeatures.trim(),
-            registrationDateTime: formatDate(adjustedDate),
-        };
+            setFormData(searchFormData); // Guardar el FormData en el contexto
 
-        // Establecer el nombre completo (opcionalmente)
-        const fullName = `${data.name} ${data.lastName} ${data.secondLastName || ''}`.trim();
-        setFullName(fullName);
+            history.replace(`/processing-information`);
 
-        console.log('Datos enviados:', finalData);
-        console.log('Imagenes:', images);
+            // Realizar la búsqueda de pacientes (modo híbrido y 50% hardcoded)
+            await searchPatients(searchFormData);
 
-        // Crear un objeto FormData para enviar al endpoint de búsqueda
-        const formData = new FormData();
-        for (const key in finalData) {
-            formData.append(key, finalData[key as keyof typeof finalData]);
+        } catch (error) {
+            if (error instanceof SearchValidationError) {
+                setErrorToast(error.message);
+            } else if (error instanceof Error) {
+                setErrorToast('Error al procesar la búsqueda: ' + error.message);
+            } else {
+                setErrorToast('Error inesperado al realizar la búsqueda');
+            }
+            console.error('❌ Error en búsqueda:', error);
         }
-
-        // Convertir las imágenes seleccionadas (URLs) a archivos File
-        for (const [index, imageUrl] of images.entries()) {
-            const file = await urlToFile(imageUrl, `image_${index}.jpg`, 'image/jpeg');
-            formData.append('face_images', file);
-        }
-
-        for (const pair of formData.entries()) {
-            console.log(`${pair[0]}: ${pair[1]}`);
-        }
-
-        setFormData(formData); // Guardar el FormData en el contexto
-
-        history.replace(`/processing-information`);
-
-        // Realizar la búsqueda de pacientes
-        await searchPatients(formData);
     };
 
     const formatDate = (fecha: string | number | Date) => {
