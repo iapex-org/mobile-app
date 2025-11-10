@@ -23,7 +23,10 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, onSelect, buttonLabe
   // const formatted2Date = format(new Date(patient.registrationDateTime), "EEEE dd 'de' MMMM 'de' yyyy 'a las' hh:mm a", { locale: es });
   const heightInMeters = (patient.approximateHeight / 100).toFixed(2);
 
-  const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  const capitalize = (str: string | null | undefined) => {
+    if (!str) return 'N/A';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
   // Función para alternar el blur de todas las imágenes
   const toggleBlur = () => {
@@ -90,7 +93,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, onSelect, buttonLabe
           {isDetailedView ? (
             <>
               <div className="ion-padding-vertical">
-                <p><b>Nombre:</b> {capitalize(patient.name!)} {patient.lastName && `${capitalize(patient.lastName.charAt(0))}.`}</p>
+                <p><b>Nombre:</b> {patient.name ? capitalize(patient.name) : 'No especificado'} {patient.lastName ? `${capitalize(patient.lastName).charAt(0)}.` : ''}</p>
                 <p><b>Sexo:</b> {capitalize(patient.gender)}</p>
                 <p><b>Edad aproximada:</b> {patient.approximateAge}</p>
               </div>
@@ -98,7 +101,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient, onSelect, buttonLabe
           ) : (
             <p className="ion-padding-vertical">
               {capitalize(patient.gender === 'masculino' ? 'Hombre' : 'Mujer')} de aproximadamente {patient.approximateAge} años,
-              {patient.name ? ` identificado como ${capitalize(patient.name!)}${patient.lastName ? ` ${capitalize(patient.lastName.charAt(0))}.` : ''}` : ' persona no identificada'} registrado el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
+              {patient.name ? ` identificado como ${capitalize(patient.name)}${patient.lastName ? ` ${capitalize(patient.lastName).charAt(0)}.` : ''}` : ' persona no identificada'} registrado el {formatted1Date} en {capitalize(patient.institution.direction.city)}, {capitalize(patient.institution.direction.state)}.
             </p>
           )}
         </div>
