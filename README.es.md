@@ -55,7 +55,7 @@ Este repositorio contiene la **App Móvil** — una aplicación multiplataforma 
 - **Datos Seguros** — Autenticación JWT y encriptación de extremo a extremo
 - **Multiplataforma** — Android e iOS mediante Capacitor
 
-## Inicio Rápido
+## Inicio rápido
 
 ### Prerrequisitos
 
@@ -91,13 +91,36 @@ npm run dev
 
 La aplicación estará disponible en `http://localhost:5173`
 
-### Compilación Móvil
+### Compilación móvil
 
 ```bash
 npm run build
 npx cap sync
 npx cap open android   # Android Studio
 npx cap open ios       # Xcode (macOS)
+```
+
+## Arquitectura
+
+```
+┌───────────────────────────────────────────────┐
+│            Mobile App (React + Ionic)          │
+│  ┌─────────┐ ┌──────────┐ ┌──────────────┐   │
+│  │ Camera  │ │  Search  │ │   Results    │   │
+│  │ Module  │ │  Module  │ │   Module     │   │
+│  └────┬────┘ └────┬─────┘ └──────┬───────┘   │
+│       │           │              │            │
+│  ┌────▼───────────▼──────────────▼───────┐    │
+│  │         HTTP Services (Axios)         │    │
+│  └────────────────┬──────────────────────┘    │
+└───────────────────┼──────────────────────────┘
+                    │ JWT Auth
+         ┌──────────┴──────────┐
+         ▼                     ▼
+┌──────────────┐     ┌──────────────┐
+│  Core API    │     │  Search API  │
+│  (Spring)    │     │  (FastAPI)   │
+└──────────────┘     └──────────────┘
 ```
 
 ## Contribuciones
