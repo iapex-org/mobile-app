@@ -1,156 +1,142 @@
-# IAPEX - Aplicación móvil
-
-Aplicación móvil para localizar pacientes extraviados en instituciones de salud mediante búsqueda híbrida con inteligencia artificial.
+# IAPEX — Mobile App (Family)
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.x-blue?logo=react" alt="React version">
-  <img src="https://img.shields.io/badge/Ionic-8.x-blue?logo=ionic" alt="Ionic version">
-  <img src="https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript" alt="TypeScript version">
-  <img src="https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite" alt="Vite version">
+  <img src="https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=black" alt="React">
+  <img src="https://img.shields.io/badge/Ionic-8.x-3880FF?logo=ionic&logoColor=white" alt="Ionic">
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Capacitor-6.x-119EFF?logo=capacitor&logoColor=white" alt="Capacitor">
+  <img src="https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white" alt="Vite">
 </p>
 
-<!-- ## 📱 Capturas de pantalla
+<p align="center">
+  <em>Mobile application for families to search for missing loved ones using hybrid AI matching.</em>
+</p>
 
 <p align="center">
-  <img src="./assets/screenshots/upload.png" alt="Carga de imágenes" width="200"/>
-  <img src="./assets/screenshots/input.png" alt="Datos del paciente" width="200"/>
-  <img src="./assets/screenshots/search.png" alt="Búsqueda en proceso" width="200"/>
-  <img src="./assets/screenshots/results.png" alt="Resultados" width="200"/>
-</p> -->
-
-## 🏥 ¿Qué es IAPEX?
-
-**IAPEX** (_Inteligencia Artificial para la Localización de Pacientes Extraviados en Instituciones de Salud_) es un sistema validado y robusto diseñado para abordar un problema crítico: **la identificación de pacientes no localizados o no identificados** dentro de instituciones de salud.
-
-### Componentes del ecosistema
-
-- **App móvil** (este repositorio): para búsqueda rápida de pacientes desde dispositivos móviles
-- **App web**: para personal de salud y gestión institucional
-- **API REST (Spring Boot)**: gestión de datos, autenticación y seguridad
-- **API de búsqueda (FastAPI)**: motor de IA con búsqueda híbrida
-
-La app móvil permite realizar búsquedas combinando **reconocimiento facial** y **descripción textual** del paciente, generando resultados ordenados por porcentaje de similitud.
+  <a href="https://github.com/iapex-org/mobile-app">Repository</a>
+  ·
+  <a href="https://github.com/iapex-org/mobile-app/issues">Report Bug</a>
+  ·
+  <a href="https://virtual.cuautitlan.unam.mx/intar/wp-content/uploads/sites/19/2025/12/166-A-Hybrid-Artificial-Intelligent-System-for-Missing-JORGE-CHRISTIAN-SERRANO-PUERTOS.pdf">Research Paper</a>
+</p>
 
 ---
 
-## ✨ Funcionalidades
+## About IAPEX
 
-🔍 **Búsqueda híbrida** - combina reconocimiento facial (75%) y análisis textual (25%)
-📸 **Reconocimiento facial** - identifica pacientes mediante CNN basada en dlib
-📝 **Búsqueda textual** - algoritmos Levenshtein y Jaro-Winkler para coincidencias
-📊 **Resultados ordenados** - porcentaje de similitud en cada coincidencia
-🏥 **Contacto institucional** - solicita información de pacientes encontrados
-🔒 **Datos seguros** - autenticación JWT y encriptación completa
+**IAPEX** (Hybrid AI for Missing Patient Identification) is a validated system that helps healthcare institutions identify and manage unidentified or missing patients through a fusion of facial recognition and textual analysis.
 
----
+This repository contains the **Mobile App** — a cross-platform application (Android/iOS) for families to:
 
-## 🛠 Tecnologías
+- Upload photos of missing loved ones for facial recognition
+- Enter physical descriptions (morphological traits, clothing, etc.)
+- View potential matches ranked by similarity percentage
+- Submit contact requests to institutions when a match is found
 
-- **React** con TypeScript
-- **Ionic Framework** para componentes móviles
-- **Vite** como build tool
-- **Capacitor** para funcionalidades nativas
-- **Axios** para comunicación con APIs
-- **React Hook Form** para gestión de formularios
-- **Context API** para estado global
+### Ecosystem
 
----
+| Component | Repository | Stack |
+|-----------|-----------|-------|
+| **Mobile App** (this) | [iapex-org/mobile-app](https://github.com/iapex-org/mobile-app) | React 18, Ionic 8, Capacitor |
+| **Web Portal** | [iapex-org/web-app](https://github.com/iapex-org/web-app) | Angular 19, Bootstrap, TypeScript |
+| **Core API** | [iapex-org/core-api](https://github.com/iapex-org/core-api) | Spring Boot 3, PostgreSQL, MongoDB |
 
-## ⚡ Instalación rápida
+## Features
 
-### Prerrequisitos
+- **Hybrid Search** — Combines facial recognition (75%) with text analysis (25%)
+- **Facial Recognition** — CNN-based identification via dlib
+- **Text Matching** — Levenshtein and Jaro-Winkler algorithms for morphological descriptions
+- **Ranked Results** — Matches ordered by similarity percentage
+- **Contact Requests** — Submit inquiries to institutions when a match is found
+- **Secure Data** — JWT authentication and end-to-end encryption
+- **Cross-Platform** — Android and iOS via Capacitor
 
-- **Node.js** (v18 o superior)
-- **npm** o **yarn**
+## Quick Start
 
-### Pasos
+### Prerequisites
 
-1. **Clonar repositorio**
+- Node.js 18+
+- npm or yarn
+
+### Setup
 
 ```bash
-git clone https://github.com/aescobar80/IAPEX-MOBILE-APP.git
-cd IAPEX-MOBILE-APP
-```
-
-2. **Instalar dependencias**
-
-```bash
+git clone https://github.com/iapex-org/mobile-app.git
+cd mobile-app
 npm install
 ```
 
-3. **Configurar variables de entorno**
-
-⚠️ **IMPORTANTE:** Las variables de entorno son **OBLIGATORIAS**. La aplicación no funcionará sin ellas.
-
-Copia el archivo de ejemplo:
+Create a `.env` file from the example:
 
 ```bash
 cp .env.example .env
 ```
 
-Configura tus valores en `.env`:
+Configure your environment variables:
 
 ```env
-# API REST - Backend principal (Spring Boot)
 VITE_API_REST_BASE_URL=http://localhost:8080/api/v1
-
-# API SEARCH - Backend de búsqueda (FastAPI)
 VITE_API_SEARCH_BASE_URL=http://localhost:8000/api/v1
 ```
 
-4. **Ejecutar en modo desarrollo**
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-La aplicación estará disponible en `http://localhost:5173`
+The app will be available at `http://localhost:5173`
 
-### 📱 Compilar para móvil
+### Mobile Build
 
 ```bash
-# Sincronizar con Capacitor
 npm run build
 npx cap sync
-
-# Abrir en Android Studio
-npx cap open android
-
-# Abrir en Xcode (macOS)
-npx cap open ios
+npx cap open android   # Android Studio
+npx cap open ios       # Xcode (macOS)
 ```
 
----
+## Architecture
 
-## 🏗 Ecosistema IAPEX: arquitectura de microservicios
+```
+\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510
+\u2502            Mobile App (React + Ionic)          \u2502
+\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u2502
+\u2502  \u2502 Camera  \u2502 \u2502  Search  \u2502 \u2502   Results    \u2502   \u2502
+\u2502  \u2502 Module  \u2502 \u2502  Module  \u2502 \u2502   Module     \u2502   \u2502
+\u2502  \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518 \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2518 \u2514\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2502
+\u2502       \u2502           \u2502              \u2502            \u2502
+\u2502  \u250c\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    \u2502
+\u2502  \u2502         HTTP Services (Axios)         \u2502    \u2502
+\u2502  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518    \u2502
+\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518
+                    \u2502 JWT Auth
+         \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510
+         \u2509                     \u2509
+\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510     \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510
+\u2502  Core API    \u2502     \u2502  Search API  \u2502
+\u2502  (Spring)    \u2502     \u2502  (FastAPI)   \u2502
+\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518     \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518
+```
 
-IAPEX está compuesto por múltiples repositorios especializados que conforman una arquitectura moderna y escalable:
+## Contributing
 
-| Repositorio                                                            | Propósito                 | Tecnología                | Estado       |
-| ---------------------------------------------------------------------- | ------------------------- | ------------------------- | ------------ |
-| **[IAPEX-MOBILE-APP](https://github.com/aescobar80/IAPEX-MOBILE-APP)** | App móvil para búsqueda   | React + Ionic + Capacitor | ✅ Operativo |
-| **[IAPEX_APP-WEB](https://github.com/aescobar80/IAPEX_APP-WEB)**       | App web institucional     | React + Vite              | ✅ Operativo |
-| **[API-REST-IAPEX](https://github.com/aescobar80/API-REST-IAPEX)**     | API principal y seguridad | Spring Boot + PostgreSQL  | ✅ Operativo |
-| **[API-SEARCH-IAPEX](https://github.com/misraelDev/API-SEARCH-IAPEX)** | Motor de IA y búsqueda    | FastAPI + dlib + MongoDB  | ✅ Operativo |
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for our branch naming, commit conventions, and PR workflow.
 
----
+## License
 
-## 🤝 Colaboración interna
+This project is licensed under the GNU General Public License v3.0 — see the [LICENSE](LICENSE) file for details.
 
-Seguimos convenciones específicas para mantener consistencia - consulta [CONTRIBUTING.MD](CONTRIBUTING.MD).
+## Acknowledgments
 
-## 🤝 Reconocimientos
-
-Este proyecto fue desarrollado por el equipo de autores:
-
+**Authors:**
 - Florentino Altamirano Misrael
 - Ortiz Pérez Alejandro
 - Serrano Puertos Jorge Christian
 
-Con la asesoría y guía conceptual de:
-
+**Advisor:**
 - Escobar García Arturo
 
-Y con el apoyo académico de la
-
+**Academic Support:**
 - Universidad Tecnológica del Centro de Veracruz
+- UNAM Cuautitlán

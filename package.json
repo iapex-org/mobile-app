@@ -1,5 +1,5 @@
 {
-  "name": "IAPEX-MOBILE-APP",
+  "name": "iapex-mobile-app",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -27,7 +27,6 @@
     "cors": "^2.8.5",
     "css-loader": "^7.1.2",
     "date-fns": "^3.6.0",
-    "IAPEX-MOBILE-APP": "file:",
     "ionicons": "^7.0.0",
     "material-icons": "^1.13.12",
     "react": "^18.3.1",
@@ -57,5 +56,5 @@
     "vite": "5.3.4",
     "vitest": "^0.34.6"
   },
-  "description": "An Ionic project"
+  "description": "IAPEX mobile app for families to search missing persons using hybrid AI"
 }
